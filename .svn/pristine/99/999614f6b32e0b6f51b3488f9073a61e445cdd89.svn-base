@@ -1,0 +1,114 @@
+package com.fun.api.web.controller;
+
+import com.fun.api.domain.OrderManage;
+import com.fun.api.service.OrderManageService;
+import com.fun.client.domain.GoodsOrderInfo;
+import com.fun.client.domain.LogisticsInfo;
+import com.fun.client.service.GoodsOrderInfoService;
+import com.fun.client.service.LogisticsInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.framework.web.support.annotation.Secure;
+import com.fun.utils.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+@RestController
+@RequestMapping("/api")
+public class OrderManagerController extends BaseController {
+    private @Autowired
+    OrderManageService orderManageService;
+    private @Autowired
+    GoodsOrderInfoService goodsOrderInfoService;
+    private @Autowired
+    LogisticsInfoService logisticsInfoService;
+
+    /**
+     * 订单发货
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"order-manage-list"}, method = {RequestMethod.POST})
+    public AjaxReturn orderManageList(OrderManage orderManage, QueryDto queryDto) {
+        if (orderManage == null) {
+            orderManage = new OrderManage();
+        }
+        if (queryDto == null) {
+            queryDto = new QueryDto();
+        }
+        return this.orderManageService.selectGoodsOrderList(orderManage, queryDto);
+    }
+
+    /**
+     * 积分订单
+     */
+    @ApiIgnore
+    //  @Secure(has = {"le:integral:list"})
+    @RequestMapping(path = {"order-integral-list"}, method = {RequestMethod.POST})
+    public AjaxReturn selectIsIntegralOrderList(OrderManage orderManage, QueryDto queryDto) {
+        if (orderManage == null) {
+            orderManage = new OrderManage();
+        }
+        if (queryDto == null) {
+            queryDto = new QueryDto();
+        }
+        return this.orderManageService.selectIsIntegralOrderList(orderManage, queryDto);
+    }
+
+    /**
+     * 发货
+     *
+     * @param orderNo
+     * @return
+     */
+
+    @ApiIgnore
+    @Log("发货")
+    @RequestMapping(path = {"deliver-goods"}, method = {RequestMethod.POST})
+    public AjaxReturn deliverGoods(LogisticsInfo logisticsInfo, String orderNo, HttpServletRequest request) throws Exception {
+        int userId = getAuthentication(request);
+        GoodsOrderInfo goodsOrderInfo = this.goodsOrderInfoService.selectGoodsInfo(orderNo, userId);
+        if (goodsOrderInfo.getOrderState().equals(4)) {//商品订单
+            logisticsInfo.setOrderId(goodsOrderInfo.getPkId());
+            goodsOrderInfo.setOrderState(5);
+            this.logisticsInfoService.addLogisticsInfo(logisticsInfo, userId);
+            this.goodsOrderInfoService.updateOrderState(orderNo, goodsOrderInfo.getOrderState(), userId);
+            return new AjaxReturn(200, "已发货", null);
+        }
+        return new AjaxReturn(501, "发货失败", null);
+    }
+
+    /**
+     * 请求发货订单列表
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"request-order-list"}, method = {RequestMethod.POST})
+    public AjaxReturn requestOrder(OrderManage orderManage, QueryDto queryDto) {
+        Pagination<OrderManage> pagination = this.orderManageService.requestOrderList(orderManage, queryDto);
+        return pagination;
+    }
+
+    /**
+     * 审核订单
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"check-the-order"}, method = {RequestMethod.POST})
+    public AjaxReturn checkTheOrder(Integer pickState, Integer pkId, HttpServletRequest request,String remark) throws Exception {
+        int userId = getAuthentication(request);
+        GoodsOrderInfo goodsOrderInfo = this.goodsOrderInfoService.selectGoodsOrderById(pkId);
+        if (pickState == 1) {
+            goodsOrderInfo.setRemark("已通过");
+        }else{
+            goodsOrderInfo.setRemark("已拒绝:"+remark);
+        }
+        this.goodsOrderInfoService.updatePickState(pickState, pkId, userId,goodsOrderInfo.getRemark());
+        return new AjaxReturn(200, null, null);
+    }
+}

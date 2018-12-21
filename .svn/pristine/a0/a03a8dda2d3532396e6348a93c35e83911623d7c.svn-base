@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.LotOpenTimeMapper">
+	<resultMap id="LotOpenTime" type="com.fun.le.entities.LotOpenTime">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="enableFlag" javaType="Integer" column="enable_flag" jdbcType="TINYINT" />
+		<result property="bgnTime" javaType="Date" column="bgn_time" jdbcType="TIME" />
+		<result property="endTime" javaType="Date" column="end_time" jdbcType="TIME" />
+		<result property="openTime" javaType="Date" column="open_time" jdbcType="TIME" />
+		<result property="issuePrefix" javaType="String" column="issue_prefix" jdbcType="CHAR" />
+		<result property="issueSuffix" javaType="String" column="issue_suffix" jdbcType="CHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="lotOpenTime.pkId">
+		<![CDATA[
+		INSERT INTO t_lot_open_time (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			enable_flag,
+			bgn_time,
+			end_time,
+			open_time,
+			issue_prefix,
+			issue_suffix
+		)
+		VALUES
+			(
+				#{lotOpenTime.pkId, jdbcType = INTEGER},
+				#{lotOpenTime.createUser, jdbcType = INTEGER},
+				#{lotOpenTime.createTime, jdbcType = TIMESTAMP},
+				#{lotOpenTime.updateUser, jdbcType = INTEGER},
+				#{lotOpenTime.updateTime, jdbcType = TIMESTAMP},
+				#{lotOpenTime.dataVersion, jdbcType = TINYINT},
+				#{lotOpenTime.productId, jdbcType = INTEGER},
+				#{lotOpenTime.enableFlag, jdbcType = TINYINT},
+				#{lotOpenTime.bgnTime, jdbcType = TIME},
+				#{lotOpenTime.endTime, jdbcType = TIME},
+				#{lotOpenTime.openTime, jdbcType = TIME},
+				#{lotOpenTime.issuePrefix, jdbcType = CHAR},
+				#{lotOpenTime.issueSuffix, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_lot_open_time (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			enable_flag,
+			bgn_time,
+			end_time,
+			open_time,
+			issue_prefix,
+			issue_suffix
+		)
+		]]>
+		<foreach collection="lotOpenTimes" item="lotOpenTime" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{lotOpenTime.pkId, jdbcType = INTEGER},
+				#{lotOpenTime.createUser, jdbcType = INTEGER},
+				#{lotOpenTime.createTime, jdbcType = TIMESTAMP},
+				#{lotOpenTime.updateUser, jdbcType = INTEGER},
+				#{lotOpenTime.updateTime, jdbcType = TIMESTAMP},
+				#{lotOpenTime.dataVersion, jdbcType = TINYINT},
+				#{lotOpenTime.productId, jdbcType = INTEGER},
+				#{lotOpenTime.enableFlag, jdbcType = TINYINT},
+				#{lotOpenTime.bgnTime, jdbcType = TIME},
+				#{lotOpenTime.endTime, jdbcType = TIME},
+				#{lotOpenTime.openTime, jdbcType = TIME},
+				#{lotOpenTime.issuePrefix, jdbcType = CHAR},
+				#{lotOpenTime.issueSuffix, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_lot_open_time]]>
+		<set>
+		<![CDATA[update_user = #{lotOpenTime.updateUser},]]>
+		<![CDATA[update_time = #{lotOpenTime.updateTime},]]>
+		<![CDATA[data_version = #{lotOpenTime.dataVersion},]]>
+		<![CDATA[product_id = #{lotOpenTime.productId},]]>
+		<![CDATA[enable_flag = #{lotOpenTime.enableFlag},]]>
+		<![CDATA[bgn_time = #{lotOpenTime.bgnTime},]]>
+		<![CDATA[end_time = #{lotOpenTime.endTime},]]>
+		<![CDATA[open_time = #{lotOpenTime.openTime},]]>
+		<![CDATA[issue_prefix = #{lotOpenTime.issuePrefix},]]>
+		<![CDATA[issue_suffix = #{lotOpenTime.issueSuffix},]]>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.issuePrefix != null and where.issuePrefix != ''">
+			<![CDATA[AND issue_prefix = #{where.issuePrefix, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.issueSuffix != null and where.issueSuffix != ''">
+			<![CDATA[AND issue_suffix = #{where.issueSuffix, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_open_time]]>
+		<set>
+		<![CDATA[update_user = #{lotOpenTime.updateUser},]]>
+		<![CDATA[update_time = #{lotOpenTime.updateTime},]]>
+		<![CDATA[data_version = #{lotOpenTime.dataVersion},]]>
+		<![CDATA[product_id = #{lotOpenTime.productId},]]>
+		<![CDATA[enable_flag = #{lotOpenTime.enableFlag},]]>
+		<![CDATA[bgn_time = #{lotOpenTime.bgnTime},]]>
+		<![CDATA[end_time = #{lotOpenTime.endTime},]]>
+		<![CDATA[open_time = #{lotOpenTime.openTime},]]>
+		<![CDATA[issue_prefix = #{lotOpenTime.issuePrefix},]]>
+		<![CDATA[issue_suffix = #{lotOpenTime.issueSuffix},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotOpenTimeId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_lot_open_time]]>
+		<set>
+			<if test="lotOpenTime.updateUser != null">
+			<![CDATA[update_user = #{lotOpenTime.updateUser},]]>
+			</if>
+			<if test="lotOpenTime.updateTime != null">
+			<![CDATA[update_time = #{lotOpenTime.updateTime},]]>
+			</if>
+			<if test="lotOpenTime.dataVersion != null">
+			<![CDATA[data_version = #{lotOpenTime.dataVersion},]]>
+			</if>
+			<if test="lotOpenTime.productId != null">
+			<![CDATA[product_id = #{lotOpenTime.productId},]]>
+			</if>
+			<if test="lotOpenTime.enableFlag != null">
+			<![CDATA[enable_flag = #{lotOpenTime.enableFlag},]]>
+			</if>
+			<if test="lotOpenTime.bgnTime != null">
+			<![CDATA[bgn_time = #{lotOpenTime.bgnTime},]]>
+			</if>
+			<if test="lotOpenTime.endTime != null">
+			<![CDATA[end_time = #{lotOpenTime.endTime},]]>
+			</if>
+			<if test="lotOpenTime.openTime != null">
+			<![CDATA[open_time = #{lotOpenTime.openTime},]]>
+			</if>
+			<if test="lotOpenTime.issuePrefix != null and lotOpenTime.issuePrefix != ''">
+			<![CDATA[issue_prefix = #{lotOpenTime.issuePrefix},]]>
+			</if>
+			<if test="lotOpenTime.issueSuffix != null and lotOpenTime.issueSuffix != ''">
+			<![CDATA[issue_suffix = #{lotOpenTime.issueSuffix},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.issuePrefix != null and where.issuePrefix != ''">
+			<![CDATA[AND issue_prefix = #{where.issuePrefix, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.issueSuffix != null and where.issueSuffix != ''">
+			<![CDATA[AND issue_suffix = #{where.issueSuffix, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_open_time]]>
+		<set>
+			<if test="lotOpenTime.updateUser != null">
+			<![CDATA[update_user = #{lotOpenTime.updateUser},]]>
+			</if>
+			<if test="lotOpenTime.updateTime != null">
+			<![CDATA[update_time = #{lotOpenTime.updateTime},]]>
+			</if>
+			<if test="lotOpenTime.dataVersion != null">
+			<![CDATA[data_version = #{lotOpenTime.dataVersion},]]>
+			</if>
+			<if test="lotOpenTime.productId != null">
+			<![CDATA[product_id = #{lotOpenTime.productId},]]>
+			</if>
+			<if test="lotOpenTime.enableFlag != null">
+			<![CDATA[enable_flag = #{lotOpenTime.enableFlag},]]>
+			</if>
+			<if test="lotOpenTime.bgnTime != null">
+			<![CDATA[bgn_time = #{lotOpenTime.bgnTime},]]>
+			</if>
+			<if test="lotOpenTime.endTime != null">
+			<![CDATA[end_time = #{lotOpenTime.endTime},]]>
+			</if>
+			<if test="lotOpenTime.openTime != null">
+			<![CDATA[open_time = #{lotOpenTime.openTime},]]>
+			</if>
+			<if test="lotOpenTime.issuePrefix != null and lotOpenTime.issuePrefix != ''">
+			<![CDATA[issue_prefix = #{lotOpenTime.issuePrefix},]]>
+			</if>
+			<if test="lotOpenTime.issueSuffix != null and lotOpenTime.issueSuffix != ''">
+			<![CDATA[issue_suffix = #{lotOpenTime.issueSuffix},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotOpenTimeId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="LotOpenTime">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.enable_flag AS enable_flag,
+			t.bgn_time AS bgn_time,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.issue_prefix AS issue_prefix,
+			t.issue_suffix AS issue_suffix
+		FROM
+			t_lot_open_time t
+		]]>
+		<where>
+			<if test="lotOpenTime.pkId != null and lotOpenTime.pkId > 0">
+			<![CDATA[AND t.pk_id = #{lotOpenTime.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotOpenTime.createUser != null and lotOpenTime.createUser > 0">
+			<![CDATA[AND t.create_user = #{lotOpenTime.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotOpenTime.createTime != null">
+			<![CDATA[AND t.create_time = #{lotOpenTime.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotOpenTime.updateUser != null and lotOpenTime.updateUser > 0">
+			<![CDATA[AND t.update_user = #{lotOpenTime.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotOpenTime.updateTime != null">
+			<![CDATA[AND t.update_time = #{lotOpenTime.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotOpenTime.dataVersion != null and lotOpenTime.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{lotOpenTime.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotOpenTime.productId != null and lotOpenTime.productId > 0">
+			<![CDATA[AND t.product_id = #{lotOpenTime.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotOpenTime.enableFlag != null and lotOpenTime.enableFlag > 0">
+			<![CDATA[AND t.enable_flag = #{lotOpenTime.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotOpenTime.bgnTime != null">
+			<![CDATA[AND t.bgn_time = #{lotOpenTime.bgnTime, jdbcType=TIME}]]>
+			</if>
+			<if test="lotOpenTime.endTime != null">
+			<![CDATA[AND t.end_time = #{lotOpenTime.endTime, jdbcType=TIME}]]>
+			</if>
+			<if test="lotOpenTime.openTime != null">
+			<![CDATA[AND t.open_time = #{lotOpenTime.openTime, jdbcType=TIME}]]>
+			</if>
+			<if test="lotOpenTime.issuePrefix != null and lotOpenTime.issuePrefix != ''">
+			<![CDATA[AND t.issue_prefix = #{lotOpenTime.issuePrefix, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotOpenTime.issueSuffix != null and lotOpenTime.issueSuffix != ''">
+			<![CDATA[AND t.issue_suffix = #{lotOpenTime.issueSuffix, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="LotOpenTime">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.enable_flag AS enable_flag,
+			t.bgn_time AS bgn_time,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.issue_prefix AS issue_prefix,
+			t.issue_suffix AS issue_suffix
+		FROM
+			t_lot_open_time t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{lotOpenTimeId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_open_time
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIME}]]>
+			</if>
+			<if test="where.issuePrefix != null and where.issuePrefix != ''">
+			<![CDATA[AND issue_prefix = #{where.issuePrefix, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.issueSuffix != null and where.issueSuffix != ''">
+			<![CDATA[AND issue_suffix = #{where.issueSuffix, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_open_time
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{lotOpenTimeId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

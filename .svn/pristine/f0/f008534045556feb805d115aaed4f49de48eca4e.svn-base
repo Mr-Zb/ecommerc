@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.MenuInfoMapper">
+    <resultMap id="MenuInfo" type="com.fun.client.domain.MenuInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="catName" javaType="String" column="cat_name" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map">
+		<![CDATA[
+		INSERT INTO t_goods_cat_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			cat_name
+		)
+		VALUES
+			(
+				#{mneuInfo.pkId, jdbcType = INTEGER},
+				#{mneuInfo.createUser, jdbcType = INTEGER},
+				#{mneuInfo.createTime, jdbcType = TIMESTAMP},
+				#{mneuInfo.updateUser, jdbcType = INTEGER},
+				#{mneuInfo.updateTime, jdbcType = TIMESTAMP},
+				#{mneuInfo.dataVersion, jdbcType = TINYINT},
+				#{mneuInfo.catName, jdbcType = VARCHAR}
+			)
+		]]>
+	</insert>
+
+    <!-- 查询所有菜单信息 -->
+    <select id="select" parameterType="Map" resultMap="MenuInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_cat_info t
+		]]>
+        <where>
+            <if test="mneuInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{mneuInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="mneuInfo.createUser != null and mneuInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{mneuInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="mneuInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{mneuInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="mneuInfo.updateUser != null and mneuInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{mneuInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="mneuInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{mneuInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="mneuInfo.dataVersion != null and mneuInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{mneuInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="mneuInfo.catName != null and mneuInfo.catName != ''">
+                <![CDATA[AND t.cat_name = #{mneuInfo.catName, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectById" parameterType="Map" resultMap="MenuInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_cat_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{menuInfoId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+    <!--根据Id修改菜单信息-->
+    <update id="update" parameterType="Map">
+        <![CDATA[UPDATE t_goods_cat_info t]]>
+            <set>
+            <![CDATA[ t.update_user = #{mneuInfo.updateUser},]]>
+            <![CDATA[ t.update_time = #{mneuInfo.updateTime},]]>
+            <![CDATA[ t.data_version = #{mneuInfo.dataVersion},]]>
+            <![CDATA[ t.cat_name = #{mneuInfo.catName},]]>
+            </set>
+          <where>
+              <![CDATA[AND t.pk_id = #{mneuInfo.pkId,jdbcType=INTEGER }]]>
+          </where>
+    </update>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_goods_cat_info
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{menuInfoId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </delete>
+</mapper>

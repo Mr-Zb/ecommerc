@@ -1,0 +1,274 @@
+package com.fun.client.service;
+
+import com.fun.admin.service.SequenceService;
+import com.fun.client.domain.GoodsInfo;
+import com.fun.client.domain.GoodsOrderInfo;
+import com.fun.client.domain.IntegralOrderInfo;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.utils.ReturnRandom;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.entities.LotLotteryIssue;
+import com.fun.le.entities.SysPropSetting;
+import com.fun.le.service.FinCapitalLogService;
+import com.fun.le.service.SysPropSettingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class UserPlaceOrderService extends BaseService {
+    private @Autowired
+    GoodsOrderInfoService goodsOrderInfoService;
+    private @Autowired
+    MemUserInfoService memUserInfoService;
+    private @Autowired
+    GoodsInfoService goodsInfoService;
+    private @Autowired
+    SequenceService sequenceService;
+    private @Autowired
+    FinCapitalLogService finCapitalLogService;
+    private @Autowired
+    IntegralOrderInfoService integralOrderInfoService;
+    @Autowired(required = false)
+    private SysPropSettingService sysPropSettingService;
+    @Autowired
+    private FinService finService;
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public String userPlaceOrder(Integer userId, Integer goodsId, Integer goodsNum) throws BusinessException {
+        Double payMoney = 0.0;
+        double amount = this.finCapitalLogService.countUserAmount(userId);
+        String orderNo = this.sequenceService.generate("O");
+        MemUserInfo memUserInfo = memUserInfoService.select(userId);
+        GoodsOrderInfo goodsOrderInfo = new GoodsOrderInfo();
+        FinCapitalLog finCapitalLog = new FinCapitalLog();
+        GoodsInfo goodsInfo = this.goodsInfoService.selectById(goodsId);
+        payMoney = goodsInfo.getPrice();
+        Double countUserIntegral = this.integralOrderInfoService.countUserIntegral(userId);//用户积分余额
+        IntegralOrderInfo integralOrderInfo = new IntegralOrderInfo();
+        double coin = goodsInfo.getCoin();//商品积分
+        goodsOrderInfo.setCreateUser(userId);
+        goodsOrderInfo.setCreateTime(new Date());
+        goodsOrderInfo.setGoodsId(goodsId);
+        goodsOrderInfo.setOrderState(5);
+        goodsOrderInfo.setGameType(0);
+        goodsOrderInfo.setPickState(0);
+        goodsOrderInfo.setBuyNum(goodsNum);
+        if (goodsInfo.getIsIntegral() == 0) {
+            if (goodsInfo.getRepertoryNum() < goodsNum) {
+                return "商品库存不足";
+            }
+            if (amount < goodsNum * payMoney) {
+                return "余额不足";
+            }
+            goodsOrderInfo.setOrderNo(orderNo);
+            goodsOrderInfo.setPromotionType(0);
+            goodsOrderInfo.setPayMoney(goodsNum * payMoney);
+            goodsOrderInfo.setIsIntegral(0);
+            goodsOrderInfo.setIsPromotion(0);
+            goodsOrderInfo.setIsIntegral(0);
+            finCapitalLog.setMemberName(memUserInfo.getLoginName());
+            finCapitalLog.setCreateTime(new Date());
+            finCapitalLog.setUpdateTime(new Date());
+            finCapitalLog.setCreateUser(userId);
+            finCapitalLog.setUpdateUser(userId);
+            finCapitalLog.setRemark("购买普通商品");
+            finCapitalLog.setOrderNo(orderNo);
+            finCapitalLog.setMemberId(memUserInfo.getPkId().longValue());
+            finCapitalLog.setCapitalAmount1(-(goodsNum * payMoney));
+            finCapitalLog.setCapitalAmount2(Double.valueOf(amount - goodsNum * payMoney));
+            finCapitalLog.setCapitalType(33);
+            finCapitalLog.setAgentFullId(memUserInfo.getAgentFullId());
+            finCapitalLog.setAgentFullName(memUserInfo.getAgentFullName());
+            finCapitalLog.setAgentId(memUserInfo.getAgentId().intValue());
+            finCapitalLog.setAgentName(memUserInfo.getAgentName());
+            this.goodsOrderInfoService.add(goodsOrderInfo);
+            finCapitalLog.setOrderId(goodsOrderInfo.getPkId());
+            finCapitalLog.setDataVersion(1);
+            this.finCapitalLogService.insert(finCapitalLog);
+            goodsInfo.setRepertoryNum(goodsInfo.getRepertoryNum() - goodsNum);
+            this.goodsInfoService.updateById(goodsInfo, goodsId);
+            this.memUserInfoService.updateUserAmount1(userId, finCapitalLog.getCapitalAmount2());
+            return "下单成功";
+        }
+        if (goodsInfo.getIsIntegral() == 1) {//积分商品
+            if (countUserIntegral < coin * goodsNum) {
+                return "积分不足无法兑换";
+            }
+            if (goodsInfo.getRepertoryNum() < goodsNum) {
+                return "商品库存不足";
+            }
+            goodsOrderInfo.setOrderNo(orderNo);
+            goodsOrderInfo.setPromotionType(0);
+            goodsOrderInfo.setPayMoney(goodsNum * coin);
+            goodsOrderInfo.setIsIntegral(1);
+            goodsOrderInfo.setIsPromotion(1);
+            goodsOrderInfo.setIsIntegral(1);
+            integralOrderInfo.setCreateTime(new Date());
+            integralOrderInfo.setGoodId(goodsId);
+            integralOrderInfo.setAmount(-(coin * goodsNum));
+            integralOrderInfo.setUserId(userId);
+            integralOrderInfo.setOrderState(5);
+            integralOrderInfo.setOrderNo(orderNo);
+            integralOrderInfo.setGoodName(goodsInfo.getGoodName());
+            this.goodsOrderInfoService.add(goodsOrderInfo);
+            this.integralOrderInfoService.insert(integralOrderInfo, userId);
+            goodsInfo.setRepertoryNum(goodsInfo.getRepertoryNum() - goodsNum);
+            this.goodsInfoService.updateById(goodsInfo, goodsId);
+            this.memUserInfoService.updateUserIntegral(userId, countUserIntegral - coin * goodsNum);
+            return "下单成功";
+        }
+        return null;
+    }
+
+    /**
+     * 大吉大利，用户下单
+     * @param userId
+     * @param goodsId
+     * @param goodsNum
+     * @return
+     * @throws BusinessException
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public String cqsscPlaceOrder(Integer userId, Integer goodsId, Integer goodsNum,String gameContext,LotLotteryIssue lotLotteryIssue) throws BusinessException {
+        Double payMoney = 0.0;
+        double amount = this.finCapitalLogService.countUserAmount(userId);
+        String orderNo = this.sequenceService.generate("C");
+        MemUserInfo memUserInfo = memUserInfoService.selectById(userId);
+        GoodsOrderInfo goodsOrderInfo = new GoodsOrderInfo();
+        GoodsInfo goodsInfo = this.goodsInfoService.selectById(goodsId);
+        payMoney = goodsInfo.getPrice();
+        goodsOrderInfo.setCreateUser(userId);
+        goodsOrderInfo.setCreateTime(new Date());
+        goodsOrderInfo.setGoodsId(goodsId);
+        goodsOrderInfo.setOrderState(1);
+        goodsOrderInfo.setGameType(1);
+        goodsOrderInfo.setPickState(0);
+        goodsOrderInfo.setBuyNum(goodsNum);
+
+        if (amount < goodsNum * payMoney) {
+            throw new BusinessException(501, "余额不足");
+        }
+        goodsOrderInfo.setOrderNo(orderNo);
+        goodsOrderInfo.setPromotionType(Integer.parseInt(gameContext));
+        goodsOrderInfo.setPayMoney(goodsNum * payMoney);
+        goodsOrderInfo.setIsIntegral(0);
+        goodsOrderInfo.setIsPromotion(0);
+        goodsOrderInfo.setIsIntegral(0);
+        goodsOrderInfo.setGoodsId(goodsId);
+        goodsOrderInfo.setOpenTime(lotLotteryIssue.getOpenTime());
+        goodsOrderInfo.setLotteryIssue(lotLotteryIssue.getLotteryIssue());
+
+
+        this.goodsOrderInfoService.add(goodsOrderInfo);
+        //资金表
+        FinCapitalLog finCapitalLog = new FinCapitalLog();
+        finCapitalLog.setMemberName(memUserInfo.getLoginName());
+        finCapitalLog.setCreateTime(new Date());
+        finCapitalLog.setUpdateTime(new Date());
+        finCapitalLog.setCreateUser(userId);
+        finCapitalLog.setUpdateUser(userId);
+        finCapitalLog.setRemark("购买促销商品");
+        finCapitalLog.setOrderNo(orderNo);
+        finCapitalLog.setMemberId(memUserInfo.getPkId().longValue());
+        finCapitalLog.setCapitalAmount1(-(goodsNum * payMoney));
+        finCapitalLog.setCapitalAmount2(Double.valueOf(amount - goodsNum * payMoney));
+        finCapitalLog.setCapitalType(22);
+        finCapitalLog.setAgentFullId(memUserInfo.getAgentFullId());
+        finCapitalLog.setAgentFullName(memUserInfo.getAgentFullName());
+        finCapitalLog.setAgentId(memUserInfo.getAgentId().intValue());
+        finCapitalLog.setAgentName(memUserInfo.getAgentName());
+        finCapitalLog.setOrderId(goodsOrderInfo.getPkId());
+        finCapitalLog.setDataVersion(1);
+        this.finCapitalLogService.insert(finCapitalLog);
+        this.memUserInfoService.updateUserAmount1(userId, finCapitalLog.getCapitalAmount2());
+        return orderNo;
+    }
+
+    /**
+     * 拆红包
+     * @param userId
+     * @param goodsId
+     * @return
+     * @throws BusinessException
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public String OpenRedEnvelope(Integer userId, Integer goodsId) throws BusinessException {
+        Double payMoney = 0.0;
+        double amount = this.finCapitalLogService.countUserAmount(userId);
+        String orderNo = this.sequenceService.generate("H");
+        MemUserInfo memUserInfo = memUserInfoService.select(userId);
+        GoodsOrderInfo goodsOrderInfo = new GoodsOrderInfo();
+        FinCapitalLog finCapitalLog = new FinCapitalLog();
+        GoodsInfo goodsInfo = this.goodsInfoService.selectById(goodsId);
+        payMoney = goodsInfo.getPrice();
+        goodsOrderInfo.setCreateUser(userId);
+        goodsOrderInfo.setCreateTime(new Date());
+        SysPropSetting sysPropSetting = new SysPropSetting();
+        sysPropSetting.setPropKey("sys.user.red.envelop");
+        List<SysPropSetting> select = sysPropSettingService.select(1,sysPropSetting);
+        String propValue = select.get(0).getPropValue();
+        double v = Double.parseDouble(propValue);
+        Integer reandom = ReturnRandom.getRandom((int)(1000*v));
+        if (reandom==1){
+            goodsOrderInfo.setOrderState(2);
+            goodsOrderInfo.setResult(3);
+        }else {
+            goodsOrderInfo.setOrderState(3);
+            goodsOrderInfo.setResult(4);
+        }
+        goodsOrderInfo.setGameType(2);
+        goodsOrderInfo.setBuyNum(1);
+        if (amount < payMoney) {
+            return "余额不足";
+        }
+        goodsOrderInfo.setOrderNo(orderNo);
+        goodsOrderInfo.setPromotionType(3);
+        goodsOrderInfo.setPayMoney(payMoney);
+        goodsOrderInfo.setIsIntegral(0);
+        goodsOrderInfo.setIsPromotion(0);
+        goodsOrderInfo.setIsIntegral(0);
+        goodsOrderInfo.setPickState(0);
+        finCapitalLog.setMemberName(memUserInfo.getLoginName());
+        finCapitalLog.setCreateTime(new Date());
+        finCapitalLog.setUpdateTime(new Date());
+        finCapitalLog.setCreateUser(userId);
+        finCapitalLog.setUpdateUser(userId);
+        finCapitalLog.setRemark("购买促销商品");
+        finCapitalLog.setOrderNo(orderNo);
+        finCapitalLog.setMemberId(memUserInfo.getPkId().longValue());
+        GoodsInfo goodsInfo1 = null;
+        if (reandom == 1) {
+            goodsInfo1 = goodsInfoService.selectByGoodSourceId(goodsId);
+            goodsOrderInfo.setGoodsId(goodsInfo1.getPkId());
+        } else {
+            goodsOrderInfo.setGoodsId(goodsId);
+        }
+        finCapitalLog.setCapitalAmount1(-(payMoney));
+        finCapitalLog.setCapitalAmount2(Double.valueOf(amount - payMoney));
+        finCapitalLog.setCapitalType(22);
+        finCapitalLog.setAgentFullId(memUserInfo.getAgentFullId());
+        finCapitalLog.setAgentFullName(memUserInfo.getAgentFullName());
+        finCapitalLog.setAgentId(memUserInfo.getAgentId().intValue());
+        finCapitalLog.setAgentName(memUserInfo.getAgentName());
+        this.goodsOrderInfoService.add(goodsOrderInfo);
+        finCapitalLog.setOrderId(goodsOrderInfo.getPkId());
+        finCapitalLog.setDataVersion(1);
+        this.finCapitalLogService.insert(finCapitalLog);
+        this.memUserInfoService.updateUserAmount1(userId, finCapitalLog.getCapitalAmount2());
+        finService.addCapitalLog(memUserInfo.getAgentId().intValue(),32,memUserInfo.getRebate()*payMoney,this.sequenceService.generate("F"),"返佣");
+        if (reandom==1){
+            MemUserInfo select2 = memUserInfoService.select(memUserInfo.getAgentId().intValue());
+            finService.addCapitalLog(memUserInfo.getAgentId().intValue(),34,memUserInfo.getRebate()*payMoney,this.sequenceService.generate("R"),"中奖返利");
+            return "恭喜您，拆中了"+goodsInfo.getPrice()*select2.getExtension()+"元的（"+goodsInfo1.getGoodName()+"）x1";
+        }else {
+            return "恭喜您，拆中了"+goodsInfo.getPrice()+"元的（"+goodsInfo.getGoodName()+"）x1";
+        }
+    }
+}

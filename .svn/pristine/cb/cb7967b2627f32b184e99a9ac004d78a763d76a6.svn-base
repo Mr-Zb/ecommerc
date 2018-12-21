@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+	<contextName>fun</contextName>
+	<property name="LOG_HOME" value="/home/logs/fun" />
+
+	<!-- 控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter> -->
+	</appender>
+	<appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>1024</queueSize>
+		<appender-ref ref="STDOUT" />
+	</appender>
+
+	<!-- 文件 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/log.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>30</maxHistory>
+			<fileNamePattern>${LOG_HOME}/log-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>1024</queueSize>
+		<appender-ref ref="FILE" />
+	</appender>
+
+
+	<!-- 第三方交易记录开始 -->
+	<appender name="FILE_PLATFORM" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/platform.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>30</maxHistory>
+			<fileNamePattern>${LOG_HOME}/platform-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ASYNC_FILE_PLATFORM" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>1024</queueSize>
+		<appender-ref ref="FILE_PLATFORM" />
+	</appender>
+	<!-- 第三方交易记录开始 -->
+
+
+	<!-- 商户交易记录开始 -->
+	<appender name="FILE_MERCHANT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/merchant.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>30</maxHistory>
+			<fileNamePattern>${LOG_HOME}/merchant-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ASYNC_FILE_MERCHANT" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>1024</queueSize>
+		<appender-ref ref="FILE_MERCHANT" />
+	</appender>
+	<!-- 商户交易记录结束 -->
+
+	<logger name="com.fun" level="INFO" addtivity="false">
+		<appender-ref ref="ASYNC_FILE" />
+	</logger>
+	
+	<logger name="com.fun.merchant" level="DEBUG" addtivity="false">
+		<appender-ref ref="ASYNC_FILE_MERCHANT" />
+	</logger>
+	
+	<logger name="com.fun.platform" level="DEBUG" addtivity="false">
+		<appender-ref ref="ASYNC_FILE_PLATFORM" />
+	</logger>
+	
+	<root level="INFO">
+		<appender-ref ref="ASYNC_STDOUT" />
+	</root>
+
+</configuration> 

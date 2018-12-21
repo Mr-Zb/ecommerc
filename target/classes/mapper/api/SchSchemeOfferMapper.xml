@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SchSchemeOfferMapper">
+	<resultMap id="SchSchemeOffer" type="com.fun.le.entities.SchSchemeOffer">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="schemeId" javaType="Integer" column="scheme_id" jdbcType="INTEGER" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="memberId" javaType="Integer" column="member_id" jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name" jdbcType="CHAR" />
+		<result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER" />
+		<result property="agentName" javaType="String" column="agent_name" jdbcType="CHAR" />
+		<result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="CHAR" />
+		<result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="CHAR" />
+		<result property="offerType" javaType="Integer" column="offer_type" jdbcType="TINYINT" />
+		<result property="offerNum" javaType="Integer" column="offer_num" jdbcType="INTEGER" />
+		<result property="offerAmount1" javaType="Double" column="offer_amount1" jdbcType="DECIMAL" />
+		<result property="offerAmount2" javaType="Double" column="offer_amount2" jdbcType="DECIMAL" />
+		<result property="offerAmount3" javaType="Double" column="offer_amount3" jdbcType="DECIMAL" />
+		<result property="niceName" javaType="String" column="nice_name" jdbcType="CHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="schSchemeOffer.pkId">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_offer (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			product_id,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			offer_type,
+			offer_num,
+			offer_amount1,
+			offer_amount2,
+			offer_amount3,
+			nice_name
+		)
+		VALUES
+			(
+				#{schSchemeOffer.pkId, jdbcType = INTEGER},
+				#{schSchemeOffer.createUser, jdbcType = INTEGER},
+				#{schSchemeOffer.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeOffer.updateUser, jdbcType = INTEGER},
+				#{schSchemeOffer.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeOffer.dataVersion, jdbcType = TINYINT},
+				#{schSchemeOffer.schemeId, jdbcType = INTEGER},
+				#{schSchemeOffer.productId, jdbcType = INTEGER},
+				#{schSchemeOffer.memberId, jdbcType = INTEGER},
+				#{schSchemeOffer.memberName, jdbcType = CHAR},
+				#{schSchemeOffer.agentId, jdbcType = INTEGER},
+				#{schSchemeOffer.agentName, jdbcType = CHAR},
+				#{schSchemeOffer.agentFullId, jdbcType = CHAR},
+				#{schSchemeOffer.agentFullName, jdbcType = CHAR},
+				#{schSchemeOffer.offerType, jdbcType = TINYINT},
+				#{schSchemeOffer.offerNum, jdbcType = INTEGER},
+				#{schSchemeOffer.offerAmount1, jdbcType = DECIMAL},
+				#{schSchemeOffer.offerAmount2, jdbcType = DECIMAL},
+				#{schSchemeOffer.offerAmount3, jdbcType = DECIMAL},
+				#{schSchemeOffer.niceName, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_offer (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			product_id,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			offer_type,
+			offer_num,
+			offer_amount1,
+			offer_amount2,
+			offer_amount3,
+			nice_name
+		)
+		]]>
+		<foreach collection="schSchemeOffers" item="schSchemeOffer" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{schSchemeOffer.pkId, jdbcType = INTEGER},
+				#{schSchemeOffer.createUser, jdbcType = INTEGER},
+				#{schSchemeOffer.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeOffer.updateUser, jdbcType = INTEGER},
+				#{schSchemeOffer.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeOffer.dataVersion, jdbcType = TINYINT},
+				#{schSchemeOffer.schemeId, jdbcType = INTEGER},
+				#{schSchemeOffer.productId, jdbcType = INTEGER},
+				#{schSchemeOffer.memberId, jdbcType = INTEGER},
+				#{schSchemeOffer.memberName, jdbcType = CHAR},
+				#{schSchemeOffer.agentId, jdbcType = INTEGER},
+				#{schSchemeOffer.agentName, jdbcType = CHAR},
+				#{schSchemeOffer.agentFullId, jdbcType = CHAR},
+				#{schSchemeOffer.agentFullName, jdbcType = CHAR},
+				#{schSchemeOffer.offerType, jdbcType = TINYINT},
+				#{schSchemeOffer.offerNum, jdbcType = INTEGER},
+				#{schSchemeOffer.offerAmount1, jdbcType = DECIMAL},
+				#{schSchemeOffer.offerAmount2, jdbcType = DECIMAL},
+				#{schSchemeOffer.offerAmount3, jdbcType = DECIMAL},
+				#{schSchemeOffer.niceName, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_offer]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeOffer.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeOffer.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeOffer.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeOffer.schemeId},]]>
+		<![CDATA[product_id = #{schSchemeOffer.productId},]]>
+		<![CDATA[member_id = #{schSchemeOffer.memberId},]]>
+		<![CDATA[member_name = #{schSchemeOffer.memberName},]]>
+		<![CDATA[agent_id = #{schSchemeOffer.agentId},]]>
+		<![CDATA[agent_name = #{schSchemeOffer.agentName},]]>
+		<![CDATA[agent_full_id = #{schSchemeOffer.agentFullId},]]>
+		<![CDATA[agent_full_name = #{schSchemeOffer.agentFullName},]]>
+		<![CDATA[offer_type = #{schSchemeOffer.offerType},]]>
+		<![CDATA[offer_num = #{schSchemeOffer.offerNum},]]>
+		<![CDATA[offer_amount1 = #{schSchemeOffer.offerAmount1},]]>
+		<![CDATA[offer_amount2 = #{schSchemeOffer.offerAmount2},]]>
+		<![CDATA[offer_amount3 = #{schSchemeOffer.offerAmount3},]]>
+		<![CDATA[nice_name = #{schSchemeOffer.niceName},]]>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.offerType != null">
+			<![CDATA[AND offer_type = #{where.offerType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.offerNum != null">
+			<![CDATA[AND offer_num = #{where.offerNum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.offerAmount1 != null">
+			<![CDATA[AND offer_amount1 = #{where.offerAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount2 != null">
+			<![CDATA[AND offer_amount2 = #{where.offerAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount3 != null">
+			<![CDATA[AND offer_amount3 = #{where.offerAmount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_offer]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeOffer.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeOffer.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeOffer.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeOffer.schemeId},]]>
+		<![CDATA[product_id = #{schSchemeOffer.productId},]]>
+		<![CDATA[member_id = #{schSchemeOffer.memberId},]]>
+		<![CDATA[member_name = #{schSchemeOffer.memberName},]]>
+		<![CDATA[agent_id = #{schSchemeOffer.agentId},]]>
+		<![CDATA[agent_name = #{schSchemeOffer.agentName},]]>
+		<![CDATA[agent_full_id = #{schSchemeOffer.agentFullId},]]>
+		<![CDATA[agent_full_name = #{schSchemeOffer.agentFullName},]]>
+		<![CDATA[offer_type = #{schSchemeOffer.offerType},]]>
+		<![CDATA[offer_num = #{schSchemeOffer.offerNum},]]>
+		<![CDATA[offer_amount1 = #{schSchemeOffer.offerAmount1},]]>
+		<![CDATA[offer_amount2 = #{schSchemeOffer.offerAmount2},]]>
+		<![CDATA[offer_amount3 = #{schSchemeOffer.offerAmount3},]]>
+		<![CDATA[nice_name = #{schSchemeOffer.niceName},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeOfferId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_offer]]>
+		<set>
+			<if test="schSchemeOffer.updateUser != null">
+			<![CDATA[update_user = #{schSchemeOffer.updateUser},]]>
+			</if>
+			<if test="schSchemeOffer.updateTime != null">
+			<![CDATA[update_time = #{schSchemeOffer.updateTime},]]>
+			</if>
+			<if test="schSchemeOffer.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeOffer.dataVersion},]]>
+			</if>
+			<if test="schSchemeOffer.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeOffer.schemeId},]]>
+			</if>
+			<if test="schSchemeOffer.productId != null">
+			<![CDATA[product_id = #{schSchemeOffer.productId},]]>
+			</if>
+			<if test="schSchemeOffer.memberId != null">
+			<![CDATA[member_id = #{schSchemeOffer.memberId},]]>
+			</if>
+			<if test="schSchemeOffer.memberName != null and schSchemeOffer.memberName != ''">
+			<![CDATA[member_name = #{schSchemeOffer.memberName},]]>
+			</if>
+			<if test="schSchemeOffer.agentId != null">
+			<![CDATA[agent_id = #{schSchemeOffer.agentId},]]>
+			</if>
+			<if test="schSchemeOffer.agentName != null and schSchemeOffer.agentName != ''">
+			<![CDATA[agent_name = #{schSchemeOffer.agentName},]]>
+			</if>
+			<if test="schSchemeOffer.agentFullId != null and schSchemeOffer.agentFullId != ''">
+			<![CDATA[agent_full_id = #{schSchemeOffer.agentFullId},]]>
+			</if>
+			<if test="schSchemeOffer.agentFullName != null and schSchemeOffer.agentFullName != ''">
+			<![CDATA[agent_full_name = #{schSchemeOffer.agentFullName},]]>
+			</if>
+			<if test="schSchemeOffer.offerType != null">
+			<![CDATA[offer_type = #{schSchemeOffer.offerType},]]>
+			</if>
+			<if test="schSchemeOffer.offerNum != null">
+			<![CDATA[offer_num = #{schSchemeOffer.offerNum},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount1 != null">
+			<![CDATA[offer_amount1 = #{schSchemeOffer.offerAmount1},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount2 != null">
+			<![CDATA[offer_amount2 = #{schSchemeOffer.offerAmount2},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount3 != null">
+			<![CDATA[offer_amount3 = #{schSchemeOffer.offerAmount3},]]>
+			</if>
+			<if test="schSchemeOffer.niceName != null and schSchemeOffer.niceName != ''">
+			<![CDATA[nice_name = #{schSchemeOffer.niceName},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.offerType != null">
+			<![CDATA[AND offer_type = #{where.offerType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.offerNum != null">
+			<![CDATA[AND offer_num = #{where.offerNum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.offerAmount1 != null">
+			<![CDATA[AND offer_amount1 = #{where.offerAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount2 != null">
+			<![CDATA[AND offer_amount2 = #{where.offerAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount3 != null">
+			<![CDATA[AND offer_amount3 = #{where.offerAmount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_offer]]>
+		<set>
+			<if test="schSchemeOffer.updateUser != null">
+			<![CDATA[update_user = #{schSchemeOffer.updateUser},]]>
+			</if>
+			<if test="schSchemeOffer.updateTime != null">
+			<![CDATA[update_time = #{schSchemeOffer.updateTime},]]>
+			</if>
+			<if test="schSchemeOffer.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeOffer.dataVersion},]]>
+			</if>
+			<if test="schSchemeOffer.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeOffer.schemeId},]]>
+			</if>
+			<if test="schSchemeOffer.productId != null">
+			<![CDATA[product_id = #{schSchemeOffer.productId},]]>
+			</if>
+			<if test="schSchemeOffer.memberId != null">
+			<![CDATA[member_id = #{schSchemeOffer.memberId},]]>
+			</if>
+			<if test="schSchemeOffer.memberName != null and schSchemeOffer.memberName != ''">
+			<![CDATA[member_name = #{schSchemeOffer.memberName},]]>
+			</if>
+			<if test="schSchemeOffer.agentId != null">
+			<![CDATA[agent_id = #{schSchemeOffer.agentId},]]>
+			</if>
+			<if test="schSchemeOffer.agentName != null and schSchemeOffer.agentName != ''">
+			<![CDATA[agent_name = #{schSchemeOffer.agentName},]]>
+			</if>
+			<if test="schSchemeOffer.agentFullId != null and schSchemeOffer.agentFullId != ''">
+			<![CDATA[agent_full_id = #{schSchemeOffer.agentFullId},]]>
+			</if>
+			<if test="schSchemeOffer.agentFullName != null and schSchemeOffer.agentFullName != ''">
+			<![CDATA[agent_full_name = #{schSchemeOffer.agentFullName},]]>
+			</if>
+			<if test="schSchemeOffer.offerType != null">
+			<![CDATA[offer_type = #{schSchemeOffer.offerType},]]>
+			</if>
+			<if test="schSchemeOffer.offerNum != null">
+			<![CDATA[offer_num = #{schSchemeOffer.offerNum},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount1 != null">
+			<![CDATA[offer_amount1 = #{schSchemeOffer.offerAmount1},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount2 != null">
+			<![CDATA[offer_amount2 = #{schSchemeOffer.offerAmount2},]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount3 != null">
+			<![CDATA[offer_amount3 = #{schSchemeOffer.offerAmount3},]]>
+			</if>
+			<if test="schSchemeOffer.niceName != null and schSchemeOffer.niceName != ''">
+			<![CDATA[nice_name = #{schSchemeOffer.niceName},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeOfferId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="SchSchemeOffer">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.product_id AS product_id,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.offer_type AS offer_type,
+			t.offer_num AS offer_num,
+			t.offer_amount1 AS offer_amount1,
+			t.offer_amount2 AS offer_amount2,
+			t.offer_amount3 AS offer_amount3,
+			t.nice_name AS nice_name
+		FROM
+			t_sch_scheme_offer t
+		]]>
+		<where>
+			<if test="schSchemeOffer.pkId != null and schSchemeOffer.pkId > 0">
+			<![CDATA[AND t.pk_id = #{schSchemeOffer.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.createUser != null and schSchemeOffer.createUser > 0">
+			<![CDATA[AND t.create_user = #{schSchemeOffer.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.createTime != null">
+			<![CDATA[AND t.create_time = #{schSchemeOffer.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeOffer.updateUser != null and schSchemeOffer.updateUser > 0">
+			<![CDATA[AND t.update_user = #{schSchemeOffer.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.updateTime != null">
+			<![CDATA[AND t.update_time = #{schSchemeOffer.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeOffer.dataVersion != null and schSchemeOffer.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{schSchemeOffer.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeOffer.schemeId != null and schSchemeOffer.schemeId > 0">
+			<![CDATA[AND t.scheme_id = #{schSchemeOffer.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.productId != null and schSchemeOffer.productId > 0">
+			<![CDATA[AND t.product_id = #{schSchemeOffer.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.memberId != null and schSchemeOffer.memberId > 0">
+			<![CDATA[AND t.member_id = #{schSchemeOffer.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.memberName != null and schSchemeOffer.memberName != ''">
+			<![CDATA[AND t.member_name = #{schSchemeOffer.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeOffer.agentId != null and schSchemeOffer.agentId > 0">
+			<![CDATA[AND t.agent_id = #{schSchemeOffer.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.agentName != null and schSchemeOffer.agentName != ''">
+			<![CDATA[AND t.agent_name = #{schSchemeOffer.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeOffer.agentFullId != null and schSchemeOffer.agentFullId != ''">
+			<![CDATA[AND t.agent_full_id = #{schSchemeOffer.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeOffer.agentFullName != null and schSchemeOffer.agentFullName != ''">
+			<![CDATA[AND t.agent_full_name = #{schSchemeOffer.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeOffer.offerType != null and schSchemeOffer.offerType > 0">
+			<![CDATA[AND t.offer_type = #{schSchemeOffer.offerType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeOffer.offerNum != null and schSchemeOffer.offerNum > 0">
+			<![CDATA[AND t.offer_num = #{schSchemeOffer.offerNum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount1 != null and schSchemeOffer.offerAmount1 > 0">
+			<![CDATA[AND t.offer_amount1 = #{schSchemeOffer.offerAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount2 != null and schSchemeOffer.offerAmount2 > 0">
+			<![CDATA[AND t.offer_amount2 = #{schSchemeOffer.offerAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeOffer.offerAmount3 != null and schSchemeOffer.offerAmount3 > 0">
+			<![CDATA[AND t.offer_amount3 = #{schSchemeOffer.offerAmount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeOffer.niceName != null and schSchemeOffer.niceName != ''">
+			<![CDATA[AND t.nice_name = #{schSchemeOffer.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="SchSchemeOffer">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.product_id AS product_id,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.offer_type AS offer_type,
+			t.offer_num AS offer_num,
+			t.offer_amount1 AS offer_amount1,
+			t.offer_amount2 AS offer_amount2,
+			t.offer_amount3 AS offer_amount3,
+			t.nice_name AS nice_name
+		FROM
+			t_sch_scheme_offer t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{schSchemeOfferId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_offer
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.offerType != null">
+			<![CDATA[AND offer_type = #{where.offerType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.offerNum != null">
+			<![CDATA[AND offer_num = #{where.offerNum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.offerAmount1 != null">
+			<![CDATA[AND offer_amount1 = #{where.offerAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount2 != null">
+			<![CDATA[AND offer_amount2 = #{where.offerAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.offerAmount3 != null">
+			<![CDATA[AND offer_amount3 = #{where.offerAmount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_offer
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeOfferId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

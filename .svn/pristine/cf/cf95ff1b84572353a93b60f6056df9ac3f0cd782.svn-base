@@ -1,0 +1,53 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.GoodsInfo;
+import com.fun.client.domain.GoodsOrderInfo;
+import com.fun.client.domain.IntegralOrderInfo;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.service.FinCapitalLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+
+@Service
+public class ExchangeIntegralService extends BaseService{
+    private @Autowired GoodsOrderInfoService goodsOrderInfoService;
+    private @Autowired MemUserInfoService memUserInfoService;
+    private @Autowired IntegralOrderInfoService integralOrderInfoService;
+    @Autowired private GoodsInfoService goodsInfoService;
+    /**
+     * 转为积分：
+     * 小升级商品，获取该商品价格
+     * 插入一条积分订单记录
+     * 更新用户表用户积分余额
+     * @param userId
+     * @param orderNo
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public String exchangeIntegral(Integer userId,String orderNo) throws BusinessException {
+        GoodsOrderInfo goodsOrderInfo = this.goodsOrderInfoService.selectGoodsInfo(orderNo, userId);
+        IntegralOrderInfo integralOrderInfo = new IntegralOrderInfo();
+        Double countUserIntegral = this.integralOrderInfoService.countUserIntegral(userId);//用户积分余额
+        GoodsInfo goodsInfo = this.goodsInfoService.selectById(goodsOrderInfo.getGoodsId());
+        if(goodsOrderInfo.getOrderState() == 3){
+            integralOrderInfo.setCreateTime(new Date());
+            integralOrderInfo.setGoodId(goodsOrderInfo.getGoodsId());
+            integralOrderInfo.setAmount(goodsOrderInfo.getPayMoney());
+            integralOrderInfo.setUserId(userId);
+            integralOrderInfo.setOrderNo(orderNo);
+            integralOrderInfo.setOrderState(4);
+            integralOrderInfo.setGoodName(goodsInfo.getGoodName());
+            this.goodsOrderInfoService.updateOrderState(orderNo,4,userId);
+            this.integralOrderInfoService.insert(integralOrderInfo,userId);//插入积分订单记录
+            this.memUserInfoService.updateUserIntegral(userId, countUserIntegral + goodsOrderInfo.getPayMoney());
+            return "已转为积分";
+        }
+        return null;
+    }
+}

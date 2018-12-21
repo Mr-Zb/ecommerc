@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.LotGameInfoMapper">
+	<resultMap id="LotGameInfo" type="com.fun.le.entities.LotGameInfo">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="gameName" javaType="String" column="game_name" jdbcType="CHAR" />
+		<result property="gameAlias" javaType="String" column="game_alias" jdbcType="CHAR" />
+		<result property="gameDesc" javaType="String" column="game_desc" jdbcType="LONGVARCHAR" />
+		<result property="sorting" javaType="Integer" column="sorting" jdbcType="TINYINT" />
+		<result property="enableFlag" javaType="Integer" column="enable_flag" jdbcType="TINYINT" />
+		<result property="reward" javaType="String" column="reward" jdbcType="CHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="lotGameInfo.pkId">
+		<![CDATA[
+		INSERT INTO t_lot_game_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			game_name,
+			game_alias,
+			game_desc,
+			sorting,
+			enable_flag,
+			reward
+		)
+		VALUES
+			(
+				#{lotGameInfo.pkId, jdbcType = INTEGER},
+				#{lotGameInfo.createUser, jdbcType = INTEGER},
+				#{lotGameInfo.createTime, jdbcType = TIMESTAMP},
+				#{lotGameInfo.updateUser, jdbcType = INTEGER},
+				#{lotGameInfo.updateTime, jdbcType = TIMESTAMP},
+				#{lotGameInfo.dataVersion, jdbcType = TINYINT},
+				#{lotGameInfo.productId, jdbcType = INTEGER},
+				#{lotGameInfo.gameName, jdbcType = CHAR},
+				#{lotGameInfo.gameAlias, jdbcType = CHAR},
+				#{lotGameInfo.gameDesc, jdbcType = LONGVARCHAR},
+				#{lotGameInfo.sorting, jdbcType = TINYINT},
+				#{lotGameInfo.enableFlag, jdbcType = TINYINT},
+				#{lotGameInfo.reward, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_lot_game_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			game_name,
+			game_alias,
+			game_desc,
+			sorting,
+			enable_flag,
+			reward
+		)
+		]]>
+		<foreach collection="lotGameInfos" item="lotGameInfo" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{lotGameInfo.pkId, jdbcType = INTEGER},
+				#{lotGameInfo.createUser, jdbcType = INTEGER},
+				#{lotGameInfo.createTime, jdbcType = TIMESTAMP},
+				#{lotGameInfo.updateUser, jdbcType = INTEGER},
+				#{lotGameInfo.updateTime, jdbcType = TIMESTAMP},
+				#{lotGameInfo.dataVersion, jdbcType = TINYINT},
+				#{lotGameInfo.productId, jdbcType = INTEGER},
+				#{lotGameInfo.gameName, jdbcType = CHAR},
+				#{lotGameInfo.gameAlias, jdbcType = CHAR},
+				#{lotGameInfo.gameDesc, jdbcType = LONGVARCHAR},
+				#{lotGameInfo.sorting, jdbcType = TINYINT},
+				#{lotGameInfo.enableFlag, jdbcType = TINYINT},
+				#{lotGameInfo.reward, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_lot_game_info]]>
+		<set>
+		<![CDATA[update_user = #{lotGameInfo.updateUser},]]>
+		<![CDATA[update_time = #{lotGameInfo.updateTime},]]>
+		<![CDATA[data_version = #{lotGameInfo.dataVersion},]]>
+		<![CDATA[product_id = #{lotGameInfo.productId},]]>
+		<![CDATA[game_name = #{lotGameInfo.gameName},]]>
+		<![CDATA[game_alias = #{lotGameInfo.gameAlias},]]>
+		<![CDATA[game_desc = #{lotGameInfo.gameDesc},]]>
+		<![CDATA[sorting = #{lotGameInfo.sorting},]]>
+		<![CDATA[enable_flag = #{lotGameInfo.enableFlag},]]>
+		<![CDATA[reward = #{lotGameInfo.reward},]]>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameName != null and where.gameName != ''">
+			<![CDATA[AND game_name = #{where.gameName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameAlias != null and where.gameAlias != ''">
+			<![CDATA[AND game_alias = #{where.gameAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameDesc != null and where.gameDesc != ''">
+			<![CDATA[AND game_desc = #{where.gameDesc, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.reward != null and where.reward != ''">
+			<![CDATA[AND reward = #{where.reward, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_game_info]]>
+		<set>
+		<![CDATA[update_user = #{lotGameInfo.updateUser},]]>
+		<![CDATA[update_time = #{lotGameInfo.updateTime},]]>
+		<![CDATA[data_version = #{lotGameInfo.dataVersion},]]>
+		<![CDATA[product_id = #{lotGameInfo.productId},]]>
+		<![CDATA[game_name = #{lotGameInfo.gameName},]]>
+		<![CDATA[game_alias = #{lotGameInfo.gameAlias},]]>
+		<![CDATA[game_desc = #{lotGameInfo.gameDesc},]]>
+		<![CDATA[sorting = #{lotGameInfo.sorting},]]>
+		<![CDATA[enable_flag = #{lotGameInfo.enableFlag},]]>
+		<![CDATA[reward = #{lotGameInfo.reward},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotGameInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_lot_game_info]]>
+		<set>
+			<if test="lotGameInfo.updateUser != null">
+			<![CDATA[update_user = #{lotGameInfo.updateUser},]]>
+			</if>
+			<if test="lotGameInfo.updateTime != null">
+			<![CDATA[update_time = #{lotGameInfo.updateTime},]]>
+			</if>
+			<if test="lotGameInfo.dataVersion != null">
+			<![CDATA[data_version = #{lotGameInfo.dataVersion},]]>
+			</if>
+			<if test="lotGameInfo.productId != null">
+			<![CDATA[product_id = #{lotGameInfo.productId},]]>
+			</if>
+			<if test="lotGameInfo.gameName != null and lotGameInfo.gameName != ''">
+			<![CDATA[game_name = #{lotGameInfo.gameName},]]>
+			</if>
+			<if test="lotGameInfo.gameAlias != null and lotGameInfo.gameAlias != ''">
+			<![CDATA[game_alias = #{lotGameInfo.gameAlias},]]>
+			</if>
+			<if test="lotGameInfo.gameDesc != null and lotGameInfo.gameDesc != ''">
+			<![CDATA[game_desc = #{lotGameInfo.gameDesc},]]>
+			</if>
+			<if test="lotGameInfo.sorting != null">
+			<![CDATA[sorting = #{lotGameInfo.sorting},]]>
+			</if>
+			<if test="lotGameInfo.enableFlag != null">
+			<![CDATA[enable_flag = #{lotGameInfo.enableFlag},]]>
+			</if>
+			<if test="lotGameInfo.reward != null and lotGameInfo.reward != ''">
+			<![CDATA[reward = #{lotGameInfo.reward},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameName != null and where.gameName != ''">
+			<![CDATA[AND game_name = #{where.gameName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameAlias != null and where.gameAlias != ''">
+			<![CDATA[AND game_alias = #{where.gameAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameDesc != null and where.gameDesc != ''">
+			<![CDATA[AND game_desc = #{where.gameDesc, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.reward != null and where.reward != ''">
+			<![CDATA[AND reward = #{where.reward, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_game_info]]>
+		<set>
+			<if test="lotGameInfo.updateUser != null">
+			<![CDATA[update_user = #{lotGameInfo.updateUser},]]>
+			</if>
+			<if test="lotGameInfo.updateTime != null">
+			<![CDATA[update_time = #{lotGameInfo.updateTime},]]>
+			</if>
+			<if test="lotGameInfo.dataVersion != null">
+			<![CDATA[data_version = #{lotGameInfo.dataVersion},]]>
+			</if>
+			<if test="lotGameInfo.productId != null">
+			<![CDATA[product_id = #{lotGameInfo.productId},]]>
+			</if>
+			<if test="lotGameInfo.gameName != null and lotGameInfo.gameName != ''">
+			<![CDATA[game_name = #{lotGameInfo.gameName},]]>
+			</if>
+			<if test="lotGameInfo.gameAlias != null and lotGameInfo.gameAlias != ''">
+			<![CDATA[game_alias = #{lotGameInfo.gameAlias},]]>
+			</if>
+			<if test="lotGameInfo.gameDesc != null and lotGameInfo.gameDesc != ''">
+			<![CDATA[game_desc = #{lotGameInfo.gameDesc},]]>
+			</if>
+			<if test="lotGameInfo.sorting != null">
+			<![CDATA[sorting = #{lotGameInfo.sorting},]]>
+			</if>
+			<if test="lotGameInfo.enableFlag != null">
+			<![CDATA[enable_flag = #{lotGameInfo.enableFlag},]]>
+			</if>
+			<if test="lotGameInfo.reward != null and lotGameInfo.reward != ''">
+			<![CDATA[reward = #{lotGameInfo.reward},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotGameInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="LotGameInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.game_name AS game_name,
+			t.game_alias AS game_alias,
+			t.game_desc AS game_desc,
+			t.sorting AS sorting,
+			t.enable_flag AS enable_flag,
+			t.reward AS reward
+		FROM
+			t_lot_game_info t
+		]]>
+		<where>
+			<if test="lotGameInfo.pkId != null and lotGameInfo.pkId > 0">
+			<![CDATA[AND t.pk_id = #{lotGameInfo.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotGameInfo.createUser != null and lotGameInfo.createUser > 0">
+			<![CDATA[AND t.create_user = #{lotGameInfo.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotGameInfo.createTime != null">
+			<![CDATA[AND t.create_time = #{lotGameInfo.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotGameInfo.updateUser != null and lotGameInfo.updateUser > 0">
+			<![CDATA[AND t.update_user = #{lotGameInfo.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotGameInfo.updateTime != null">
+			<![CDATA[AND t.update_time = #{lotGameInfo.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotGameInfo.dataVersion != null and lotGameInfo.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{lotGameInfo.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotGameInfo.productId != null and lotGameInfo.productId > 0">
+			<![CDATA[AND t.product_id = #{lotGameInfo.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotGameInfo.gameName != null and lotGameInfo.gameName != ''">
+			<![CDATA[AND t.game_name = #{lotGameInfo.gameName, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotGameInfo.gameAlias != null and lotGameInfo.gameAlias != ''">
+			<![CDATA[AND t.game_alias = #{lotGameInfo.gameAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotGameInfo.gameDesc != null and lotGameInfo.gameDesc != ''">
+			<![CDATA[AND t.game_desc = #{lotGameInfo.gameDesc, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="lotGameInfo.sorting != null and lotGameInfo.sorting > 0">
+			<![CDATA[AND t.sorting = #{lotGameInfo.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotGameInfo.enableFlag != null and lotGameInfo.enableFlag > 0">
+			<![CDATA[AND t.enable_flag = #{lotGameInfo.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotGameInfo.reward != null and lotGameInfo.reward != ''">
+			<![CDATA[AND t.reward = #{lotGameInfo.reward, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="LotGameInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.game_name AS game_name,
+			t.game_alias AS game_alias,
+			t.game_desc AS game_desc,
+			t.sorting AS sorting,
+			t.enable_flag AS enable_flag,
+			t.reward AS reward
+		FROM
+			t_lot_game_info t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{lotGameInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_game_info
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameName != null and where.gameName != ''">
+			<![CDATA[AND game_name = #{where.gameName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameAlias != null and where.gameAlias != ''">
+			<![CDATA[AND game_alias = #{where.gameAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.gameDesc != null and where.gameDesc != ''">
+			<![CDATA[AND game_desc = #{where.gameDesc, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.reward != null and where.reward != ''">
+			<![CDATA[AND reward = #{where.reward, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_game_info
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{lotGameInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

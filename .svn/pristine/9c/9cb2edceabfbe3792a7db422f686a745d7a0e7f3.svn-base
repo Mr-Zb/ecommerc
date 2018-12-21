@@ -1,0 +1,149 @@
+package com.fun.client.service;
+
+import com.fun.admin.service.SequenceService;
+import com.fun.client.domain.FinRechargeLog;
+import com.fun.client.domain.FinWithdrawLog;
+import com.fun.client.domain.GoodsOrderInfo;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.repository.MemUserInfoMapper;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.utils.DigestUtils;
+import com.fun.framework.utils.StringUtils;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.service.FinCapitalLogService;
+import org.apache.commons.lang3.Validate;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.utils.CollectionUtils;
+
+import com.fun.le.repository.LotGameInfoMapper;
+
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class MemFinService extends BaseService {
+
+	@Autowired
+	private MemUserInfoMapper memUserInfoMapper;
+
+	@Autowired
+	private FinRechargeLogService rechargeLogService;
+
+	@Autowired
+	private LotGameInfoMapper lotGameInfoMapper;
+
+	private @Autowired
+	FinCapitalLogService finCapitalLogService;
+
+	private @Autowired
+	SequenceService sequenceService;
+
+	@Autowired
+	private FinWithdrawLogService withdrawLogService;
+
+	@Autowired
+	private FinService finService;
+
+	/**
+	 * 第三方充值（自动）
+	 * @param uid
+	 * @param orderId
+	 * @param amount
+	 * @param remark
+	 * @throws BusinessException
+	 */
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = { Exception.class })
+	public void recharge(Integer uid, String orderId, Double amount, String remark){
+		MemUserInfo userInfo = memUserInfoMapper.selectById(uid);
+		if (userInfo != null) {
+			double _amount = this.finCapitalLogService.countUserAmount(uid);
+//			String ordderNo = this.sequenceService.generate("C");
+			FinRechargeLog where = new FinRechargeLog();
+			where.setRechargeNo(orderId);
+			List<FinRechargeLog> list = this.rechargeLogService.select(uid, where);
+			Validate.isTrue(CollectionUtils.isEmpty(list));
+			FinRechargeLog finRechargeLog = new FinRechargeLog();
+			finRechargeLog.setMemberId(userInfo.getPkId());
+			finRechargeLog.setMemberName(userInfo.getLoginName());
+			finRechargeLog.setAgentId(userInfo.getAgentId().intValue());
+			finRechargeLog.setAgentName(userInfo.getAgentName());
+			finRechargeLog.setAgentFullId(userInfo.getAgentFullId());
+			finRechargeLog.setAgentFullName(userInfo.getAgentFullName());
+			finRechargeLog.setRechargeAmount1(amount);
+			finRechargeLog.setRechargeAmount2(Double.valueOf(amount.doubleValue() + _amount));
+			finRechargeLog.setRechargeAccount(remark);
+			finRechargeLog.setRechargeNo(orderId);
+			finRechargeLog.setOrderNo(orderId);
+			finRechargeLog.setRechargeFrom("自动入账");
+			finRechargeLog.setRemark("自动入账，" + remark);
+			finRechargeLog.setRechargeState(Integer.valueOf(1));
+			this.rechargeLogService.insert(uid, finRechargeLog);
+			FinCapitalLog finCapitalLog = new FinCapitalLog();
+			finCapitalLog.setMemberName(userInfo.getLoginName());
+			finCapitalLog.setCreateTime(new Date());
+			finCapitalLog.setUpdateTime(new Date());
+			finCapitalLog.setCreateUser(uid);
+			finCapitalLog.setUpdateUser(uid);
+			finCapitalLog.setRemark("自动入账");
+			finCapitalLog.setOrderNo(orderId);
+			finCapitalLog.setMemberId(userInfo.getPkId().longValue());
+			finCapitalLog.setCapitalAmount1(amount);
+			finCapitalLog.setCapitalAmount2(Double.valueOf(amount.doubleValue() + _amount));
+			finCapitalLog.setCapitalType(33);
+			finCapitalLog.setAgentFullId(userInfo.getAgentFullId());
+			finCapitalLog.setAgentFullName(userInfo.getAgentFullName());
+			finCapitalLog.setAgentId(userInfo.getAgentId().intValue());
+			finCapitalLog.setAgentName(userInfo.getAgentName());
+			finCapitalLog.setOrderId(0);
+			finCapitalLog.setDataVersion(1);
+			this.finCapitalLogService.insert(finCapitalLog);
+			this.memUserInfoMapper.updateUserAmount1(uid, finCapitalLog.getCapitalAmount2());
+		}
+	}
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = { Exception.class })
+	public void drawApplier(Integer userId, String bankPwd, Double amount) throws BusinessException {
+		MemUserInfo userInfo = memUserInfoMapper.selectById(userId);
+		if (!StringUtils.equalsIgnoreCase(DigestUtils.md5Hex(bankPwd), userInfo.getLoginPwd())) {
+			throw new BusinessException(Integer.valueOf(501), "提款密码不正确");
+		}
+		if (userInfo.getBankLocked().intValue() == 0) {
+			throw new BusinessException(Integer.valueOf(501), "请先完善银行资料");
+		}
+		double _amount = this.finCapitalLogService.countUserAmount(userId);
+		if (_amount < amount.doubleValue()) {
+			throw new BusinessException(Integer.valueOf(501), "余额不足");
+		}
+		String orderNo = this.sequenceService.generate("T");
+		FinWithdrawLog finWithdrawLog = new FinWithdrawLog();
+		finWithdrawLog.setMemberId(userInfo.getPkId());
+		finWithdrawLog.setMemberName(userInfo.getLoginName());
+		finWithdrawLog.setAgentId(userInfo.getAgentId().intValue());
+		finWithdrawLog.setAgentName(userInfo.getAgentName());
+		finWithdrawLog.setAgentFullId(userInfo.getAgentFullId());
+		finWithdrawLog.setAgentFullName(userInfo.getAgentFullName());
+		finWithdrawLog.setBankName(userInfo.getBankName());
+		finWithdrawLog.setBankSubName(userInfo.getBankSubName());
+		finWithdrawLog.setWithdrawAccount(userInfo.getBankAccount());
+		finWithdrawLog.setBankAccountName(userInfo.getBankAccountName());
+		finWithdrawLog.setBankAccount(userInfo.getBankAccount());
+		finWithdrawLog.setOrderNo(orderNo);
+		//提现流水
+		finWithdrawLog.setWithdrawNo(orderNo);
+		//提现平台
+		finWithdrawLog.setWithdrawTo(orderNo);
+		finWithdrawLog.setRemark("用户提现");
+		finWithdrawLog.setWithdrawState(Integer.valueOf(0));
+		finWithdrawLog.setWithdrawAmount1(Double.valueOf(_amount));
+		finWithdrawLog.setWithdrawAmount2(amount);
+		this.withdrawLogService.insert(userId, finWithdrawLog);
+		this.finService.addCapitalLog(userId, Integer.valueOf(12), Double.valueOf(-amount.doubleValue()), orderNo, "用户发起提现申请");
+	}
+}

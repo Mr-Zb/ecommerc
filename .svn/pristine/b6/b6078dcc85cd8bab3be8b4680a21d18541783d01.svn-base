@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.FinRechargeLogMapper">
+	<resultMap id="FinRechargeLog" type="com.fun.client.domain.FinRechargeLog">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="memberId" javaType="Integer" column="member_id" jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name" jdbcType="CHAR" />
+		<result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER" />
+		<result property="agentName" javaType="String" column="agent_name" jdbcType="VARCHAR" />
+		<result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="CHAR" />
+		<result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="CHAR" />
+		<result property="orderNo" javaType="String" column="order_no" jdbcType="CHAR" />
+		<result property="rechargeFrom" javaType="String" column="recharge_from" jdbcType="CHAR" />
+		<result property="rechargeAccount" javaType="String" column="recharge_account" jdbcType="CHAR" />
+		<result property="rechargeAmount1" javaType="Double" column="recharge_amount1" jdbcType="DECIMAL" />
+		<result property="rechargeAmount2" javaType="Double" column="recharge_amount2" jdbcType="DECIMAL" />
+		<result property="rechargeState" javaType="Integer" column="recharge_state" jdbcType="TINYINT" />
+		<result property="rechargeNo" javaType="String" column="recharge_no" jdbcType="CHAR" />
+		<result property="remark" javaType="String" column="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="finRechargeLog.pkId">
+		<![CDATA[
+		INSERT INTO t_fin_recharge_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			order_no,
+			recharge_from,
+			recharge_account,
+			recharge_amount1,
+			recharge_amount2,
+			recharge_state,
+			recharge_no,
+			remark
+		)
+		VALUES
+			(
+				#{finRechargeLog.pkId, jdbcType = INTEGER},
+				#{finRechargeLog.createUser, jdbcType = INTEGER},
+				#{finRechargeLog.createTime, jdbcType = TIMESTAMP},
+				#{finRechargeLog.updateUser, jdbcType = INTEGER},
+				#{finRechargeLog.updateTime, jdbcType = TIMESTAMP},
+				#{finRechargeLog.dataVersion, jdbcType = TINYINT},
+				#{finRechargeLog.memberId, jdbcType = INTEGER},
+				#{finRechargeLog.memberName, jdbcType = CHAR},
+				#{finRechargeLog.agentId, jdbcType = INTEGER},
+				#{finRechargeLog.agentName, jdbcType = VARCHAR},
+				#{finRechargeLog.agentFullId, jdbcType = CHAR},
+				#{finRechargeLog.agentFullName, jdbcType = CHAR},
+				#{finRechargeLog.orderNo, jdbcType = CHAR},
+				#{finRechargeLog.rechargeFrom, jdbcType = CHAR},
+				#{finRechargeLog.rechargeAccount, jdbcType = CHAR},
+				#{finRechargeLog.rechargeAmount1, jdbcType = DECIMAL},
+				#{finRechargeLog.rechargeAmount2, jdbcType = DECIMAL},
+				#{finRechargeLog.rechargeState, jdbcType = TINYINT},
+				#{finRechargeLog.rechargeNo, jdbcType = CHAR},
+				#{finRechargeLog.remark, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_fin_recharge_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			order_no,
+			recharge_from,
+			recharge_account,
+			recharge_amount1,
+			recharge_amount2,
+			recharge_state,
+			recharge_no,
+			remark
+		)
+		]]>
+		<foreach collection="finRechargeLogs" item="finRechargeLog" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{finRechargeLog.pkId, jdbcType = INTEGER},
+				#{finRechargeLog.createUser, jdbcType = INTEGER},
+				#{finRechargeLog.createTime, jdbcType = TIMESTAMP},
+				#{finRechargeLog.updateUser, jdbcType = INTEGER},
+				#{finRechargeLog.updateTime, jdbcType = TIMESTAMP},
+				#{finRechargeLog.dataVersion, jdbcType = TINYINT},
+				#{finRechargeLog.memberId, jdbcType = INTEGER},
+				#{finRechargeLog.memberName, jdbcType = CHAR},
+				#{finRechargeLog.agentId, jdbcType = INTEGER},
+				#{finRechargeLog.agentName, jdbcType = VARCHAR},
+				#{finRechargeLog.agentFullId, jdbcType = CHAR},
+				#{finRechargeLog.agentFullName, jdbcType = CHAR},
+				#{finRechargeLog.orderNo, jdbcType = CHAR},
+				#{finRechargeLog.rechargeFrom, jdbcType = CHAR},
+				#{finRechargeLog.rechargeAccount, jdbcType = CHAR},
+				#{finRechargeLog.rechargeAmount1, jdbcType = DECIMAL},
+				#{finRechargeLog.rechargeAmount2, jdbcType = DECIMAL},
+				#{finRechargeLog.rechargeState, jdbcType = TINYINT},
+				#{finRechargeLog.rechargeNo, jdbcType = CHAR},
+				#{finRechargeLog.remark, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_fin_recharge_log]]>
+		<set>
+		<![CDATA[update_user = #{finRechargeLog.updateUser},]]>
+		<![CDATA[update_time = #{finRechargeLog.updateTime},]]>
+		<![CDATA[data_version = #{finRechargeLog.dataVersion},]]>
+		<![CDATA[member_id = #{finRechargeLog.memberId},]]>
+		<![CDATA[member_name = #{finRechargeLog.memberName},]]>
+		<![CDATA[agent_id = #{finRechargeLog.agentId},]]>
+		<![CDATA[agent_name = #{finRechargeLog.agentName},]]>
+		<![CDATA[agent_full_id = #{finRechargeLog.agentFullId},]]>
+		<![CDATA[agent_full_name = #{finRechargeLog.agentFullName},]]>
+		<![CDATA[order_no = #{finRechargeLog.orderNo},]]>
+		<![CDATA[recharge_from = #{finRechargeLog.rechargeFrom},]]>
+		<![CDATA[recharge_account = #{finRechargeLog.rechargeAccount},]]>
+		<![CDATA[recharge_amount1 = #{finRechargeLog.rechargeAmount1},]]>
+		<![CDATA[recharge_amount2 = #{finRechargeLog.rechargeAmount2},]]>
+		<![CDATA[recharge_state = #{finRechargeLog.rechargeState},]]>
+		<![CDATA[recharge_no = #{finRechargeLog.rechargeNo},]]>
+		<![CDATA[remark = #{finRechargeLog.remark},]]>
+		</set>
+		<where>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeFrom != null and where.rechargeFrom != ''">
+			<![CDATA[AND recharge_from = #{where.rechargeFrom, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAccount != null and where.rechargeAccount != ''">
+			<![CDATA[AND recharge_account = #{where.rechargeAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAmount1 != null">
+			<![CDATA[AND recharge_amount1 = #{where.rechargeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeAmount2 != null">
+			<![CDATA[AND recharge_amount2 = #{where.rechargeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeState != null">
+			<![CDATA[AND recharge_state = #{where.rechargeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rechargeNo != null and where.rechargeNo != ''">
+			<![CDATA[AND recharge_no = #{where.rechargeNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_fin_recharge_log]]>
+		<set>
+		<![CDATA[update_user = #{finRechargeLog.updateUser},]]>
+		<![CDATA[update_time = #{finRechargeLog.updateTime},]]>
+		<![CDATA[data_version = #{finRechargeLog.dataVersion},]]>
+		<![CDATA[member_id = #{finRechargeLog.memberId},]]>
+		<![CDATA[member_name = #{finRechargeLog.memberName},]]>
+		<![CDATA[agent_id = #{finRechargeLog.agentId},]]>
+		<![CDATA[agent_name = #{finRechargeLog.agentName},]]>
+		<![CDATA[agent_full_id = #{finRechargeLog.agentFullId},]]>
+		<![CDATA[agent_full_name = #{finRechargeLog.agentFullName},]]>
+		<![CDATA[order_no = #{finRechargeLog.orderNo},]]>
+		<![CDATA[recharge_from = #{finRechargeLog.rechargeFrom},]]>
+		<![CDATA[recharge_account = #{finRechargeLog.rechargeAccount},]]>
+		<![CDATA[recharge_amount1 = #{finRechargeLog.rechargeAmount1},]]>
+		<![CDATA[recharge_amount2 = #{finRechargeLog.rechargeAmount2},]]>
+		<![CDATA[recharge_state = #{finRechargeLog.rechargeState},]]>
+		<![CDATA[recharge_no = #{finRechargeLog.rechargeNo},]]>
+		<![CDATA[remark = #{finRechargeLog.remark},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{finRechargeLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_fin_recharge_log]]>
+		<set>
+			<if test="finRechargeLog.updateUser != null">
+			<![CDATA[update_user = #{finRechargeLog.updateUser},]]>
+			</if>
+			<if test="finRechargeLog.updateTime != null">
+			<![CDATA[update_time = #{finRechargeLog.updateTime},]]>
+			</if>
+			<if test="finRechargeLog.dataVersion != null">
+			<![CDATA[data_version = #{finRechargeLog.dataVersion},]]>
+			</if>
+			<if test="finRechargeLog.memberId != null">
+			<![CDATA[member_id = #{finRechargeLog.memberId},]]>
+			</if>
+			<if test="finRechargeLog.memberName != null and finRechargeLog.memberName != ''">
+			<![CDATA[member_name = #{finRechargeLog.memberName},]]>
+			</if>
+			<if test="finRechargeLog.agentId != null">
+			<![CDATA[agent_id = #{finRechargeLog.agentId},]]>
+			</if>
+			<if test="finRechargeLog.agentName != null and finRechargeLog.agentName != ''">
+			<![CDATA[agent_name = #{finRechargeLog.agentName},]]>
+			</if>
+			<if test="finRechargeLog.agentFullId != null and finRechargeLog.agentFullId != ''">
+			<![CDATA[agent_full_id = #{finRechargeLog.agentFullId},]]>
+			</if>
+			<if test="finRechargeLog.agentFullName != null and finRechargeLog.agentFullName != ''">
+			<![CDATA[agent_full_name = #{finRechargeLog.agentFullName},]]>
+			</if>
+			<if test="finRechargeLog.orderNo != null and finRechargeLog.orderNo != ''">
+			<![CDATA[order_no = #{finRechargeLog.orderNo},]]>
+			</if>
+			<if test="finRechargeLog.rechargeFrom != null and finRechargeLog.rechargeFrom != ''">
+			<![CDATA[recharge_from = #{finRechargeLog.rechargeFrom},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAccount != null and finRechargeLog.rechargeAccount != ''">
+			<![CDATA[recharge_account = #{finRechargeLog.rechargeAccount},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount1 != null">
+			<![CDATA[recharge_amount1 = #{finRechargeLog.rechargeAmount1},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount2 != null">
+			<![CDATA[recharge_amount2 = #{finRechargeLog.rechargeAmount2},]]>
+			</if>
+			<if test="finRechargeLog.rechargeState != null">
+			<![CDATA[recharge_state = #{finRechargeLog.rechargeState},]]>
+			</if>
+			<if test="finRechargeLog.rechargeNo != null and finRechargeLog.rechargeNo != ''">
+			<![CDATA[recharge_no = #{finRechargeLog.rechargeNo},]]>
+			</if>
+			<if test="finRechargeLog.remark != null and finRechargeLog.remark != ''">
+			<![CDATA[remark = #{finRechargeLog.remark},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeFrom != null and where.rechargeFrom != ''">
+			<![CDATA[AND recharge_from = #{where.rechargeFrom, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAccount != null and where.rechargeAccount != ''">
+			<![CDATA[AND recharge_account = #{where.rechargeAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAmount1 != null">
+			<![CDATA[AND recharge_amount1 = #{where.rechargeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeAmount2 != null">
+			<![CDATA[AND recharge_amount2 = #{where.rechargeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeState != null">
+			<![CDATA[AND recharge_state = #{where.rechargeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rechargeNo != null and where.rechargeNo != ''">
+			<![CDATA[AND recharge_no = #{where.rechargeNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_fin_recharge_log]]>
+		<set>
+			<if test="finRechargeLog.updateUser != null">
+			<![CDATA[update_user = #{finRechargeLog.updateUser},]]>
+			</if>
+			<if test="finRechargeLog.updateTime != null">
+			<![CDATA[update_time = #{finRechargeLog.updateTime},]]>
+			</if>
+			<if test="finRechargeLog.dataVersion != null">
+			<![CDATA[data_version = #{finRechargeLog.dataVersion},]]>
+			</if>
+			<if test="finRechargeLog.memberId != null">
+			<![CDATA[member_id = #{finRechargeLog.memberId},]]>
+			</if>
+			<if test="finRechargeLog.memberName != null and finRechargeLog.memberName != ''">
+			<![CDATA[member_name = #{finRechargeLog.memberName},]]>
+			</if>
+			<if test="finRechargeLog.agentId != null">
+			<![CDATA[agent_id = #{finRechargeLog.agentId},]]>
+			</if>
+			<if test="finRechargeLog.agentName != null and finRechargeLog.agentName != ''">
+			<![CDATA[agent_name = #{finRechargeLog.agentName},]]>
+			</if>
+			<if test="finRechargeLog.agentFullId != null and finRechargeLog.agentFullId != ''">
+			<![CDATA[agent_full_id = #{finRechargeLog.agentFullId},]]>
+			</if>
+			<if test="finRechargeLog.agentFullName != null and finRechargeLog.agentFullName != ''">
+			<![CDATA[agent_full_name = #{finRechargeLog.agentFullName},]]>
+			</if>
+			<if test="finRechargeLog.orderNo != null and finRechargeLog.orderNo != ''">
+			<![CDATA[order_no = #{finRechargeLog.orderNo},]]>
+			</if>
+			<if test="finRechargeLog.rechargeFrom != null and finRechargeLog.rechargeFrom != ''">
+			<![CDATA[recharge_from = #{finRechargeLog.rechargeFrom},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAccount != null and finRechargeLog.rechargeAccount != ''">
+			<![CDATA[recharge_account = #{finRechargeLog.rechargeAccount},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount1 != null">
+			<![CDATA[recharge_amount1 = #{finRechargeLog.rechargeAmount1},]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount2 != null">
+			<![CDATA[recharge_amount2 = #{finRechargeLog.rechargeAmount2},]]>
+			</if>
+			<if test="finRechargeLog.rechargeState != null">
+			<![CDATA[recharge_state = #{finRechargeLog.rechargeState},]]>
+			</if>
+			<if test="finRechargeLog.rechargeNo != null and finRechargeLog.rechargeNo != ''">
+			<![CDATA[recharge_no = #{finRechargeLog.rechargeNo},]]>
+			</if>
+			<if test="finRechargeLog.remark != null and finRechargeLog.remark != ''">
+			<![CDATA[remark = #{finRechargeLog.remark},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{finRechargeLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="FinRechargeLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.order_no AS order_no,
+			t.recharge_from AS recharge_from,
+			t.recharge_account AS recharge_account,
+			t.recharge_amount1 AS recharge_amount1,
+			t.recharge_amount2 AS recharge_amount2,
+			t.recharge_state AS recharge_state,
+			t.recharge_no AS recharge_no
+			t.remark AS remark
+		FROM
+			t_fin_recharge_log t
+		]]>
+		<where>
+			<if test="finRechargeLog.pkId != null and finRechargeLog.pkId > 0">
+			<![CDATA[AND t.pk_id = #{finRechargeLog.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.createUser != null and finRechargeLog.createUser > 0">
+			<![CDATA[AND t.create_user = #{finRechargeLog.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.createTime != null">
+			<![CDATA[AND t.create_time = #{finRechargeLog.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="finRechargeLog.updateUser != null and finRechargeLog.updateUser > 0">
+			<![CDATA[AND t.update_user = #{finRechargeLog.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.updateTime != null">
+			<![CDATA[AND t.update_time = #{finRechargeLog.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="finRechargeLog.dataVersion != null and finRechargeLog.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{finRechargeLog.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="finRechargeLog.memberId != null and finRechargeLog.memberId > 0">
+			<![CDATA[AND t.member_id = #{finRechargeLog.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.memberName != null and finRechargeLog.memberName != ''">
+			<![CDATA[AND t.member_name = #{finRechargeLog.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.agentId != null and finRechargeLog.agentId > 0">
+			<![CDATA[AND t.agent_id = #{finRechargeLog.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.agentName != null and finRechargeLog.agentName != ''">
+			<![CDATA[AND t.agent_name = #{finRechargeLog.agentName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="finRechargeLog.agentFullId != null and finRechargeLog.agentFullId != ''">
+			<![CDATA[AND t.agent_full_id = #{finRechargeLog.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.agentFullName != null and finRechargeLog.agentFullName != ''">
+			<![CDATA[AND t.agent_full_name = #{finRechargeLog.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.orderNo != null and finRechargeLog.orderNo != ''">
+			<![CDATA[AND t.order_no = #{finRechargeLog.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.rechargeFrom != null and finRechargeLog.rechargeFrom != ''">
+			<![CDATA[AND t.recharge_from = #{finRechargeLog.rechargeFrom, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.rechargeAccount != null and finRechargeLog.rechargeAccount != ''">
+			<![CDATA[AND t.recharge_account = #{finRechargeLog.rechargeAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount1 != null and finRechargeLog.rechargeAmount1 > 0">
+			<![CDATA[AND t.recharge_amount1 = #{finRechargeLog.rechargeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="finRechargeLog.rechargeAmount2 != null and finRechargeLog.rechargeAmount2 > 0">
+			<![CDATA[AND t.recharge_amount2 = #{finRechargeLog.rechargeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="finRechargeLog.rechargeState != null and finRechargeLog.rechargeState > 0">
+			<![CDATA[AND t.recharge_state = #{finRechargeLog.rechargeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="finRechargeLog.rechargeNo != null and finRechargeLog.rechargeNo != ''">
+			<![CDATA[AND t.recharge_no = #{finRechargeLog.rechargeNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.remark != null and finRechargeLog.remark != ''">
+			<![CDATA[AND t.remark = #{finRechargeLog.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="FinRechargeLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.order_no AS order_no,
+			t.recharge_from AS recharge_from,
+			t.recharge_account AS recharge_account,
+			t.recharge_amount1 AS recharge_amount1,
+			t.recharge_amount2 AS recharge_amount2,
+			t.recharge_state AS recharge_state,
+			t.recharge_no AS recharge_no,
+			t.remark AS remark
+		FROM
+			t_fin_recharge_log t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{finRechargeLogId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+	<!-- 根据member_id获取最后一笔充值 -->
+	<select id="selectLastByUserId" parameterType="Map" resultMap="FinRechargeLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.order_no AS order_no,
+			t.recharge_from AS recharge_from,
+			t.recharge_account AS recharge_account,
+			t.recharge_amount1 AS recharge_amount1,
+			t.recharge_amount2 AS recharge_amount2,
+			t.recharge_state AS recharge_state,
+			t.recharge_no AS recharge_no,
+			t.remark AS remark,
+		FROM
+			t_fin_recharge_log t
+		]]>
+		<where>
+		<![CDATA[AND t.member_id = #{memberId, jdbcType=INTEGER}]]>
+		<![CDATA[ORDER BY t.create_time DESC LIMIT 1]]>
+		</where>
+	</select>
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_fin_recharge_log
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeFrom != null and where.rechargeFrom != ''">
+			<![CDATA[AND recharge_from = #{where.rechargeFrom, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAccount != null and where.rechargeAccount != ''">
+			<![CDATA[AND recharge_account = #{where.rechargeAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.rechargeAmount1 != null">
+			<![CDATA[AND recharge_amount1 = #{where.rechargeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeAmount2 != null">
+			<![CDATA[AND recharge_amount2 = #{where.rechargeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.rechargeState != null">
+			<![CDATA[AND recharge_state = #{where.rechargeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rechargeNo != null and where.rechargeNo != ''">
+			<![CDATA[AND recharge_no = #{where.rechargeNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_fin_recharge_log
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{finRechargeLogId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+
+	<!--充值明细-->
+	<select id="selectFinRechargeList" parameterType="Map" resultMap="FinRechargeLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.order_no AS order_no,
+			t.recharge_from AS recharge_from,
+			t.recharge_account AS recharge_account,
+			t.recharge_amount1 AS recharge_amount1,
+			t.recharge_amount2 AS recharge_amount2,
+			t.recharge_state AS recharge_state,
+			t.recharge_no AS recharge_no,
+			t.remark AS remark
+		FROM
+			t_fin_recharge_log t
+		]]>
+		<where>
+			<if test="finRechargeLog.agentId != null and finRechargeLog.agentId > 0">
+				<![CDATA[AND t.agent_id = #{finRechargeLog.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finRechargeLog.memberName != null and finRechargeLog.memberName != ''">
+				<![CDATA[AND t.member_name = #{finRechargeLog.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finRechargeLog.rechargeState != null and finRechargeLog.rechargeState > 0">
+				<![CDATA[AND t.recharge_state = #{finRechargeLog.rechargeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.beginDate != null">
+				<![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endDate != null">
+				<![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,22 @@
+package com.fun.api.web.controller;
+
+import com.fun.client.service.GoodsOrderInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.framework.web.dto.QueryDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class OrderManageController extends BaseController{
+
+    private @Autowired
+    GoodsOrderInfoService goodsOrderInfoService;
+
+//    public AjaxReturn orderInfoList(Integer pkId, Integer createUser, Integer orderState, QueryDto queryDto){
+//        return this.goodsOrderInfoService.orderInfoList(pkId,createUser,orderState,queryDto);
+//    }
+
+}

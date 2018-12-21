@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.ThreePayInfoMapper">
+		<resultMap id="ThreePayInfo" type="com.fun.client.domain.ThreePayInfo">
+			<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+			<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+			<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+			<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+			<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+			<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT"/>
+			<result property="platformId" javaType="Integer" column="platform_id" jdbcType="INTEGER" />
+			<result property="platformName" javaType="String" column="platform_name" jdbcType="VARCHAR" />
+			<result property="version" javaType="String" column="version" jdbcType="VARCHAR" />
+			<result property="payId" javaType="String" column="pay_id" jdbcType="VARCHAR" />
+			<result property="payName" javaType="String" column="pay_name" jdbcType="VARCHAR" />
+			<result property="memberId" javaType="String" column="member_id" jdbcType="VARCHAR" />
+			<result property="memberKey" javaType="String" column="member_key" jdbcType="VARCHAR" />
+			<result property="closeMoney" javaType="Double" column="close_money" jdbcType="DECIMAL" />
+			<result property="mostIncome" javaType="Double" column="most_income" jdbcType="DECIMAL" />
+			<result property="minimumIncome" javaType="Double" column="minimum_income" jdbcType="DECIMAL" />
+			<result property="state" javaType="Integer" column="state" jdbcType="INTEGER" />
+			<result property="key" javaType="Integer" column="key" jdbcType="INTEGER" />
+			<result property="rsaPrivateKey" javaType="String" column="rsa_private_key" jdbcType="VARCHAR" />
+			<result property="payUrl" javaType="String" column="pay_url" jdbcType="VARCHAR" />
+			<result property="businessAlias" javaType="String" column="business_alias" jdbcType="VARCHAR" />
+			<result property="businessAccount" javaType="String" column="business_account" jdbcType="VARCHAR" />
+		</resultMap>
+		
+	 <!-- 插入数据 -->
+ <insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="ThreePayInfo.pkId">
+		<![CDATA[
+		INSERT INTO t_addedpay (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			platform_id,
+			platform_name,
+			version,
+			pay_id,
+			pay_name,
+			member_id,
+			member_key,
+			close_money,
+			most_income,
+			minimum_income,
+			state,
+			`key`,
+			rsa_private_key,
+			pay_url,
+			business_alias,
+			business_account
+		)
+		VALUES
+			(
+				#{threePayInfo.pkId, jdbcType = INTEGER},
+				#{threePayInfo.createUser, jdbcType = INTEGER},
+				#{threePayInfo.createTime, jdbcType = TIMESTAMP},
+				#{threePayInfo.updateUser, jdbcType = INTEGER},
+				#{threePayInfo.updateTime, jdbcType = TIMESTAMP},
+				#{threePayInfo.dataVersion, jdbcType = TINYINT},
+				#{threePayInfo.platformId, jdbcType = INTEGER},
+				#{threePayInfo.platformName, jdbcType = VARCHAR},
+				#{threePayInfo.version, jdbcType = VARCHAR},
+				#{threePayInfo.payId, jdbcType = VARCHAR},
+				#{threePayInfo.payName, jdbcType = VARCHAR},
+				#{threePayInfo.memberId, jdbcType = VARCHAR},
+				#{threePayInfo.memberKey, jdbcType = VARCHAR},
+				#{threePayInfo.closeMoney, jdbcType = DECIMAL},
+				#{threePayInfo.mostIncome, jdbcType = DECIMAL},
+				#{threePayInfo.minimumIncome, jdbcType = DECIMAL},
+				#{threePayInfo.state, jdbcType = INTEGER},
+				#{threePayInfo.key, jdbcType = INTEGER},
+				#{threePayInfo.rsaPrivateKey, jdbcType = VARCHAR},
+				#{threePayInfo.payUrl, jdbcType = VARCHAR},
+				#{threePayInfo.businessAlias, jdbcType = VARCHAR},
+				#{threePayInfo.businessAccount, jdbcType = VARCHAR}
+			)
+		]]>
+	</insert> 
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_addedpay]]>
+		<set>
+		<if test="threePayInfo.platformId != null">
+		<![CDATA[platform_id = #{threePayInfo.platformId},]]>
+		</if>
+		<if test="threePayInfo.platformName != null">
+		<![CDATA[platform_name = #{threePayInfo.platformName},]]>
+		</if>
+		<if test="threePayInfo.version != null">
+		<![CDATA[version = #{threePayInfo.version},]]>
+		</if>
+		<if test="threePayInfo.payId != null and threePayInfo.payId != '' ">
+		<![CDATA[pay_id = #{threePayInfo.payId},]]>
+		</if>
+		<if test="threePayInfo.payName != null and threePayInfo.payName != ''">
+		<![CDATA[pay_name = #{threePayInfo.payName},]]>
+		</if>
+		<if test="threePayInfo.memberId != null and threePayInfo.memberId != '' ">
+		<![CDATA[member_id = #{threePayInfo.memberId},]]>
+		</if>
+		<if test="threePayInfo.memberKey != null and threePayInfo.memberKey != ''">
+		<![CDATA[member_key = #{threePayInfo.memberKey},]]>
+		</if>
+		<if test="threePayInfo.closeMoney != null and threePayInfo.closeMoney >0">
+		<![CDATA[close_money = #{threePayInfo.closeMoney},]]>
+		</if>
+		<if test="threePayInfo.mostIncome != null and threePayInfo.mostIncome >0 ">
+		<![CDATA[most_income = #{threePayInfo.mostIncome},]]>
+		</if>
+		<if test="threePayInfo.minimumIncome != null and threePayInfo.minimumIncome >0">
+		<![CDATA[minimum_income = #{threePayInfo.minimumIncome},]]>
+		</if>
+		<if test="threePayInfo.state != null ">
+		<![CDATA[state = #{threePayInfo.state},]]>
+		</if>
+		<if test="threePayInfo.key != null and threePayInfo.key != ''">
+		<![CDATA[`key`= #{threePayInfo.key},]]>
+		</if>
+		<if test="threePayInfo.rsaPrivateKey != null">
+		<![CDATA[rsa_private_key = #{threePayInfo.rsaPrivateKey},]]>
+		</if>
+		<if test="threePayInfo.payUrl != null and threePayInfo.payUrl !=''">
+		<![CDATA[pay_url = #{threePayInfo.payUrl},]]>
+		</if>
+		<if test="threePayInfo.businessAlias != null and threePayInfo.businessAlias != ''">
+		<![CDATA[business_alias = #{threePayInfo.businessAlias},]]>
+		</if>
+		<if test="threePayInfo.businessAccount != null and threePayInfo.businessAccount != ''">
+		<![CDATA[business_account = #{threePayInfo.businessAccount},]]>
+		</if> 
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{threePayInfo.pkId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!--查询 -->
+	 <select id="select" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*  
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+		<if test="threePayInfo.pkId != null and threePayInfo.pkId > 0">
+			<![CDATA[AND t.pk_id = #{threePayInfo.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.createUser != null and threePayInfo.createUser > 0">
+			<![CDATA[AND t.create_user = #{threePayInfo.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.createTime != null">
+			<![CDATA[AND t.create_time = #{threePayInfo.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="threePayInfo.updateUser != null and threePayInfo.updateUser > 0">
+			<![CDATA[AND t.update_user = #{threePayInfo.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.updateTime != null">
+			<![CDATA[AND t.update_time = #{threePayInfo.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="threePayInfo.dataVersion != null and threePayInfo.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{threePayInfo.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.platformId != null and threePayInfo.platformId != ''">
+			<![CDATA[AND t.platform_id = #{threePayInfo.platformId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.platformName != null and threePayInfo.platformName != ''">
+			<![CDATA[AND t.platform_name = #{threePayInfo.platformName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.version != null and threePayInfo.version != ''">
+			<![CDATA[AND t.version = #{threePayInfo.version, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.payId != null and threePayInfo.payId != '' ">
+			<![CDATA[AND t.pay_id = #{threePayInfo.payId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.payName != null and threePayInfo.payName != ''">
+			<![CDATA[AND t.pay_name = #{threePayInfo.payName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.memberId != null and threePayInfo.memberId != ''">
+			<![CDATA[AND t.member_id = #{threePayInfo.memberId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.memberKey != null and threePayInfo.memberKey != ''">
+			<![CDATA[AND t.member_key = #{threePayInfo.memberKey, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.closeMoney != null and threePayInfo.closeMoney > 0">
+			<![CDATA[AND t.close_money = #{threePayInfo.closeMoney, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.mostIncome != null and threePayInfo.mostIncome > 0">
+			<![CDATA[AND t.most_income = #{threePayInfo.mostIncome, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.minimumIncome != null and threePayInfo.minimumIncome > 0">
+			<![CDATA[AND t.minimum_income = #{threePayInfo.campaign, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.state != null ">
+			<![CDATA[AND t.state = #{threePayInfo.state, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.key != null and threePayInfo.key > 0">
+			<![CDATA[AND t.key = #{threePayInfo.key, jdbcType=TINYINT}]]>
+			</if>
+		</where>
+	</select>
+	<!--查询 -->
+	<select id="selectA" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+			<if test="threePayInfo.pkId != null and threePayInfo.pkId > 0">
+				<![CDATA[AND t.pk_id = #{threePayInfo.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.createUser != null and threePayInfo.createUser > 0">
+				<![CDATA[AND t.create_user = #{threePayInfo.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.createTime != null">
+				<![CDATA[AND t.create_time = #{threePayInfo.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="threePayInfo.updateUser != null and threePayInfo.updateUser > 0">
+				<![CDATA[AND t.update_user = #{threePayInfo.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="threePayInfo.updateTime != null">
+				<![CDATA[AND t.update_time = #{threePayInfo.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="threePayInfo.dataVersion != null and threePayInfo.dataVersion > 0">
+				<![CDATA[AND t.data_version = #{threePayInfo.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.platformId != null and threePayInfo.platformId != ''">
+				<![CDATA[AND t.platform_id = #{threePayInfo.platformId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.platformName != null and threePayInfo.platformName != ''">
+				<![CDATA[AND t.platform_name = #{threePayInfo.platformName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.version != null and threePayInfo.version != ''">
+				<![CDATA[AND t.version = #{threePayInfo.version, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.payId != null and threePayInfo.payId != '' ">
+				<![CDATA[AND t.pay_id = #{threePayInfo.payId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.payName != null and threePayInfo.payName != ''">
+				<![CDATA[AND t.pay_name = #{threePayInfo.payName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.memberId != null and threePayInfo.memberId != ''">
+				<![CDATA[AND t.member_id = #{threePayInfo.memberId, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.memberKey != null and threePayInfo.memberKey != ''">
+				<![CDATA[AND t.member_key = #{threePayInfo.memberKey, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.closeMoney != null and threePayInfo.closeMoney > 0">
+				<![CDATA[AND t.close_money = #{threePayInfo.closeMoney, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.mostIncome != null and threePayInfo.mostIncome > 0">
+				<![CDATA[AND t.most_income = #{threePayInfo.mostIncome, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.minimumIncome != null and threePayInfo.minimumIncome > 0">
+				<![CDATA[AND t.minimum_income = #{threePayInfo.campaign, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="threePayInfo.state != null ">
+				<![CDATA[AND t.state = #{threePayInfo.state, jdbcType=TINYINT}]]>
+			</if>
+			<if test="threePayInfo.key != null and threePayInfo.key > 0">
+				<![CDATA[AND t.key = #{threePayInfo.key, jdbcType=TINYINT}]]>
+			</if>
+		</where>
+	</select>
+	<!--按主键查询 -->
+	 <select id="selectById" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*  
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+			<![CDATA[t.pk_id = #{pkId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+	
+	<!--按platform_id查询 -->
+	 <select id="selectByPlatformId" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*  
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+			<![CDATA[t.platform_id = #{platformId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+	<!--states查询 -->
+	 <select id="selectByState" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*  
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+			<if test="threePayInfo.payName != null and threePayInfo.payName != ''">
+			<![CDATA[AND t.pay_name = #{threePayInfo.payName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.state != null ">
+			<![CDATA[AND t.state = #{threePayInfo.state, jdbcType=TINYINT}]]>
+			</if>
+		</where>
+	</select>
+	
+		<!--通过平台名称和银行名称查询 -->
+	 <select id="selectByName" parameterType="Map" resultMap="ThreePayInfo">
+		<![CDATA[
+		SELECT
+			*  
+		FROM
+			t_addedpay t
+		]]>
+		<where>
+			<if test="threePayInfo.platformName != null and threePayInfo.platformName != ''">
+				<![CDATA[AND t.platform_name = #{threePayInfo.platformName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.payName != null and threePayInfo.payName != ''">
+				<![CDATA[AND t.pay_name = #{threePayInfo.payName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="threePayInfo.state != null ">
+			<![CDATA[AND t.state = #{threePayInfo.state, jdbcType=TINYINT}]]>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_addedpay
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{threePayInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</delete> 
+</mapper>

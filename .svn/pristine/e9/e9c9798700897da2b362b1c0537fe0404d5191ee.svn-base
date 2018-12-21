@@ -1,0 +1,91 @@
+package com.fun.client.service;
+
+import java.util.Date;
+import java.util.List;
+
+import com.fun.client.domain.FinWithdrawLog;
+import com.fun.client.repository.FinWithdrawLogMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fun.framework.support.BusinessException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class FinWithdrawLogService {
+
+	@Autowired
+	private FinWithdrawLogMapper finWithdrawLogMapper;
+
+	public Integer insert(Integer userId, FinWithdrawLog finWithdrawLog) throws BusinessException {
+		finWithdrawLog.setCreateTime(new Date());
+		finWithdrawLog.setCreateUser(userId);
+		finWithdrawLog.setUpdateTime(new Date());
+		finWithdrawLog.setUpdateUser(userId);
+		finWithdrawLog.setDataVersion(Integer.valueOf(1));
+		return this.finWithdrawLogMapper.insert(finWithdrawLog);
+	}
+
+	public Integer insert(Integer userId, List<FinWithdrawLog> finWithdrawLogs) throws BusinessException {
+		for (FinWithdrawLog finWithdrawLog : finWithdrawLogs) {
+			finWithdrawLog.setCreateTime(new Date());
+			finWithdrawLog.setCreateUser(userId);
+			finWithdrawLog.setUpdateTime(new Date());
+			finWithdrawLog.setUpdateUser(userId);
+			finWithdrawLog.setDataVersion(Integer.valueOf(1));
+		}
+		return this.finWithdrawLogMapper.insertBatch(finWithdrawLogs);
+	}
+
+	public Integer update(Integer userId, FinWithdrawLog finWithdrawLog, FinWithdrawLog where)
+			throws BusinessException {
+		finWithdrawLog.setUpdateTime(new Date());
+		finWithdrawLog.setUpdateUser(userId);
+		return this.finWithdrawLogMapper.update(finWithdrawLog, where);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+	public Integer updateById(Integer userId, FinWithdrawLog finWithdrawLog, Integer finWithdrawLogId)
+			throws BusinessException {
+		finWithdrawLog.setUpdateTime(new Date());
+		finWithdrawLog.setUpdateUser(userId);
+		return this.finWithdrawLogMapper.updateById(finWithdrawLog, finWithdrawLogId);
+	}
+
+	public Integer updateActive(Integer userId, FinWithdrawLog finWithdrawLog, FinWithdrawLog where)
+			throws BusinessException {
+		finWithdrawLog.setUpdateTime(new Date());
+		finWithdrawLog.setUpdateUser(userId);
+		return this.finWithdrawLogMapper.updateActive(finWithdrawLog, where);
+	}
+
+	public Integer updateActiveById(Integer userId, FinWithdrawLog finWithdrawLog, Integer finWithdrawLogId)
+			throws BusinessException {
+		finWithdrawLog.setUpdateTime(new Date());
+		finWithdrawLog.setUpdateUser(userId);
+		return this.finWithdrawLogMapper.updateActiveById(finWithdrawLog, finWithdrawLogId);
+	}
+
+	public Pagination<FinWithdrawLog> select(FinWithdrawLog finWithdrawLog, QueryDto queryDto) throws BusinessException {
+		PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+		Page<FinWithdrawLog> page = this.finWithdrawLogMapper.select(finWithdrawLog,queryDto);
+		return new Pagination<>(page.getTotal(), page.getResult());
+	}
+
+	public FinWithdrawLog selectById(Integer userId, Integer finWithdrawLogId) throws BusinessException {
+		return this.finWithdrawLogMapper.selectById(finWithdrawLogId);
+	}
+
+	public Integer delete(Integer userId, FinWithdrawLog where) throws BusinessException {
+		return this.finWithdrawLogMapper.delete(where);
+	}
+
+	public Integer deleteById(Integer userId, Integer finWithdrawLogId) throws BusinessException {
+		return this.finWithdrawLogMapper.deleteById(finWithdrawLogId);
+	}
+}

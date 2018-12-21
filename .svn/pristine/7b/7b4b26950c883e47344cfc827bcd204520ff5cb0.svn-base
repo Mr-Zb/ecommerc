@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.GoodsOrderInfoMapper">
+    <resultMap id="GoodsOrderInfo" type="com.fun.client.domain.GoodsOrderInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="goodsId" javaType="Integer" column="goods_id" jdbcType="INTEGER"/>
+        <result property="orderState" javaType="Integer" column="order_state" jdbcType="INTEGER"/>
+        <result property="gameType" javaType="Integer" column="game_type" jdbcType="INTEGER"/>
+        <result property="orderNo" javaType="String" column="order_no" jdbcType="VARCHAR"/>
+        <result property="promotionType" javaType="Integer" column="promotion_type" jdbcType="INTEGER"/>
+        <result property="buyNum" javaType="Integer" column="buy_num" jdbcType="INTEGER"/>
+        <result property="payMoney" javaType="Double" column="pay_money" jdbcType="DECIMAL"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodSrc" javaType="String" column="good_src" jdbcType="VARCHAR"/>
+        <result property="catId" javaType="Integer" column="cat_id" jdbcType="INTEGER"/>
+        <result property="detail" javaType="String" column="detail" jdbcType="VARCHAR"/>
+        <result property="price" javaType="Double" column="price" jdbcType="DECIMAL"/>
+        <result property="coin" javaType="Double" column="coin" jdbcType="DECIMAL"/>
+        <result property="isIntegral" javaType="Integer" column="is_integral" jdbcType="INTEGER"/>
+        <result property="isPromotion" javaType="Integer" column="is_promotion" jdbcType="INTEGER"/>
+        <result property="goodSourceId" javaType="Integer" column="good_source_id" jdbcType="INTEGER"/>
+        <result property="result" javaType="Integer" column="result" jdbcType="INTEGER"/>
+        <result property="openTime" javaType="Date" column="open_time" jdbcType="TIMESTAMP" />
+        <result property="lotteryIssue" javaType="String" column="lottery_issue" jdbcType="CHAR" />
+        <result property="pickState" javaType="Integer" column="pick_state" jdbcType="INTEGER"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="CHAR"/>
+    </resultMap>
+    <resultMap id="NewPromotion" type="com.fun.client.domain.NewPromotion">
+        <result property="goodName" javaType="String" column="good_Name" jdbcType="VARCHAR"/>
+        <result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="FinManage" type="com.fun.client.domain.FinManage">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="goodsId" javaType="Integer" column="goods_id" jdbcType="INTEGER"/>
+        <result property="orderState" javaType="Integer" column="order_state" jdbcType="INTEGER"/>
+        <result property="gameType" javaType="Integer" column="game_type" jdbcType="INTEGER"/>
+        <result property="orderNo" javaType="String" column="order_no" jdbcType="VARCHAR"/>
+        <result property="promotionType" javaType="Integer" column="promotion_type" jdbcType="INTEGER"/>
+        <result property="logisticsNo" javaType="String" column="logistics_no" jdbcType="VARCHAR"/>
+        <result property="buyNum" javaType="Integer" column="buy_num" jdbcType="INTEGER"/>
+        <result property="payMoney" javaType="Double" column="pay_money" jdbcType="DECIMAL"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodSrc" javaType="String" column="good_src" jdbcType="VARCHAR"/>
+        <result property="catId" javaType="Integer" column="cat_id" jdbcType="INTEGER"/>
+        <result property="detail" javaType="String" column="detail" jdbcType="VARCHAR"/>
+        <result property="price" javaType="Double" column="price" jdbcType="DECIMAL"/>
+        <result property="coin" javaType="Double" column="coin" jdbcType="DECIMAL"/>
+        <result property="isIntegral" javaType="Integer" column="is_integral" jdbcType="INTEGER"/>
+        <result property="isPromotion" javaType="Integer" column="is_promotion" jdbcType="INTEGER"/>
+        <result property="goodSourceId" javaType="Integer" column="good_source_id" jdbcType="INTEGER"/>
+        <result property="result" javaType="Integer" column="result" jdbcType="INTEGER"/>
+        <result property="openTime" javaType="Date" column="open_time" jdbcType="TIMESTAMP" />
+        <result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--增加-->
+    <insert id="addGoodsOrderInfo" useGeneratedKeys="true" keyProperty="goodsOrderInfo.pkId"
+            parameterType="com.fun.client.domain.GoodsOrderInfo">
+        <![CDATA[
+        INSERT INTO t_goods_order_info (
+        pk_id,
+        create_user,
+        create_time,
+        update_time,
+        update_user,
+        goods_id,
+        order_state,
+        game_type,
+        order_no,
+        promotion_type,
+        buy_num,
+        pay_money,
+        is_integral,
+        open_time,
+        lottery_issue,
+        pick_state
+        )
+        VALUE (
+                #{goodsOrderInfo.pkId, jdbcType = INTEGER},
+				#{goodsOrderInfo.createUser, jdbcType = INTEGER},
+				#{goodsOrderInfo.createTime, jdbcType = TIMESTAMP},
+				#{goodsOrderInfo.updateTime, jdbcType = TIMESTAMP},
+				#{goodsOrderInfo.updateUser, jdbcType = INTEGER},
+				#{goodsOrderInfo.goodsId, jdbcType = INTEGER},
+				#{goodsOrderInfo.orderState, jdbcType = INTEGER},
+				#{goodsOrderInfo.gameType, jdbcType = INTEGER},
+				#{goodsOrderInfo.orderNo, jdbcType = VARCHAR},
+				#{goodsOrderInfo.promotionType, jdbcType = INTEGER},
+				#{goodsOrderInfo.buyNum, jdbcType = INTEGER},
+				#{goodsOrderInfo.payMoney, jdbcType = DECIMAL},
+				#{goodsOrderInfo.isIntegral, jdbcType = INTEGER},
+				#{goodsOrderInfo.openTime, jdbcType = TIMESTAMP},
+				#{goodsOrderInfo.lotteryIssue, jdbcType = VARCHAR},
+				#{goodsOrderInfo.pickState, jdbcType = INTEGER}
+        )
+        ]]>
+    </insert>
+
+    <!--根据订单号搜索商品-->
+    <select id="selectGoodsInfo" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+           SELECT
+           *
+           from t_goods_order_info t1
+           WHERE 1=1
+           AND  t1.order_no = #{orderNo,jdbcType=VARCHAR}
+           AND  t1.create_user = #{userId,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <!--根据商品id搜索商品信息-->
+    <select id="selectGoodsOrderById" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+         SELECT
+           *
+           from t_goods_order_info t
+           WHERE 1=1
+           AND  t.pk_id = #{pkId,jdbcType=VARCHAR}
+        ]]>
+    </select>
+
+    <!--搜索某种商品订单数量-->
+    <select id="selectOrderByGoodId" parameterType="Map" resultType="java.lang.Integer">
+        <![CDATA[
+           SELECT
+           COUNT(0)
+           from t_goods_order_info t1
+           WHERE 1=1
+           AND  t1.goods_id = #{goodId,jdbcType=INTEGER}
+        ]]>
+    </select>
+
+    <!--根据订单号修改订单状态-->
+    <update id="updateOrderState" parameterType="Map">
+        <![CDATA[
+        update t_goods_order_info t
+        SET
+        t.order_state = #{orderState,jdbcType=INTEGER},
+        t.update_time = #{updateTime,jdbcType =TIMESTAMP },
+        t.update_user = #{updateUser,jdbcType =INTEGER }
+        WHERE 1=1
+        AND  t.order_no = #{orderNo,jdbcType=VARCHAR}
+        ]]>
+    </update>
+
+    <!--根据ID搜索商品信息-->
+    <select id="select" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+      SELECT * from t_goods_order_info t1
+      LEFT JOIN t_goods_info t2
+      ON t1.goods_id = t2.pk_id
+      WHERE t1.create_user =#{userId,jdbcType=INTEGER}
+      ORDER BY t1.create_time DESC
+        ]]>
+    </select>
+
+    <!--根据ID搜索商品信息-->
+    <select id="selectNewPromotion" parameterType="Map" resultMap="NewPromotion">
+        <![CDATA[
+
+      SELECT t2.good_name,t3.login_name from t_goods_order_info t1
+            LEFT JOIN t_goods_info t2
+            ON t1.goods_id = t2.pk_id
+            LEFT JOIN t_mem_user_info t3
+            ON t1.create_user = t3.pk_id
+            where t1.game_type=2
+            and t1.order_state=2
+            ORDER BY t1.create_time DESC  LIMIT 10
+
+        ]]>
+    </select>
+
+    <update id="updateStateAndResult" parameterType="Map">
+        <![CDATA[
+        update t_goods_order_info t
+        SET
+        t.order_state = #{orderState,jdbcType=INTEGER},
+        t.result = #{result,jdbcType=INTEGER}
+        WHERE 1=1
+        AND  t.order_no = #{orderNo,jdbcType=VARCHAR}
+
+        ]]>
+    </update>
+
+    <select id="orderInfoList" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+        SELECT *
+        FROM
+        t_goods_order_info t
+        ]]>
+        <where>
+            <if test="goodsOrderInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsOrderInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsOrderInfo.createUser != null">
+                <![CDATA[AND t.create_user = #{goodsOrderInfo.createUser, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsOrderInfo.orderState != null">
+                <![CDATA[AND t.order_state = #{goodsOrderInfo.orderState, jdbcType=BIGINT}]]>
+            </if>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--根据用户id查询促销中奖金额-->
+    <select id="selectPromotionMoney" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+        IFNULL(
+        sum(t.pay_money),
+        0.00
+          ) AS  pay_money
+          FROM t_goods_order_info t
+          WHERE 1=1
+          AND t.create_user = #{userId,jdbcType = INTEGER}
+          AND t.game_type = 2
+          AND t.promotion_type = t.result
+       ]]>
+    </select>
+
+    <!--根据用户id查询抢红包中奖金额-->
+    <select id="selectRedPacketMoney" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+        IFNULL(
+        sum(t.pay_money),
+        0.00
+          ) AS  pay_money
+          FROM t_goods_order_info t
+          WHERE 1=1
+          AND t.create_user = #{userId,jdbcType = INTEGER}
+          AND t.game_type = 1
+          AND t.result = 3
+       ]]>
+    </select>
+
+    <!--查询大吉大利中奖订单-->
+    <select id="promotionWinList" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+        SELECT
+        *
+        FROM
+        t_goods_order_info t
+        WHERE 1=1
+        AND t.game_type = 1
+        AND t.promotion_type = t.result
+        ]]>
+        <if test="where.beginDate != null">
+            <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="where.endDate != null">
+            <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+
+    <!--查询抢红包中奖订单-->
+    <select id="redEnvelopeList" parameterType="Map" resultMap="GoodsOrderInfo">
+        <![CDATA[
+        SELECT
+         *
+        FROM
+        t_goods_order_info t
+        WHERE 1=1
+        AND t.game_type = 2
+        AND t.result = 3
+        ]]>
+        <if test="where.beginDate != null">
+            <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="where.endDate != null">
+            <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+
+    <!--用户促销订单列表-->
+    <select id="userPromotionList" parameterType="Map" resultMap="FinManage">
+        <![CDATA[
+        SELECT
+        t.*,t1.login_name,t2.price,t2.good_source_id
+        FROM
+        (t_goods_order_info t LEFT JOIN t_mem_user_info t1 ON t.create_user = t1.pk_id)
+        LEFT JOIN t_goods_info t2 ON t.goods_id = t2.pk_id
+        WHERE 1=1
+        AND t.game_type <> 0
+        ]]>
+        <if test="finManage.pkId != null">
+            <![CDATA[AND t.pk_id = #{finManage.pkId, jdbcType=BIGINT}]]>
+        </if>
+        <if test="finManage.createUser != null">
+            <![CDATA[AND t.create_user = #{finManage.createUser, jdbcType=INTEGER}]]>
+        </if>
+        <if test="where.beginDate != null">
+            <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="where.endDate != null">
+            <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+
+    <!--根据订单号修改订单状态-->
+    <update id="updatePickState" parameterType="Map">
+        <![CDATA[
+        update t_goods_order_info t
+        SET t.pick_state = #{pickState,jdbcType=INTEGER},
+        t.update_user = #{updateUser,jdbcType=INTEGER},
+        t.remark = #{remark,jdbcType=VARCHAR}
+        WHERE 1=1
+        AND t.pk_id = #{pkId,jdbcType=INTEGER}
+        ]]>
+    </update>
+</mapper>

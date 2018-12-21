@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.AgentInfoMapper">
+    <resultMap id="AgentInfo" type="com.fun.client.domain.AgentInfo">
+        <result property="agentName" javaType="String" column="agent_name" jdbcType="VARCHAR"/>
+        <result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR"/>
+        <result property="userName" javaType="String" column="user_name" jdbcType="VARCHAR"/>
+        <result property="totalSales" javaType="Double" column="total_sales" jdbcType="DECIMAL"/>
+        <result property="profitable" javaType="Double" column="profitable" jdbcType="DECIMAL"/>
+        <result property="bigTotal" javaType="Double" column="big_total" jdbcType="DECIMAL"/>
+        <result property="extension" javaType="Double" column="extension" jdbcType="DECIMAL"/>
+        <result property="difference" javaType="Double" column="difference" jdbcType="DECIMAL"/>
+        <result property="profitMargin" javaType="Double" column="profit_margin" jdbcType="DECIMAL"/>
+        <result property="totalEarnings" javaType="Double" column="total_earnings" jdbcType="DECIMAL"/>
+    </resultMap>
+    <select id="selectProft" parameterType="Map" resultMap="AgentInfo" >
+        <![CDATA[
+			SELECT tm.bank_account_name as user_name,tm.agent_name,
+            tm.login_name,
+            sum(-tf.capital_amount1) as total_sales,
+            tm.rebate*sum(-tf.capital_amount1) as profitable,
+            tg.big_total,
+            tm.extension,
+            tm2.extension-tm.extension as difference,
+            (tm.rebate*sum(-tf.capital_amount1) *(IFNULL(tm2.extension,0)-IFNULL(tm.extension,0))) as profit_margin,
+            (tm.rebate*sum(-tf.capital_amount1) *(IFNULL(tm2.extension,0)-IFNULL(tm.extension,0)))+(tm.rebate*sum(-tf.capital_amount1)) as total_earnings
+            FROM t_mem_user_info tm
+            left JOIN t_fin_capital_log tf
+            ON (tm.pk_id = tf.create_user and tf.capital_type = '22')
+            left JOIN
+            (SELECT create_user, order_state ,SUM(pay_money) as big_total FROM t_goods_order_info where order_state =2 GROUP BY create_user) tg
+            ON (tg.create_user = tm.pk_id)
+            left JOIN t_mem_user_info tm2
+            ON (tm2.pk_id = tm.agent_id)
+		]]>
+        <where>
+           <!-- <![CDATA[AND user_type = '20']]>-->
+            <if test="loginName != null and loginName != ''">
+                <![CDATA[AND tm.login_name = #{loginName}]]>
+            </if>
+            <if test="userName != null and userName != ''">
+                <![CDATA[AND (tm.user_name = #{userName})]]>
+            </if>
+            <if test="agentName != null and agentName != ''">
+                <![CDATA[AND tm.bank_account =#{agentName}]]>
+            </if>
+        </where>
+    </select>
+</mapper>

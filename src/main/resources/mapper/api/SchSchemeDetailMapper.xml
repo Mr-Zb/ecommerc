@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SchSchemeDetailMapper">
+	<resultMap id="SchSchemeDetail" type="com.fun.le.entities.SchSchemeDetail">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="schemeId" javaType="Integer" column="scheme_id" jdbcType="INTEGER" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="gameId" javaType="Integer" column="game_id" jdbcType="INTEGER" />
+		<result property="gameContext" javaType="String" column="game_context" jdbcType="CHAR" />
+		<result property="betting" javaType="Integer" column="betting" jdbcType="INTEGER" />
+		<result property="amount1" javaType="Double" column="amount1" jdbcType="DECIMAL" />
+		<result property="amount2" javaType="Double" column="amount2" jdbcType="DECIMAL" />
+		<result property="moneymode" javaType="Double" column="moneymode" jdbcType="DOUBLE" />
+		
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="schSchemeDetail.pkId">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_detail (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			product_id,
+			game_id,
+			game_context,
+			betting,
+			amount1,
+			amount2
+		)
+		VALUES
+			(
+				#{schSchemeDetail.pkId, jdbcType = INTEGER},
+				#{schSchemeDetail.createUser, jdbcType = INTEGER},
+				#{schSchemeDetail.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeDetail.updateUser, jdbcType = INTEGER},
+				#{schSchemeDetail.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeDetail.dataVersion, jdbcType = TINYINT},
+				#{schSchemeDetail.schemeId, jdbcType = INTEGER},
+				#{schSchemeDetail.productId, jdbcType = INTEGER},
+				#{schSchemeDetail.gameId, jdbcType = INTEGER},
+				#{schSchemeDetail.gameContext, jdbcType = CHAR},
+				#{schSchemeDetail.betting, jdbcType = INTEGER},
+				#{schSchemeDetail.amount1, jdbcType = DECIMAL},
+				#{schSchemeDetail.amount2, jdbcType = DECIMAL}
+			)
+		]]>
+	</insert>
+	<!-- 新增判断圆角字段  -->
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_detail (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			product_id,
+			game_id,
+			game_context,
+			betting,
+			amount1,
+			amount2,
+			moneymode
+		)
+		]]>
+		<foreach collection="schSchemeDetails" item="schSchemeDetail" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{schSchemeDetail.pkId, jdbcType = INTEGER},
+				#{schSchemeDetail.createUser, jdbcType = INTEGER},
+				#{schSchemeDetail.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeDetail.updateUser, jdbcType = INTEGER},
+				#{schSchemeDetail.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeDetail.dataVersion, jdbcType = TINYINT},
+				#{schSchemeDetail.schemeId, jdbcType = INTEGER},
+				#{schSchemeDetail.productId, jdbcType = INTEGER},
+				#{schSchemeDetail.gameId, jdbcType = INTEGER},
+				#{schSchemeDetail.gameContext, jdbcType = CHAR},
+				#{schSchemeDetail.betting, jdbcType = INTEGER},
+				#{schSchemeDetail.amount1, jdbcType = DECIMAL},
+				#{schSchemeDetail.amount2, jdbcType = DECIMAL},
+				#{schSchemeDetail.moneymode, jdbcType = DOUBLE}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_detail]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeDetail.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeDetail.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeDetail.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeDetail.schemeId},]]>
+		<![CDATA[product_id = #{schSchemeDetail.productId},]]>
+		<![CDATA[game_id = #{schSchemeDetail.gameId},]]>
+		<![CDATA[game_context = #{schSchemeDetail.gameContext},]]>
+		<![CDATA[betting = #{schSchemeDetail.betting},]]>
+		<![CDATA[amount1 = #{schSchemeDetail.amount1},]]>
+		<![CDATA[amount2 = #{schSchemeDetail.amount2},]]>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameId != null">
+			<![CDATA[AND game_id = #{where.gameId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameContext != null and where.gameContext != ''">
+			<![CDATA[AND game_context = #{where.gameContext, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.betting != null">
+			<![CDATA[AND betting = #{where.betting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_detail]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeDetail.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeDetail.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeDetail.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeDetail.schemeId},]]>
+		<![CDATA[product_id = #{schSchemeDetail.productId},]]>
+		<![CDATA[game_id = #{schSchemeDetail.gameId},]]>
+		<![CDATA[game_context = #{schSchemeDetail.gameContext},]]>
+		<![CDATA[betting = #{schSchemeDetail.betting},]]>
+		<![CDATA[amount1 = #{schSchemeDetail.amount1},]]>
+		<![CDATA[amount2 = #{schSchemeDetail.amount2},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeDetailId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_detail]]>
+		<set>
+			<if test="schSchemeDetail.updateUser != null">
+			<![CDATA[update_user = #{schSchemeDetail.updateUser},]]>
+			</if>
+			<if test="schSchemeDetail.updateTime != null">
+			<![CDATA[update_time = #{schSchemeDetail.updateTime},]]>
+			</if>
+			<if test="schSchemeDetail.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeDetail.dataVersion},]]>
+			</if>
+			<if test="schSchemeDetail.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeDetail.schemeId},]]>
+			</if>
+			<if test="schSchemeDetail.productId != null">
+			<![CDATA[product_id = #{schSchemeDetail.productId},]]>
+			</if>
+			<if test="schSchemeDetail.gameId != null">
+			<![CDATA[game_id = #{schSchemeDetail.gameId},]]>
+			</if>
+			<if test="schSchemeDetail.gameContext != null and schSchemeDetail.gameContext != ''">
+			<![CDATA[game_context = #{schSchemeDetail.gameContext},]]>
+			</if>
+			<if test="schSchemeDetail.betting != null">
+			<![CDATA[betting = #{schSchemeDetail.betting},]]>
+			</if>
+			<if test="schSchemeDetail.amount1 != null">
+			<![CDATA[amount1 = #{schSchemeDetail.amount1},]]>
+			</if>
+			<if test="schSchemeDetail.amount2 != null">
+			<![CDATA[amount2 = #{schSchemeDetail.amount2},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameId != null">
+			<![CDATA[AND game_id = #{where.gameId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameContext != null and where.gameContext != ''">
+			<![CDATA[AND game_context = #{where.gameContext, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.betting != null">
+			<![CDATA[AND betting = #{where.betting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_detail]]>
+		<set>
+			<if test="schSchemeDetail.updateUser != null">
+			<![CDATA[update_user = #{schSchemeDetail.updateUser},]]>
+			</if>
+			<if test="schSchemeDetail.updateTime != null">
+			<![CDATA[update_time = #{schSchemeDetail.updateTime},]]>
+			</if>
+			<if test="schSchemeDetail.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeDetail.dataVersion},]]>
+			</if>
+			<if test="schSchemeDetail.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeDetail.schemeId},]]>
+			</if>
+			<if test="schSchemeDetail.productId != null">
+			<![CDATA[product_id = #{schSchemeDetail.productId},]]>
+			</if>
+			<if test="schSchemeDetail.gameId != null">
+			<![CDATA[game_id = #{schSchemeDetail.gameId},]]>
+			</if>
+			<if test="schSchemeDetail.gameContext != null and schSchemeDetail.gameContext != ''">
+			<![CDATA[game_context = #{schSchemeDetail.gameContext},]]>
+			</if>
+			<if test="schSchemeDetail.betting != null">
+			<![CDATA[betting = #{schSchemeDetail.betting},]]>
+			</if>
+			<if test="schSchemeDetail.amount1 != null">
+			<![CDATA[amount1 = #{schSchemeDetail.amount1},]]>
+			</if>
+			<if test="schSchemeDetail.amount2 != null">
+			<![CDATA[amount2 = #{schSchemeDetail.amount2},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeDetailId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="SchSchemeDetail">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.product_id AS product_id,
+			t.game_id AS game_id,
+			t.game_context AS game_context,
+			t.betting AS betting,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2,
+			t.moneymode As moneymode
+		FROM
+			t_sch_scheme_detail t
+		]]>
+		<where>
+			<if test="schSchemeDetail.pkId != null and schSchemeDetail.pkId > 0">
+			<![CDATA[AND t.pk_id = #{schSchemeDetail.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.createUser != null and schSchemeDetail.createUser > 0">
+			<![CDATA[AND t.create_user = #{schSchemeDetail.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.createTime != null">
+			<![CDATA[AND t.create_time = #{schSchemeDetail.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeDetail.updateUser != null and schSchemeDetail.updateUser > 0">
+			<![CDATA[AND t.update_user = #{schSchemeDetail.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.updateTime != null">
+			<![CDATA[AND t.update_time = #{schSchemeDetail.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeDetail.dataVersion != null and schSchemeDetail.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{schSchemeDetail.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeDetail.schemeId != null and schSchemeDetail.schemeId > 0">
+			<![CDATA[AND t.scheme_id = #{schSchemeDetail.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.productId != null and schSchemeDetail.productId > 0">
+			<![CDATA[AND t.product_id = #{schSchemeDetail.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.gameId != null and schSchemeDetail.gameId > 0">
+			<![CDATA[AND t.game_id = #{schSchemeDetail.gameId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.gameContext != null and schSchemeDetail.gameContext != ''">
+			<![CDATA[AND t.game_context = #{schSchemeDetail.gameContext, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeDetail.betting != null and schSchemeDetail.betting > 0">
+			<![CDATA[AND t.betting = #{schSchemeDetail.betting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeDetail.amount1 != null and schSchemeDetail.amount1 > 0">
+			<![CDATA[AND t.amount1 = #{schSchemeDetail.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeDetail.amount2 != null and schSchemeDetail.amount2 > 0">
+			<![CDATA[AND t.amount2 = #{schSchemeDetail.amount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="SchSchemeDetail">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.product_id AS product_id,
+			t.game_id AS game_id,
+			t.game_context AS game_context,
+			t.betting AS betting,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2
+		FROM
+			t_sch_scheme_detail t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{schSchemeDetailId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+	
+		<!-- 根据scheme_id查询 -->
+	<select id="selectBySchemeId" parameterType="Map" resultMap="SchSchemeDetail">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.product_id AS product_id,
+			t.game_id AS game_id,
+			t.game_context AS game_context,
+			t.betting AS betting,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2
+		FROM
+			t_sch_scheme_detail t
+		]]>
+		<where>
+		<![CDATA[AND t.scheme_id = #{schSchemeDetailId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+	
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_detail
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameId != null">
+			<![CDATA[AND game_id = #{where.gameId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gameContext != null and where.gameContext != ''">
+			<![CDATA[AND game_context = #{where.gameContext, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.betting != null">
+			<![CDATA[AND betting = #{where.betting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_detail
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeDetailId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

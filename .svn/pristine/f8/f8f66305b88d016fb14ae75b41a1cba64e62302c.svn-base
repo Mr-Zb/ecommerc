@@ -1,0 +1,200 @@
+package com.fun.client.controller;
+
+import com.fun.admin.service.SequenceService;
+import com.fun.client.domain.*;
+import com.fun.client.service.*;
+import com.fun.client.utils.ReturnRandom;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.le.entities.SysPropSetting;
+import com.fun.le.service.SysPropSettingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.*;
+
+@RestController
+@RequestMapping("/api")
+public class GoodsInfoController extends BaseController {
+
+    @Autowired
+    private GoodsInfoService goodsInfoService;
+
+    @Autowired(required = false)
+    private SysPropSettingService sysPropSettingService;
+
+    private @Autowired
+    BannerInfoService bannerInfoService;
+
+    private @Autowired
+    MenuInfoService menuInfoService;
+
+    private @Autowired
+    SequenceService sequenceService;
+
+    private @Autowired
+    GoodsOrderInfoService goodsOrderInfoService;
+
+    private @Autowired
+    GoodsInfoService getGoodsInfoService;
+    private @Autowired
+    MemUserInfoService memUserInfoService;
+
+    /**
+     * 获取所有商品
+     *
+     * @param goodsInfo
+     * @return
+     */
+    @RequestMapping(path = {"/show-goods-info-list"}, method = {RequestMethod.POST})
+    public ReturnIndex goodsList(GoodsInfo goodsInfo) throws Exception {
+        SysPropSetting sysPropSetting = new SysPropSetting();
+        sysPropSetting.setPropKey("sys.goods.notice");
+        //轮播图信息
+        BannerInfo bannerInfo = new BannerInfo();
+        bannerInfo.setState(1);
+        bannerInfo.setBannerLocation(1);
+        List<BannerInfo> bannerInfos = bannerInfoService.selectByState(bannerInfo);
+        List<SysPropSetting> select = sysPropSettingService.select(1, sysPropSetting);
+        //普通商品
+        List<GoodsInfo> goodsInfos = goodsInfoService.selectAll(goodsInfo);
+        GoodsInfo goodsInfo11 = new GoodsInfo();
+        goodsInfo11.setCatId(1);
+        List<GoodsInfo> goodsInfos12 = goodsInfoService.selectAll(goodsInfo11);
+        GoodsInfo goodsInfo12 = new GoodsInfo();
+        goodsInfo12.setCatId(2);
+        List<GoodsInfo> goodsInfos13 = goodsInfoService.selectAll(goodsInfo12);
+        Map<String, List<GoodsInfo>> goodsMap = new HashMap<>();
+        goodsMap.put("all", goodsInfos);
+        goodsMap.put("tea", goodsInfos12);
+        goodsMap.put("bear", goodsInfos13);
+        return new ReturnIndex(200, null, bannerInfos, select, goodsMap);
+    }
+
+    /**
+     * 促销商品
+     *
+     * @return
+     */
+    @RequestMapping(path = {"/show-good-promotion"}, method = {RequestMethod.POST})
+    public AjaxReturn promotionGood() throws Exception {
+        int userId = getAuthentication().intValue();
+        MemUserInfo memUserInfo = memUserInfoService.select(userId);
+        MemUserInfo agentUser = memUserInfoService.select(memUserInfo.getAgentId().intValue());
+        long agentId = memUserInfo.getAgentId();
+        SysPropSetting sysPropSetting1 = new SysPropSetting();
+        sysPropSetting1.setPropKey("sys.user.extension");
+        List<SysPropSetting> select1 = sysPropSettingService.select((int) agentId, sysPropSetting1);
+        List<SysPropSetting> select2;
+        double ratio = 0.0;
+        if (select1.size() != 0) {
+            String propValue1 = select1.get(0).getPropValue();
+            ratio = Double.parseDouble(propValue1);
+        } else {
+            select2 = sysPropSettingService.select(agentUser.getAgentId().intValue(), sysPropSetting1);
+            String propValue2 = select2.get(0).getPropValue();
+            ratio = Double.parseDouble(propValue2) - 0.05;
+        }
+        List<GoodsInfo> goodsInfos2 = goodsInfoService.selectByPromotion(new GoodsInfo());
+        Map<String, List<GoodsInfo[]>> PromotionGoods = new HashMap<>();
+        List<GoodsInfo[]> objects = new ArrayList<>();
+        for (GoodsInfo goods : goodsInfos2) {
+            GoodsInfo goodsInfo3 = goodsInfoService.selectById(goods.getGoodSourceId());
+            goods.setPrice(goodsInfo3.getPrice() * ratio);
+            GoodsInfo[] goodsInfos3 = {goodsInfo3, goods};
+            objects.add(goodsInfos3);
+        }
+        PromotionGoods.put("all", objects);
+        return new AjaxReturn(200, null, PromotionGoods);
+    }
+
+    /**
+     * 积分商品
+     *
+     * @param goodsInfo
+     * @return
+     */
+    @RequestMapping(path = {"/show-integral-good-list"}, method = {RequestMethod.POST})
+    public IntegralReturn integralGoods(GoodsInfo goodsInfo) {
+        List<GoodsInfo> goodsInfos1 = goodsInfoService.selectByIntegral(goodsInfo);
+        List<GoodsInfo> goodsInfos2 = goodsInfoService.selectByIntegral(goodsInfo);
+        Map<String, List<GoodsInfo>> goodsMap = new LinkedHashMap<>();
+        goodsMap.put("全部", goodsInfos2);
+        LinkedHashSet<String> menus = new LinkedHashSet<>();
+        menus.add("全部");
+        List<GoodsInfo> goodsList1 = new ArrayList<>();
+        int catId1 = 0;
+        for (GoodsInfo goods1 : goodsInfos1) {
+            if (catId1 != 0 && catId1 != goods1.getCatId()) {
+                goodsList1 = new ArrayList<>();
+            }
+            goodsList1.add(goods1);
+            String catName = menuInfoService.selectById(goods1.getCatId()).getCatName();
+            goodsMap.put(catName, goodsList1);
+            menus.add(catName);
+            catId1 = goods1.getCatId();
+        }
+        BannerInfo bannerInfo = new BannerInfo();
+        bannerInfo.setState(1);
+        bannerInfo.setBannerLocation(2);
+        List<BannerInfo> bannerInfos = bannerInfoService.selectByState(bannerInfo);
+        return new IntegralReturn(200, null, bannerInfos, goodsMap, menus);
+    }
+
+    /**
+     * 商品详情图
+     *
+     * @param goodId
+     * @return
+     */
+    @RequestMapping(path = {"/show-good-detail-imgs"}, method = {RequestMethod.POST})
+    public AjaxReturn GoodImgs(Integer goodId) {
+        List<GoodImg> goodImgs = goodsInfoService.selectImgs(goodId);
+        return new AjaxReturn(200, null, goodImgs);
+    }
+
+    /**
+     * 拆红包
+     *
+     * @return
+     */
+    @RequestMapping(path = {"/grab-red-envelope"}, method = {RequestMethod.POST})
+    public AjaxReturn grabRedEnvelope(Integer BuyNum, Integer goodId, Double payMoney) throws Exception {
+        int userId = getAuthentication().intValue();
+        SysPropSetting sysPropSetting = new SysPropSetting();
+        sysPropSetting.setPropKey("sys.user.red.envelop");
+        List<SysPropSetting> select = sysPropSettingService.select(1, sysPropSetting);
+        GoodsInfo goodsInfo = getGoodsInfoService.selectById(userId);
+        if (goodsInfo != null) {
+            if (Double.doubleToLongBits(goodsInfo.getPrice() * BuyNum) == Double.doubleToLongBits(payMoney)) {
+                String propValue = select.get(0).getPropValue();
+                double v = Double.parseDouble(propValue);
+                Integer reandom = ReturnRandom.getRandom((int) (1000 * v));
+                GoodsOrderInfo goodsOrderInfo = new GoodsOrderInfo();
+                goodsOrderInfo.setCreateTime(new Date());
+                goodsOrderInfo.setUpdateTime(new Date());
+                goodsOrderInfo.setCreateUser(userId);
+                goodsOrderInfo.setUpdateUser(userId);
+                goodsOrderInfo.setBuyNum(BuyNum);
+                goodsOrderInfoService.add(goodsOrderInfo);
+                String h = sequenceService.generate("H");
+            } else {
+                return new AjaxReturn(200, "商品价格不符！", null);
+            }
+        } else {
+            return new AjaxReturn(200, "商品可能已售完！", null);
+        }
+        return new AjaxReturn(200, null, null);
+    }
+
+    /**
+     * 修改订单状态
+     */
+    @RequestMapping(path = {"update-goods-state"}, method = {RequestMethod.POST})
+    public AjaxReturn updateGoodsState(Integer goodsState, Integer goodsId) {
+        this.goodsInfoService.updateGoodsState(goodsState, goodsId);
+        return new AjaxReturn(200, null, null);
+    }
+}

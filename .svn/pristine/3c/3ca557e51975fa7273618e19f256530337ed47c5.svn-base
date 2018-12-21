@@ -1,0 +1,88 @@
+package com.fun.client.repository;
+
+import com.fun.client.domain.GoodImg;
+import com.fun.client.domain.GoodsInfo;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+@Mapper
+public interface GoodsInfoMapper {
+    /**
+     * 查询所有商品
+     * @param goodsInfo
+     * @return
+     */
+    List<GoodsInfo> select(@Param("goodsInfo") GoodsInfo goodsInfo);
+
+    Page<GoodsInfo> selectGoods(@Param("goodsInfo") GoodsInfo goodsInfo);
+
+    /**
+     * 查询所有积分商品列表
+     * @param goodsInfo
+     * @return
+     */
+    List<GoodsInfo> selectByIntegral(@Param("goodsInfo") GoodsInfo goodsInfo);
+
+    /**
+     * 查询所有促销商品列表
+     * @param goodsInfo
+     * @return
+     */
+    List<GoodsInfo> selectByPromotion(@Param("goodsInfo") GoodsInfo goodsInfo);
+
+    /**
+     * 新增商品
+     * @param goodsInfo
+     * @return
+     */
+    Integer insert(@Param("goodsInfo") GoodsInfo goodsInfo);
+
+
+    Integer updateById(@Param("goodsInfo")GoodsInfo goodsInfo,@Param("goodsInfoId")Integer goodsId);
+
+    /**
+     * 根据ID查询商品
+     * @param goodsInfoId
+     * @return
+     */
+    GoodsInfo selectById(@Param("goodsInfoId")Integer goodsInfoId);
+
+    /**
+     * 根据主键删除商品
+     * @param goodsInfoId
+     * @return
+     */
+    Integer deleteById(@Param("goodsInfoId")Integer goodsInfoId);
+
+    /**
+     * 根据商品ID查询详情图片
+     * @param goodId
+     * @return
+     */
+    List<GoodImg> selectImgs(@Param("goodId")Integer goodId);
+
+    /**
+     * 根据商品源ID查询商品
+     * @param goodSourceId
+     * @return
+     */
+    GoodsInfo selectByGoodSourceId(@Param("goodSourceId")Integer goodSourceId);
+
+    Integer selectCount(@Param("catId")Integer catId);
+
+    /**
+     * 删除商品详情图
+     * @param Id
+     * @return
+     */
+    Integer deleteDetailImgById(@Param("Id")Integer Id);
+
+    /**
+     * 插入商品详情图
+     * @param goodImg
+     * @return
+     */
+    Integer insertGoodImgs(@Param("goodImg")GoodImg goodImg);
+}

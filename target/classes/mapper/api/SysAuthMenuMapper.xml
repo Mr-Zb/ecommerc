@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SysAuthMenuMapper">
+	<resultMap id="SysAuthMenu" type="com.fun.le.entities.SysAuthMenu">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="parentId" javaType="Integer" column="parent_id" jdbcType="INTEGER" />
+		<result property="menuName" javaType="String" column="menu_name" jdbcType="VARCHAR" />
+		<result property="menuLink" javaType="String" column="menu_link" jdbcType="VARCHAR" />
+		<result property="menuIcon" javaType="String" column="menu_icon" jdbcType="VARCHAR" />
+		<result property="sorting" javaType="Integer" column="sorting" jdbcType="INTEGER" />
+		<result property="authCode" javaType="String" column="auth_code" jdbcType="VARCHAR" />
+		<result property="remark" javaType="String" column="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="sysAuthMenu.pkId">
+		<![CDATA[
+		INSERT INTO t_sys_auth_menu (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			parent_id,
+			menu_name,
+			menu_link,
+			menu_icon,
+			sorting,
+			auth_code,
+			remark
+		)
+		VALUES
+			(
+				#{sysAuthMenu.pkId, jdbcType = INTEGER},
+				#{sysAuthMenu.createUser, jdbcType = INTEGER},
+				#{sysAuthMenu.createTime, jdbcType = TIMESTAMP},
+				#{sysAuthMenu.updateUser, jdbcType = INTEGER},
+				#{sysAuthMenu.updateTime, jdbcType = TIMESTAMP},
+				#{sysAuthMenu.dataVersion, jdbcType = INTEGER},
+				#{sysAuthMenu.parentId, jdbcType = INTEGER},
+				#{sysAuthMenu.menuName, jdbcType = VARCHAR},
+				#{sysAuthMenu.menuLink, jdbcType = VARCHAR},
+				#{sysAuthMenu.menuIcon, jdbcType = VARCHAR},
+				#{sysAuthMenu.sorting, jdbcType = INTEGER},
+				#{sysAuthMenu.authCode, jdbcType = VARCHAR},
+				#{sysAuthMenu.remark, jdbcType = VARCHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_sys_auth_menu (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			parent_id,
+			menu_name,
+			menu_link,
+			menu_icon,
+			sorting,
+			auth_code,
+			remark
+		)
+		]]>
+		<foreach collection="sysAuthMenus" item="sysAuthMenu" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{sysAuthMenu.pkId, jdbcType = INTEGER},
+				#{sysAuthMenu.createUser, jdbcType = INTEGER},
+				#{sysAuthMenu.createTime, jdbcType = TIMESTAMP},
+				#{sysAuthMenu.updateUser, jdbcType = INTEGER},
+				#{sysAuthMenu.updateTime, jdbcType = TIMESTAMP},
+				#{sysAuthMenu.dataVersion, jdbcType = INTEGER},
+				#{sysAuthMenu.parentId, jdbcType = INTEGER},
+				#{sysAuthMenu.menuName, jdbcType = VARCHAR},
+				#{sysAuthMenu.menuLink, jdbcType = VARCHAR},
+				#{sysAuthMenu.menuIcon, jdbcType = VARCHAR},
+				#{sysAuthMenu.sorting, jdbcType = INTEGER},
+				#{sysAuthMenu.authCode, jdbcType = VARCHAR},
+				#{sysAuthMenu.remark, jdbcType = VARCHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+	<!-- 根据主键批量查询 -->
+	<select id="selectByIds" parameterType="Map" resultMap="SysAuthMenu">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.parent_id AS parent_id,
+			t.menu_name AS menu_name,
+			t.menu_link AS menu_link,
+			t.menu_icon AS menu_icon
+		FROM
+			t_sys_auth_menu t
+		Where t.pk_id IN
+		]]>
+		<foreach item="ids" index="index" collection="ids" open="(" separator="," close=")">
+			#{ids}
+		</foreach>
+	</select>
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_sys_auth_menu]]>
+		<set>
+		<![CDATA[update_user = #{sysAuthMenu.updateUser},]]>
+		<![CDATA[update_time = #{sysAuthMenu.updateTime},]]>
+		<![CDATA[data_version = #{sysAuthMenu.dataVersion},]]>
+		<![CDATA[parent_id = #{sysAuthMenu.parentId},]]>
+		<![CDATA[menu_name = #{sysAuthMenu.menuName},]]>
+		<![CDATA[menu_link = #{sysAuthMenu.menuLink},]]>
+		<![CDATA[menu_icon = #{sysAuthMenu.menuIcon},]]>
+		<![CDATA[sorting = #{sysAuthMenu.sorting},]]>
+		<![CDATA[auth_code = #{sysAuthMenu.authCode},]]>
+		<![CDATA[remark = #{sysAuthMenu.remark},]]>
+		</set>
+		<where>
+			<if test="where.parentId != null">
+			<![CDATA[AND parent_id = #{where.parentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.menuName != null and where.menuName != ''">
+			<![CDATA[AND menu_name = #{where.menuName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuLink != null and where.menuLink != ''">
+			<![CDATA[AND menu_link = #{where.menuLink, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuIcon != null and where.menuIcon != ''">
+			<![CDATA[AND menu_icon = #{where.menuIcon, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.authCode != null and where.authCode != ''">
+			<![CDATA[AND auth_code = #{where.authCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_sys_auth_menu]]>
+		<set>
+		<![CDATA[update_user = #{sysAuthMenu.updateUser},]]>
+		<![CDATA[update_time = #{sysAuthMenu.updateTime},]]>
+		<![CDATA[data_version = #{sysAuthMenu.dataVersion},]]>
+		<![CDATA[parent_id = #{sysAuthMenu.parentId},]]>
+		<![CDATA[menu_name = #{sysAuthMenu.menuName},]]>
+		<![CDATA[menu_link = #{sysAuthMenu.menuLink},]]>
+		<![CDATA[menu_icon = #{sysAuthMenu.menuIcon},]]>
+		<![CDATA[sorting = #{sysAuthMenu.sorting},]]>
+		<![CDATA[auth_code = #{sysAuthMenu.authCode},]]>
+		<![CDATA[remark = #{sysAuthMenu.remark},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{sysAuthMenuId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_sys_auth_menu]]>
+		<set>
+			<if test="sysAuthMenu.updateUser != null">
+			<![CDATA[update_user = #{sysAuthMenu.updateUser},]]>
+			</if>
+			<if test="sysAuthMenu.updateTime != null">
+			<![CDATA[update_time = #{sysAuthMenu.updateTime},]]>
+			</if>
+			<if test="sysAuthMenu.dataVersion != null">
+			<![CDATA[data_version = #{sysAuthMenu.dataVersion},]]>
+			</if>
+			<if test="sysAuthMenu.parentId != null">
+			<![CDATA[parent_id = #{sysAuthMenu.parentId},]]>
+			</if>
+			<if test="sysAuthMenu.menuName != null and sysAuthMenu.menuName != ''">
+			<![CDATA[menu_name = #{sysAuthMenu.menuName},]]>
+			</if>
+			<if test="sysAuthMenu.menuLink != null and sysAuthMenu.menuLink != ''">
+			<![CDATA[menu_link = #{sysAuthMenu.menuLink},]]>
+			</if>
+			<if test="sysAuthMenu.menuIcon != null and sysAuthMenu.menuIcon != ''">
+			<![CDATA[menu_icon = #{sysAuthMenu.menuIcon},]]>
+			</if>
+			<if test="sysAuthMenu.sorting != null">
+			<![CDATA[sorting = #{sysAuthMenu.sorting},]]>
+			</if>
+			<if test="sysAuthMenu.authCode != null and sysAuthMenu.authCode != ''">
+			<![CDATA[auth_code = #{sysAuthMenu.authCode},]]>
+			</if>
+			<if test="sysAuthMenu.remark != null and sysAuthMenu.remark != ''">
+			<![CDATA[remark = #{sysAuthMenu.remark},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.parentId != null">
+			<![CDATA[AND parent_id = #{where.parentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.menuName != null and where.menuName != ''">
+			<![CDATA[AND menu_name = #{where.menuName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuLink != null and where.menuLink != ''">
+			<![CDATA[AND menu_link = #{where.menuLink, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuIcon != null and where.menuIcon != ''">
+			<![CDATA[AND menu_icon = #{where.menuIcon, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.authCode != null and where.authCode != ''">
+			<![CDATA[AND auth_code = #{where.authCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_sys_auth_menu]]>
+		<set>
+			<if test="sysAuthMenu.updateUser != null">
+			<![CDATA[update_user = #{sysAuthMenu.updateUser},]]>
+			</if>
+			<if test="sysAuthMenu.updateTime != null">
+			<![CDATA[update_time = #{sysAuthMenu.updateTime},]]>
+			</if>
+			<if test="sysAuthMenu.dataVersion != null">
+			<![CDATA[data_version = #{sysAuthMenu.dataVersion},]]>
+			</if>
+			<if test="sysAuthMenu.parentId != null">
+			<![CDATA[parent_id = #{sysAuthMenu.parentId},]]>
+			</if>
+			<if test="sysAuthMenu.menuName != null and sysAuthMenu.menuName != ''">
+			<![CDATA[menu_name = #{sysAuthMenu.menuName},]]>
+			</if>
+			<if test="sysAuthMenu.menuLink != null and sysAuthMenu.menuLink != ''">
+			<![CDATA[menu_link = #{sysAuthMenu.menuLink},]]>
+			</if>
+			<if test="sysAuthMenu.menuIcon != null and sysAuthMenu.menuIcon != ''">
+			<![CDATA[menu_icon = #{sysAuthMenu.menuIcon},]]>
+			</if>
+			<if test="sysAuthMenu.sorting != null">
+			<![CDATA[sorting = #{sysAuthMenu.sorting},]]>
+			</if>
+			<if test="sysAuthMenu.authCode != null and sysAuthMenu.authCode != ''">
+			<![CDATA[auth_code = #{sysAuthMenu.authCode},]]>
+			</if>
+			<if test="sysAuthMenu.remark != null and sysAuthMenu.remark != ''">
+			<![CDATA[remark = #{sysAuthMenu.remark},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{sysAuthMenuId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="SysAuthMenu">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.parent_id AS parent_id,
+			t.menu_name AS menu_name,
+			t.menu_link AS menu_link,
+			t.menu_icon AS menu_icon,
+			t.sorting AS sorting,
+			t.auth_code AS auth_code,
+			t.remark AS remark
+		FROM
+			t_sys_auth_menu t
+		]]>
+		<where>
+			<if test="sysAuthMenu.pkId != null and sysAuthMenu.pkId > 0">
+			<![CDATA[AND t.pk_id = #{sysAuthMenu.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.createUser != null and sysAuthMenu.createUser > 0">
+			<![CDATA[AND t.create_user = #{sysAuthMenu.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.createTime != null">
+			<![CDATA[AND t.create_time = #{sysAuthMenu.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="sysAuthMenu.updateUser != null and sysAuthMenu.updateUser > 0">
+			<![CDATA[AND t.update_user = #{sysAuthMenu.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.updateTime != null">
+			<![CDATA[AND t.update_time = #{sysAuthMenu.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="sysAuthMenu.dataVersion != null and sysAuthMenu.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{sysAuthMenu.dataVersion, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.parentId != null and sysAuthMenu.parentId > 0">
+			<![CDATA[AND t.parent_id = #{sysAuthMenu.parentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.menuName != null and sysAuthMenu.menuName != ''">
+			<![CDATA[AND t.menu_name = #{sysAuthMenu.menuName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="sysAuthMenu.menuLink != null and sysAuthMenu.menuLink != ''">
+			<![CDATA[AND t.menu_link = #{sysAuthMenu.menuLink, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="sysAuthMenu.menuIcon != null and sysAuthMenu.menuIcon != ''">
+			<![CDATA[AND t.menu_icon = #{sysAuthMenu.menuIcon, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="sysAuthMenu.sorting != null and sysAuthMenu.sorting > 0">
+			<![CDATA[AND t.sorting = #{sysAuthMenu.sorting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="sysAuthMenu.authCode != null and sysAuthMenu.authCode != ''">
+			<![CDATA[AND t.auth_code = #{sysAuthMenu.authCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="sysAuthMenu.remark != null and sysAuthMenu.remark != ''">
+			<![CDATA[AND t.remark = #{sysAuthMenu.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="SysAuthMenu">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.parent_id AS parent_id,
+			t.menu_name AS menu_name,
+			t.menu_link AS menu_link,
+			t.menu_icon AS menu_icon,
+			t.sorting AS sorting,
+			t.auth_code AS auth_code,
+			t.remark AS remark
+		FROM
+			t_sys_auth_menu t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{sysAuthMenuId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sys_auth_menu
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.parentId != null">
+			<![CDATA[AND parent_id = #{where.parentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.menuName != null and where.menuName != ''">
+			<![CDATA[AND menu_name = #{where.menuName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuLink != null and where.menuLink != ''">
+			<![CDATA[AND menu_link = #{where.menuLink, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.menuIcon != null and where.menuIcon != ''">
+			<![CDATA[AND menu_icon = #{where.menuIcon, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.authCode != null and where.authCode != ''">
+			<![CDATA[AND auth_code = #{where.authCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sys_auth_menu
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{sysAuthMenuId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

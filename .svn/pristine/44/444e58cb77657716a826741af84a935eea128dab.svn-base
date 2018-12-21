@@ -1,0 +1,356 @@
+package com.fun.client.controller;
+
+import java.util.*;
+
+import com.fun.client.domain.ThreePayInfo;
+import com.fun.client.service.ThreePayInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.mysqldb.AttributeDto;
+import com.fun.mysqldb.service.IdeviceLocationService;
+import com.github.pagehelper.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.framework.web.support.annotation.Secure;
+import com.github.pagehelper.PageHelper;
+
+import springfox.documentation.annotations.ApiIgnore;
+
+@RestController
+public class ThreePayController extends BaseController
+{
+	@Autowired
+	private IdeviceLocationService tDeviceLocationDAO;
+	@Autowired
+	private ThreePayInfoService payInfoService;
+	
+	@ApiIgnore
+	@Secure(has={"le:admin"})
+	@RequestMapping(path = { "ope-pay-list"}, method = { RequestMethod.GET })
+	public ModelAndView sysNotice(WebRequest request, Model model) throws BusinessException {
+		ModelAndView mav = new ModelAndView("operation/addthree");
+		return mav;   
+	}
+	
+	@ApiIgnore
+	@Secure(has={"le:admin"})
+	@RequestMapping(path = { "ope-pay-list-show"}, method = { RequestMethod.GET })
+	public ModelAndView sysNoticeee(WebRequest request, Model model) throws BusinessException {
+		ModelAndView mav = new ModelAndView("operation/show");
+		return mav;   
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param platformId
+	 * @return 每个平台下面得支付类型
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "ope-pay-add-val"}, method = { RequestMethod.POST })
+	public AjaxReturn payThree(WebRequest request, Model model, String platformId) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeList();
+		List<AttributeDto> list1 = new ArrayList<AttributeDto>();
+		String payName = "";
+        for(AttributeDto attr:list){
+        	if(!payName.equals(attr.getPlatformName())){
+        	AttributeDto attributeDto = new AttributeDto();
+        	attributeDto.setPlatformName(attr.getPlatformName());
+        	attributeDto.setVersion(attr.getVersion());
+        	attributeDto.setPayId(attr.getPayId());
+        	attributeDto.setPayName(attr.getPayName());
+        	attributeDto.setPlatformId(attr.getPlatformId());
+        	list1.add(attributeDto);
+        	}else{
+        		AttributeDto attributeDto = list1.get(list1.size()-1);
+        		attributeDto.setPayId(attr.getPayId()+"&"+attributeDto.getPayId());
+        		attributeDto.setPayName(attr.getPayName()+"&"+attributeDto.getPayName());
+        		}
+        	payName = attr.getPlatformName();
+        }
+        List<AttributeDto> list2 = new ArrayList<AttributeDto>(); 
+       for(AttributeDto str:list1){
+    	   if(str.getPlatformId().equals(platformId)){
+    		   list2.add(str);
+    	   }
+       } 
+		return new AjaxReturn(200, null, list2);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return 所有平台
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "ope-pay-add-name"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeqq(WebRequest request, Model model) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeList();
+	    Set<Object> set = new HashSet<Object>();
+        for(AttributeDto attr:list){
+        	String payName = attr.getPlatformName();//诚意支付
+        	String platform_id = attr.getPlatformId();
+        	set.add(payName+":"+platform_id);
+        }
+		return new AjaxReturn(200, null, set);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return 反回网银通道
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "api-ope-pay-tongdao"}, method = { RequestMethod.POST })
+	public AjaxReturn wangYinTongDao(WebRequest request, Model model) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeList();
+	    Set<Object> set = new HashSet<Object>();
+	    if(list!=null) {
+	        for(AttributeDto attr:list){
+	        	String platformName = attr.getPlatformName();//诚意支付
+	        	Integer merge = attr.getIsMerge();
+	        	if(attr.getIsBank()==1) {
+	        		String payName = attr.getPayName();
+	        		String[] split = payName.split("&");
+	        		for(String str:split) {
+	        			ThreePayInfo threePayInfo = new ThreePayInfo();
+	        			threePayInfo.setPlatformName(platformName);
+	        			threePayInfo.setPayName(str);
+	        			threePayInfo.setState(1);
+	        			List<ThreePayInfo> selectByName = payInfoService.selectByName(threePayInfo);
+	        			if(selectByName.size()>0) {
+	        					set.add(platformName+":"+merge);
+	        			}
+	        		}
+	        	}
+	        }
+	    }
+		return new AjaxReturn(200, null, set);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param threePayInfo
+	 * @param queryDto
+	 * @return 展示所有支付类型列表
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "api-ope-pay-three-list"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeaa(WebRequest request, Model model,ThreePayInfo threePayInfo,QueryDto queryDto) throws BusinessException {
+		PageHelper.startPage((int) queryDto.getPage(), (int) queryDto.getRows(), true);
+		Page<ThreePayInfo> select = payInfoService.select(threePayInfo);
+		return new Pagination<ThreePayInfo>(select.getTotal(),select.getResult());
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param threePayInfo
+	 * @param queryDto
+	 * @return 客户端获取支付类型详情
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "api-ope-pay-three-list-qian"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeaee(WebRequest request, Model model,ThreePayInfo threePayInfo,QueryDto queryDto) throws BusinessException {
+		PageHelper.startPage((int) queryDto.getPage(), (int) queryDto.getRows(), true);
+		Page<ThreePayInfo> select = payInfoService.select(threePayInfo);
+		List<ThreePayInfo> result = select.getResult();
+		for(ThreePayInfo three:result) {
+			three.setRsaPrivateKey(null);
+			three.setKey(null);
+			three.setMemberId(null);
+			three.setMemberKey(null);
+		}
+		return new Pagination<ThreePayInfo>(select.getTotal(),select.getResult());
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param threePayInfo
+	 * @return 修改某支付类型
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@Secure(has={"le:admin"})
+	@RequestMapping(path = { "ope-pay-three-update"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeUpdate(WebRequest request, Model model,ThreePayInfo threePayInfo) throws BusinessException {
+		payInfoService.updateById(threePayInfo);
+		return new AjaxReturn(200, null, null);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param threePayInfo
+	 * @param payType
+	 * @return 插入支付类型
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@Secure(has={"le:admin"})
+	@RequestMapping(path = { "ope-pay-three-insert"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeInsert(WebRequest request, Model model,ThreePayInfo threePayInfo,String payType) throws Exception {
+		int userId = getAuthentication().intValue();
+		if(payType.length()>0) {
+			String[] split = payType.split("-");
+			for(String str : split) {
+				String[] split2 = str.split("&");
+				threePayInfo.setPayId(split2[0]); 
+				threePayInfo.setPayName(split2[1]);
+				threePayInfo.setCreateUser(userId);
+				threePayInfo.setCreateTime(new Date());
+				threePayInfo.setUpdateUser(userId);
+				threePayInfo.setDataVersion(Integer.valueOf(1));
+				threePayInfo.setUpdateTime(new Date());
+				if(threePayInfo.getPlatformName()==null||"".equals(threePayInfo.getPlatformName())) {
+					return new AjaxReturn(500, "平台名称不能为空", null);
+				}else if(payType==null||"".equals(payType)) {
+					return new AjaxReturn(500, "支付类型不能为空", null);
+				}else if(threePayInfo.getVersion()==null||"".equals(threePayInfo.getVersion())) {
+					return new AjaxReturn(500, "版本号不能为空", null);
+				}else if(threePayInfo.getState()==null) {
+					return new AjaxReturn(500, "开启状态不能为空", null);
+				}else if(threePayInfo.getRsaPrivateKey()==null||"".equals(threePayInfo.getRsaPrivateKey())) {
+					return new AjaxReturn(500, "Rsa密钥不能为空", null);
+				}else if(threePayInfo.getPlatformName()==null||"".equals(threePayInfo.getPlatformName())) {
+					return new AjaxReturn(500, "平台名称不能为空", null);
+				}else if(threePayInfo.getPayUrl()==null||"".equals(threePayInfo.getPayUrl())) {
+					return new AjaxReturn(500, "支付Url不能为空", null);
+				}else if(threePayInfo.getPayName()==null||"".equals(threePayInfo.getPayName())) {
+					return new AjaxReturn(500, "支付类型不能为空", null);
+				}else if(threePayInfo.getCloseMoney()==null||threePayInfo.getCloseMoney()<0) {
+					return new AjaxReturn(500, "停用金额不能为空", null);
+				}else if(threePayInfo.getMostIncome()==null||threePayInfo.getMostIncome()<0) {
+					return new AjaxReturn(500, "最大充值金额不能为空", null);
+				}else if(threePayInfo.getMinimumIncome()==null||threePayInfo.getMinimumIncome()<0) {
+					return new AjaxReturn(500, "最低入款金额不能为空", null);
+				}else if(threePayInfo.getMemberKey()==null||"".equals(threePayInfo.getMemberKey())) {
+					return new AjaxReturn(500, "商户密钥不能为空", null);
+				}else if(threePayInfo.getKey()==null||threePayInfo.getKey()<0) {
+					return new AjaxReturn(500, "顺序不能为空", null);
+				}else if(threePayInfo.getBusinessAccount()==null||"".equals(threePayInfo.getBusinessAccount())) {
+					return new AjaxReturn(500, "商户账号不能为空", null);
+				}
+				payInfoService.insert(threePayInfo);
+			}
+		}else {
+			return new AjaxReturn(500, "请填写数据", null);
+		}
+		return new AjaxReturn(200, null, null);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @param threePayInfo
+	 * @return 删除支付类型
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@Secure(has={"le:admin"})
+	@RequestMapping(path = { "ope-pay-three-delete"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeInsertDelete(WebRequest request, Model model,ThreePayInfo threePayInfo) throws BusinessException {
+		payInfoService.deleteById(threePayInfo.getPkId());
+		return new AjaxReturn(200, null, null);
+	}
+	
+
+	/**
+	 * @param request
+	 * @param model
+	 * @return 反回所有银联支付类型（状态开启，不重复）
+	 * @throws BusinessException
+	 */
+	@RequestMapping(path = { "api-ope-pay-add-val-yinlian"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeQian(WebRequest request, Model model) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeListByBack();
+		Set<String> set = new HashSet<>();
+		if(list!=null) {
+			for(AttributeDto attr : list) {
+				String[] split = attr.getPayName().split("&");
+				for(String str : split) {
+					ThreePayInfo threePayInfo = new ThreePayInfo();
+					threePayInfo.setPayName(str);
+					threePayInfo.setState(1);
+					List<ThreePayInfo> selectByState = payInfoService.selectByState(threePayInfo);
+					if(selectByState.size()!=0) {
+						set.add(str);
+					}
+				}
+			}
+		}
+		return new AjaxReturn(200, null, set);
+	}
+
+	/**
+	 * @param request
+	 * @param model
+	 * @return 根据网银通道信息反回对应得信息
+	 * @throws BusinessException
+	 */
+	@RequestMapping(path = { "api-ope-pay-add-val-wangyin"}, method = { RequestMethod.POST })
+	public AjaxReturn payThreeQianWang(WebRequest request, Model model,AttributeDto attributeDto) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeListByBack1(attributeDto.getPlatformName());
+		List<ThreePayInfo> list1 = new ArrayList<ThreePayInfo>();
+		if(list!=null) {
+			for(AttributeDto attr : list) {
+				String[] split = attr.getPayName().split("&");
+				for(String str : split) {
+					String platformName = attr.getPlatformName();
+					ThreePayInfo threePayInfo = new ThreePayInfo();
+					threePayInfo.setPlatformName(platformName);
+					threePayInfo.setPayName(str);
+					threePayInfo.setState(1);
+					List<ThreePayInfo> selectByName = payInfoService.selectByName(threePayInfo);
+					if(selectByName.size()!=0) {
+						selectByName.get(0).setKey(null);
+						selectByName.get(0).setRsaPrivateKey(null);
+						selectByName.get(0).setMemberKey(null);
+						selectByName.get(0).setMemberId(null);
+						list1.add(selectByName.get(0));
+					}
+				}
+			}
+		}
+		return new AjaxReturn(200, null, list1);
+	}
+	
+	/**
+	 * @param request
+	 * @param model
+	 * @return 获取所有支付类型名称
+	 * @throws BusinessException
+	 */
+	@ApiIgnore
+	@RequestMapping(path = { "ope-pay-add-val-payname"}, method = { RequestMethod.POST })
+	public AjaxReturn payThree1(WebRequest request, Model model) throws BusinessException {
+		List<AttributeDto> list = tDeviceLocationDAO.getAttributeList();
+		HashSet<Object> set = new HashSet<>();
+		if(list!=null) {
+			for(AttributeDto attr:list){
+				String name = attr.getPayName();
+				String[] split = name.split("&");
+				for(String str : split) {
+					set.add(str);
+				}
+			}
+		}
+		return new AjaxReturn(200, null, set);
+	}
+}

@@ -1,0 +1,50 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.GoodImg;
+import com.fun.client.domain.GoodsInfo;
+import com.fun.client.repository.GoodsInfoMapper;
+import com.fun.framework.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class GoodsInfoService extends BaseService {
+
+    private @Autowired GoodsInfoMapper goodsMapper;
+
+    public List<GoodsInfo> selectAll(GoodsInfo goodsInfo){
+        return  goodsMapper.select(goodsInfo);
+    }
+
+    public  GoodsInfo selectById(Integer goodsInfoId){
+        return goodsMapper.selectById(goodsInfoId);
+    }
+
+    public Integer deteleById(Integer goodsInfoId){
+        return goodsMapper.deleteById(goodsInfoId);
+    }
+
+   public Integer insert(GoodsInfo goodsInfo){
+        return  goodsMapper.insert(goodsInfo);
+    }
+
+    public Integer updateById(GoodsInfo goodsInfo,Integer userId){
+        return goodsMapper.updateById(goodsInfo,userId);
+    }
+
+    public  List<GoodsInfo> selectByPromotion(GoodsInfo goodsInfo){
+        return  goodsMapper.selectByPromotion(goodsInfo);
+    }
+
+    public  List<GoodsInfo> selectByIntegral(GoodsInfo goodsInfo){
+        return  goodsMapper.selectByIntegral(goodsInfo);
+    }
+    public List<GoodImg> selectImgs(Integer goodId){
+        return goodsMapper.selectImgs(goodId);
+    }
+    public GoodsInfo selectByGoodSourceId(Integer goodSourceId){
+        return goodsMapper.selectByGoodSourceId(goodSourceId);
+    }
+}

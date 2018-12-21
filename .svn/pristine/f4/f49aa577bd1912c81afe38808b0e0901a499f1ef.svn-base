@@ -1,0 +1,87 @@
+package com.fun.admin.controller;
+
+import com.fun.client.domain.OperationLog;
+import com.fun.client.service.OperationLogService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.le.entities.SysPropSetting;
+import com.fun.le.service.SysPropSettingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class SysOperation extends BaseController {
+
+    @Autowired
+    private OperationLogService operationLogService;
+    @Autowired(required = false)
+    private SysPropSettingService sysPropSettingService;
+
+    @RequestMapping(path = {"sys-operation-list"}, method = {RequestMethod.POST})
+    public AjaxReturn showOperationList(OperationLog operationLog, QueryDto queryDto){
+        Pagination<OperationLog> operationLogPagination = operationLogService.listOperationLog(operationLog, queryDto);
+        return operationLogPagination;
+    }
+
+    /**
+     * 展示系统参数
+     * @return
+     */
+    @RequestMapping(path = {"sys-operation-info"}, method = {RequestMethod.POST})
+    public AjaxReturn showSysInfo(){
+        Map<String, String> map = new HashMap<>();
+        SysPropSetting sysPropSetting1 = new SysPropSetting();
+        //红包中奖概率
+        sysPropSetting1.setPropKey("sys.user.red.envelop");
+        List<SysPropSetting> red = sysPropSettingService.select(sysPropSetting1);
+        map.put("sys.user.red.envelop",red.get(0).getPropValue());
+        //系统版本
+        sysPropSetting1.setPropKey("sys.version");
+        List<SysPropSetting> version = sysPropSettingService.select(sysPropSetting1);
+        map.put("sys.version",version.get(0).getPropValue());
+        //下载地址
+        sysPropSetting1.setPropKey("sys.download.adress");
+        List<SysPropSetting> download = sysPropSettingService.select(sysPropSetting1);
+        map.put("sys.download.adress",download.get(0).getPropValue());
+        //注册须知
+        /*sysPropSetting1.setPropKey("sys.registration");
+        List<SysPropSetting> registration = sysPropSettingService.select(sysPropSetting1);
+        map.put("sys.registration",registration.get(0).getPropValue());*/
+        return new AjaxReturn(200,null,map);
+    }
+
+    /**
+     * 修改系统参数
+     * @param sysPropSettings
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(path = {"sys-operation-update"}, method = {RequestMethod.POST})
+    public AjaxReturn updateSysInfo(List<Map<String ,String >> sysPropSettings) throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        for (Map<String ,String > str : sysPropSettings){
+            for (Map.Entry<String ,String> entry : str.entrySet()) {
+                SysPropSetting sysPropSetting1 = new SysPropSetting();
+                sysPropSetting1.setPropKey(entry.getKey());
+                SysPropSetting sysPropSetting2 = new SysPropSetting();
+                sysPropSetting2.setPropValue(entry.getValue());
+                sysPropSettingService.updateActive(userId,sysPropSetting1,sysPropSetting2);
+            }
+        }
+        return new AjaxReturn(200,null,null);
+    }
+}

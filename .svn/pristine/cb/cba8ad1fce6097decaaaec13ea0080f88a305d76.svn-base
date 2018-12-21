@@ -1,0 +1,90 @@
+package com.fun.client.service;
+
+import java.util.Date;
+import java.util.List;
+
+import com.fun.client.domain.FinRechargeLog;
+import com.fun.client.repository.FinRechargeLogMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FinRechargeLogService{
+
+	@Autowired
+	private FinRechargeLogMapper finRechargeLogMapper;
+
+	public Integer insert(Integer userId, FinRechargeLog finRechargeLog) {
+		finRechargeLog.setCreateTime(new Date());
+		finRechargeLog.setCreateUser(userId);
+		finRechargeLog.setUpdateTime(new Date());
+		finRechargeLog.setUpdateUser(userId);
+		finRechargeLog.setDataVersion(Integer.valueOf(1));
+		return this.finRechargeLogMapper.insert(finRechargeLog);
+	}
+
+	public Integer insert(Integer userId, List<FinRechargeLog> finRechargeLogs) {
+		for (FinRechargeLog finRechargeLog : finRechargeLogs) {
+			finRechargeLog.setCreateTime(new Date());
+			finRechargeLog.setCreateUser(userId);
+			finRechargeLog.setUpdateTime(new Date());
+			finRechargeLog.setUpdateUser(userId);
+			finRechargeLog.setDataVersion(Integer.valueOf(1));
+		}
+		return this.finRechargeLogMapper.insertBatch(finRechargeLogs);
+	}
+
+	public Integer update(Integer userId, FinRechargeLog finRechargeLog, FinRechargeLog where){
+		finRechargeLog.setUpdateTime(new Date());
+		finRechargeLog.setUpdateUser(userId);
+		return this.finRechargeLogMapper.update(finRechargeLog, where);
+	}
+
+	public Integer updateById(Integer userId, FinRechargeLog finRechargeLog, Integer finRechargeLogId){
+		finRechargeLog.setUpdateTime(new Date());
+		finRechargeLog.setUpdateUser(userId);
+		return this.finRechargeLogMapper.updateById(finRechargeLog, finRechargeLogId);
+	}
+
+	public Integer updateActive(Integer userId, FinRechargeLog finRechargeLog, FinRechargeLog where){
+		finRechargeLog.setUpdateTime(new Date());
+		finRechargeLog.setUpdateUser(userId);
+		return this.finRechargeLogMapper.updateActive(finRechargeLog, where);
+	}
+
+	public Integer updateActiveById(Integer userId, FinRechargeLog finRechargeLog, Integer finRechargeLogId){
+		finRechargeLog.setUpdateTime(new Date());
+		finRechargeLog.setUpdateUser(userId);
+		return this.finRechargeLogMapper.updateActiveById(finRechargeLog, finRechargeLogId);
+	}
+
+	public List<FinRechargeLog> select(Integer userId, FinRechargeLog finRechargeLog){
+		return this.finRechargeLogMapper.select(finRechargeLog);
+	}
+
+	public FinRechargeLog selectById(Integer userId, Integer finRechargeLogId){
+		return this.finRechargeLogMapper.selectById(finRechargeLogId);
+	}
+
+	public Integer delete(Integer userId, FinRechargeLog where){
+		return this.finRechargeLogMapper.delete(where);
+	}
+
+	public Integer deleteById(Integer userId, Integer finRechargeLogId){
+		return this.finRechargeLogMapper.deleteById(finRechargeLogId);
+	}
+
+	public FinRechargeLog selectLastByUserId(Integer memberId){
+		return finRechargeLogMapper.selectLastByUserId(memberId);
+	}
+
+	public Pagination<FinRechargeLog> selectFinRechargeList(FinRechargeLog finRechargeLog, QueryDto queryDto){
+		PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+		Page<FinRechargeLog> page = this.finRechargeLogMapper.selectFinRechargeList(finRechargeLog, queryDto);
+		return new Pagination<>(page.getTotal(), page.getResult());
+	}
+}

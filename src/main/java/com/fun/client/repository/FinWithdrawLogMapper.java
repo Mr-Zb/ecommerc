@@ -1,0 +1,35 @@
+package com.fun.client.repository;
+
+import com.fun.client.domain.FinWithdrawLog;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+public interface FinWithdrawLogMapper {
+	Integer insert(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog);
+
+	Integer insertBatch(@Param("finWithdrawLogs") List<FinWithdrawLog> paramList);
+
+	Integer update(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog1,
+				   @Param("where") FinWithdrawLog paramFinWithdrawLog2);
+
+	Integer updateById(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog,
+					   @Param("finWithdrawLogId") Integer paramInteger);
+
+	Integer updateActive(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog1,
+						 @Param("where") FinWithdrawLog paramFinWithdrawLog2);
+
+	Integer updateActiveById(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog,
+							 @Param("finWithdrawLogId") Integer paramInteger);
+
+	Page<FinWithdrawLog> select(@Param("finWithdrawLog") FinWithdrawLog paramFinWithdrawLog,@Param("where") QueryDto where);
+
+	FinWithdrawLog selectById(@Param("finWithdrawLogId") Integer paramInteger);
+
+	Integer delete(@Param("where") FinWithdrawLog paramFinWithdrawLog);
+
+	Integer deleteById(@Param("finWithdrawLogId") Integer paramInteger);
+
+}

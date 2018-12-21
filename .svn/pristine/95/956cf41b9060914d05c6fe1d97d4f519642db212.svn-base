@@ -1,0 +1,128 @@
+package com.fun.client.controller;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fun.admin.service.SequenceService;
+import com.fun.client.domain.FinRechargeLog;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.domain.ThreePayInfo;
+import com.fun.client.service.*;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.le.service.FinCapitalLogService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.aspectj.weaver.loadtime.Aj;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import springfox.documentation.annotations.ApiIgnore;
+
+/**
+ * 诚意支付
+ */
+@Controller
+public class PayController extends BaseController {
+	
+	@Autowired(required = false)
+	private ThreePayInfoService payInfoService;
+	@Autowired 
+	private ApplicationContext context;
+    @Autowired
+    private MemUserInfoService memUserInfoService;
+    @Autowired
+    private  FinService finService;
+    @Autowired
+    private SequenceService sequenceService;
+    @Autowired
+    private FinRechargeLogService rechargeLogService;
+
+    @ApiIgnore
+    @RequestMapping(path = { "/pay-anual-top-up" }, method = { RequestMethod.GET, RequestMethod.POST })
+    public AjaxReturn anualPay(Double amount) throws Exception {
+        int memId = this.getAuthentication().intValue();
+        MemUserInfo userInfo = this.memUserInfoService.selectById(memId);
+        double _amount = userInfo.getCapital1();
+        String orderNo = this.sequenceService.generate("S");
+        FinRechargeLog finRechargeLog = new FinRechargeLog();
+        finRechargeLog.setMemberId(userInfo.getPkId());
+        finRechargeLog.setMemberName(userInfo.getLoginName());
+        finRechargeLog.setAgentId(userInfo.getAgentId().intValue());
+        finRechargeLog.setAgentName(userInfo.getAgentName());
+        finRechargeLog.setAgentFullId(userInfo.getAgentFullId());
+        finRechargeLog.setAgentFullName(userInfo.getAgentFullName());
+        finRechargeLog.setRechargeAmount1(amount);
+        finRechargeLog.setRechargeAmount2(amount + _amount);
+        finRechargeLog.setRechargeAccount("---");
+        finRechargeLog.setRechargeFrom("客户端手动充值");
+        finRechargeLog.setRechargeNo(orderNo);
+        finRechargeLog.setOrderNo(orderNo);
+        finRechargeLog.setRemark("手动充值");
+        finRechargeLog.setRechargeState(0);
+        this.rechargeLogService.insert(memId, finRechargeLog);
+        return new AjaxReturn(200, null, null);
+    }
+
+	@ApiIgnore
+	@RequestMapping(path = { "/api-three-pay" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView threePay(HttpServletRequest req,HttpServletResponse response) throws Exception{
+
+		//int uid = getAuthentication().intValue();
+        int uid =1;
+		if (uid == 0) {
+			String errorUrl = req.getScheme()+"://"+req.getServerName()+"/api-three-pay-back-error.json";
+			return new ModelAndView(new RedirectView(errorUrl));
+		}
+		String pkId = req.getParameter("pkId");
+		ThreePayInfo threePayInfo = payInfoService.selectById(Integer.parseInt(pkId));
+		// 调用支付进程
+        //修改过-----待测
+        Pay0001Service bean = context.getBean("pay-" + threePayInfo.getPlatformId() + "-service", Pay0001Service.class);
+        return bean.threePay(req, threePayInfo, uid);
+	}
+	
+	@RequestMapping(path = { "/api-three-pay-back-error" }, method = { RequestMethod.POST,RequestMethod.GET })
+	@ResponseBody
+	public void threePayBackError(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+		StringBuilder sb=new  StringBuilder();
+        sb.append("<!DOCTYPE html><html xmlns=\"http://www.w3.org/1999/xhtml\">\n");
+        sb.append("<head>");
+        sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        sb.append("<title></title>");
+        sb.append("</head>");
+        sb.append("<body>");
+        sb.append("<div>登录超时，请<br><a href='"+req.getScheme()+"://"+req.getServerName()+"'>返回首页</a>,退出重新登录</div>");
+        sb.append("</body>");
+        sb.append("</html>");
+        resp.setHeader("Content-type", "text/html;charset=UTF-8");
+        resp.getWriter().write(sb.toString()); 
+	}
+
+    private static byte[] getContentBytes(String content, String charset) {
+        if (charset == null || "".equals(charset)) {
+            return content.getBytes();
+        }
+        try {
+            return content.getBytes(charset);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("MD5签名过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
+        }
+    }
+    public static String md5(String text, String input_charset) {
+    	
+        return DigestUtils.md5Hex(getContentBytes(text, input_charset));
+    }
+}

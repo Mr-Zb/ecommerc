@@ -1,0 +1,166 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.FinRechargeLog;
+import com.fun.client.domain.FinWithdrawLog;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.repository.MemUserInfoMapper;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.repository.FinCapitalLogMapper;
+import com.fun.le.service.FinCapitalLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.concurrent.Future;
+
+@Service
+public class FinService extends BaseService {
+     @Autowired
+     @Lazy
+     private FinCapitalLogMapper finCapitalLogMapper;
+    @Autowired
+    @Lazy
+    private MemUserInfoMapper memUserInfoMapper;
+
+    @Autowired
+    private FinRechargeLogService finRechargeLogService;
+
+    private @Autowired
+    FinWithdrawLogService finWithdrawLogService;
+    private @Autowired
+    FinCapitalLogService finCapitalLogService;
+    private @Autowired
+    MemUserInfoService memUserInfoService;
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    @Async
+    public Future<String> addCapitalLog(Integer memId, Integer capitalType, Double amount,
+                                String orderNo, String remark) {
+        synchronized (getlock(memId)) {
+            MemUserInfo userInfo = memUserInfoMapper.selectById(memId);
+            double amount2 = userInfo.getCapital1();
+            FinCapitalLog finCapitalLog = new FinCapitalLog();
+            finCapitalLog.setMemberName(userInfo.getLoginName());
+            finCapitalLog.setCreateTime(new Date());
+            finCapitalLog.setUpdateTime(new Date());
+            finCapitalLog.setCreateUser(memId);
+            finCapitalLog.setUpdateUser(memId);
+            finCapitalLog.setRemark(remark);
+            finCapitalLog.setOrderNo(orderNo);
+            finCapitalLog.setMemberId(userInfo.getPkId().longValue());
+            finCapitalLog.setCapitalAmount1(amount);
+            finCapitalLog.setCapitalAmount2(amount2 + amount);
+            finCapitalLog.setCapitalType(capitalType);
+            finCapitalLog.setAgentFullId(userInfo.getAgentFullId());
+            finCapitalLog.setAgentFullName(userInfo.getAgentFullName());
+            finCapitalLog.setAgentId(userInfo.getAgentId().intValue());
+            finCapitalLog.setAgentName(userInfo.getAgentName());
+            finCapitalLog.setOrderId(0);
+            finCapitalLog.setDataVersion(1);
+            this.finCapitalLogMapper.insert(finCapitalLog);
+            this.memUserInfoMapper.updateUserAmount1(memId, finCapitalLog.getCapitalAmount2());
+        }
+        return new AsyncResult<>("任务完成");
+    }
+
+    /**
+     * 充值确认
+     *
+     * @param rechargeState
+     * @param pkId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void rechargeCheck(Integer rechargeState, Integer pkId, Integer userId) {
+        FinRechargeLog finRechargeLog = this.finRechargeLogService.selectById(userId, pkId);
+        MemUserInfo memUserInfo = this.memUserInfoService.selectById(finRechargeLog.getMemberId());
+        double sumRecharge = memUserInfo.getCapital4();
+        finRechargeLog.setRechargeState(rechargeState);
+        FinCapitalLog finCapitalLog1 = this.finCapitalLogMapper.selectById(finRechargeLog.getMemberId());
+        double amount = finCapitalLog1.getCapitalAmount2();
+        if (rechargeState == 1) {
+            finRechargeLog.setRemark("已到账");
+            //插入资金记录
+            FinCapitalLog finCapitalLog = new FinCapitalLog();
+            finCapitalLog.setAgentFullId(finRechargeLog.getAgentFullId());
+            finCapitalLog.setAgentFullName(finRechargeLog.getAgentFullName());
+            finCapitalLog.setAgentId(finRechargeLog.getAgentId());
+            finCapitalLog.setAgentName(finRechargeLog.getAgentName());
+            finCapitalLog.setCapitalAmount1(finRechargeLog.getRechargeAmount1());
+            finCapitalLog.setCapitalAmount2(amount + finRechargeLog.getRechargeAmount1());
+            finCapitalLog.setCapitalType(11);
+            finCapitalLog.setCreateTime(new Date());
+            finCapitalLog.setCreateUser(finRechargeLog.getCreateUser());
+            finCapitalLog.setDataVersion(1);
+            finCapitalLog.setMemberId(finRechargeLog.getMemberId().longValue());
+            finCapitalLog.setMemberName(finRechargeLog.getMemberName());
+            finCapitalLog.setOrderId(finRechargeLog.getPkId());
+            finCapitalLog.setOrderNo(finRechargeLog.getOrderNo());
+            finCapitalLog.setRemark("用户充值");
+            finCapitalLog.setUpdateTime(new Date());
+            finCapitalLog.setUpdateUser(userId);
+            sumRecharge = sumRecharge + finRechargeLog.getRechargeAmount1();
+
+            memUserInfo.setPkId(finRechargeLog.getMemberId());
+            memUserInfo.setCapital4(sumRecharge);
+            this.memUserInfoService.updateUserAmount(memUserInfo,finRechargeLog.getMemberId());//更新用户充值金额
+            this.finCapitalLogService.insert(finCapitalLog);
+            this.memUserInfoService.updateUserAmount1(finRechargeLog.getMemberId(), finCapitalLog.getCapitalAmount2());//更新用户余额
+        } else {
+            finRechargeLog.setRemark("未到账");
+        }
+        this.finRechargeLogService.updateById(userId, finRechargeLog, pkId);
+    }
+
+    /**
+     * 提款审核
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void userDrawCheck(Integer id, Integer withdrawState, String remark, Integer userId) throws BusinessException {
+        FinWithdrawLog finWithdrawLog = this.finWithdrawLogService.selectById(userId, id);//查询提款记录
+        MemUserInfo memUserInfo = this.memUserInfoService.selectById(finWithdrawLog.getMemberId());
+        double sumWithdraw = memUserInfo.getCapital7();
+        FinCapitalLog finCapitalLog1 = this.finCapitalLogMapper.selectById(finWithdrawLog.getMemberId());
+        double amount = finCapitalLog1.getCapitalAmount2();//用户余额
+        finWithdrawLog.setWithdrawState(withdrawState);
+        if (finWithdrawLog.getWithdrawState() == 1) {
+            finWithdrawLog.setRemark("已完成");
+
+            FinCapitalLog finCapitalLog = new FinCapitalLog();
+            finCapitalLog.setAgentFullId(finWithdrawLog.getAgentFullId());
+            finCapitalLog.setAgentFullName(finWithdrawLog.getAgentFullName());
+            finCapitalLog.setAgentId(finWithdrawLog.getAgentId());
+            finCapitalLog.setAgentName(finWithdrawLog.getAgentName());
+            finCapitalLog.setCapitalAmount1(-finWithdrawLog.getWithdrawAmount2());
+            finCapitalLog.setCapitalAmount2(amount - finWithdrawLog.getWithdrawAmount2());
+            finCapitalLog.setCapitalType(12);
+            finCapitalLog.setCreateTime(new Date());
+            finCapitalLog.setCreateUser(finWithdrawLog.getCreateUser());
+            finCapitalLog.setDataVersion(1);
+            finCapitalLog.setMemberId(finWithdrawLog.getMemberId().longValue());
+            finCapitalLog.setMemberName(finWithdrawLog.getMemberName());
+            finCapitalLog.setOrderId(finWithdrawLog.getPkId());
+            finCapitalLog.setOrderNo(finWithdrawLog.getOrderNo());
+            finCapitalLog.setRemark("用户提款");
+            finCapitalLog.setUpdateTime(new Date());
+            finCapitalLog.setUpdateUser(userId);
+
+            sumWithdraw += finWithdrawLog.getWithdrawAmount2();
+            memUserInfo.setPkId(finWithdrawLog.getMemberId());
+            memUserInfo.setCapital7(sumWithdraw);
+            this.memUserInfoService.updateUserAmount(memUserInfo,finWithdrawLog.getMemberId());//更新用户提现金额
+            this.finCapitalLogService.insert(finCapitalLog);//插入资金日志
+            this.memUserInfoService.updateUserAmount1(finWithdrawLog.getMemberId(), finCapitalLog.getCapitalAmount2());//更新用户余额
+        } else {
+            finWithdrawLog.setRemark("已拒绝：" + remark);
+        }
+        this.finWithdrawLogService.updateById(userId, finWithdrawLog, id);
+    }
+}

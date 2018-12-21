@@ -1,0 +1,119 @@
+package com.fun.client.controller;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fun.client.domain.ThreePayInfo;
+import com.fun.client.service.MemFinService;
+import com.fun.client.service.ThreePayInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+import com.alibaba.fastjson.JSON;
+
+import springfox.documentation.annotations.ApiIgnore;
+
+@Controller
+public class BackController extends BaseController {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired(required = false)
+	private MemFinService memFinService;
+	
+	@Autowired(required = false)
+	private ThreePayInfoService payInfoService;
+
+	@RequestMapping(path = { "/api-three-pay-back-suc" }, method = { RequestMethod.POST,RequestMethod.GET })
+	@ResponseBody
+	public void threePayBackSuc(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+		StringBuilder sb=new  StringBuilder();
+        sb.append("<!DOCTYPE html><html xmlns=\"http://www.w3.org/1999/xhtml\">\n");
+        sb.append("<head>");
+        sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        sb.append("<title></title>");
+        sb.append("</head>");
+        sb.append("<body>");
+        sb.append("<div>支付成功啦<br><a href='"+req.getScheme()+"://"+req.getServerName()+"'>返回首页</a></div>");
+        sb.append("</body>");
+        sb.append("</html>");
+        resp.setHeader("Content-type", "text/html;charset=UTF-8");
+        resp.getWriter().write(sb.toString()); 
+	}
+	@ApiIgnore
+	@RequestMapping(path = { "/api-pay-back-001" }, method = { RequestMethod.POST })
+	@ResponseBody
+	public String threePayBack(HttpServletRequest req,HttpServletResponse resp) throws Exception{
+        logger.info("接收诚意付异步回调{}", JSON.toJSONString(req.getParameterMap()));
+		List<ThreePayInfo> threePayInfos = payInfoService.selectByPlatformId(1);
+		if (threePayInfos == null || threePayInfos.size() ==0) {
+			return new String("没有新增该支付渠道");
+		}
+		String sign = req.getParameter("Md5Sign");
+		Double FactMoney = Double.parseDouble(req.getParameter("FactMoney"));
+		String TransID= req.getParameter("TransID");
+		String Extand1 = req.getParameter("Extand1");
+        logger.info("FactMoney="+FactMoney);
+        logger.info("orderid="+TransID);
+        logger.info("uidStr="+Extand1);
+
+		Integer Result = 1;
+		String ResultDesc = "支付成功";
+		String SuccTime = req.getParameter("SuccTime");//下单日期
+		String MARK = "~|~";
+		String md5Str =new String(
+		"MemberID="+threePayInfos.get(0).getMemberId()+MARK+
+		"TransID="+TransID+MARK+
+		"Result="+Result+MARK+
+		"ResultDesc="+ResultDesc+MARK+
+		"FactMoney="+FactMoney+MARK+
+		"Extand1="+Extand1+MARK+
+		"SuccTime="+SuccTime+MARK+
+		"Md5Key="+threePayInfos.get(0).getMemberKey());//MD5签名格式
+		String Md5Sign = md5(md5Str,"UTF-8");//计算MD5值
+		if (Md5Sign.equals(sign)) {
+	    	try {
+		      this.memFinService.recharge(Integer.parseInt(Extand1), TransID, FactMoney, "第三方充值");
+//		      resp.getWriter().write("success");
+		      return new String("ok");
+			} catch (Exception e) {
+				if (e.toString().contains("IllegalArgumentException")) {
+					return new String("ok");
+				}
+				return new String("充值失败"+e.toString());
+			}
+		}else{
+			return new String("充值失败");
+		}
+	}
+
+    private static byte[] getContentBytes(String content, String charset) {
+        if (charset == null || "".equals(charset)) {
+            return content.getBytes();
+        }
+        try {
+            return content.getBytes(charset);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("MD5签名过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
+        }
+    }
+    public static String md5(String text, String input_charset) {
+    	
+        return DigestUtils.md5Hex(getContentBytes(text, input_charset));
+    }
+}

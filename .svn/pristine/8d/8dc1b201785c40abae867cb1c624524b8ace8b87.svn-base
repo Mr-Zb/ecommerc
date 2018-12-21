@@ -1,0 +1,223 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.MemTeam;
+import com.fun.client.domain.MemUserInfo;
+
+import com.fun.client.domain.ReturnCount;
+import com.fun.client.repository.MemUserInfoMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.utils.DigestUtils;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.utils.Log;
+import com.github.pagehelper.Page;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import com.github.pagehelper.PageHelper;
+
+import java.util.List;
+import java.util.concurrent.Future;
+
+@Service
+public class MemUserInfoService extends BaseService {
+
+    private @Autowired
+    @Lazy
+    MemUserInfoMapper memUserInfoMapper;
+
+    //查询列表
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo select(Integer userId) {
+        return this.memUserInfoMapper.select(userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo selectLoginName(String loginName) {
+        return this.memUserInfoMapper.selectLoginName(loginName);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo selectById(Integer userId) {
+        return this.memUserInfoMapper.selectById(userId);
+    }
+
+    //查询收货地址
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo selectUserAddress(Integer userId) {
+        return this.memUserInfoMapper.selectUserAddress(userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemTeam selectByAgentId(Integer agentId) {
+        return this.memUserInfoMapper.selectTeamMoney(agentId);
+    }
+
+    //插入数据
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer insert(MemUserInfo memUserInfo) {
+        return this.memUserInfoMapper.insert(memUserInfo);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer integerBankInfo(MemUserInfo memUserInfo, Integer u) {
+        return this.memUserInfoMapper.insertBankInfo(memUserInfo, u);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer update(MemUserInfo memUserInfo, Integer userId) {
+        return this.memUserInfoMapper.update(memUserInfo, userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer addBankInfo(MemUserInfo memUserInfo, Integer userId) {
+        return this.memUserInfoMapper.addBankInfo(memUserInfo, userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo selcectBankInfo(MemUserInfo memUserInfo, Integer id) {
+        return this.memUserInfoMapper.selectBankInfo(memUserInfo, id);
+    }
+
+    //根据ID修改收货地址
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateById(MemUserInfo memUserInfo, Integer userId) {
+        return this.memUserInfoMapper.updateAddress(memUserInfo, userId);
+    }
+
+    //修改收货地址
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateMemAddress(MemUserInfo memUserInfo) {
+        return this.memUserInfoMapper.updateAddress(memUserInfo);
+    }
+
+    @Log("修改密码")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void updatePwdById(MemUserInfo memUserInfo, String pwd1, String pwd2) throws Exception {
+        Integer count = this.memUserInfoMapper.updatePwdById(memUserInfo, DigestUtils.md5Hex(pwd1), DigestUtils.md5Hex(pwd2));
+        if (count <= 0) {
+            throw new Exception("原密碼錯誤");
+        }
+    }
+
+    /**
+     * 查询用户的上级代理
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MemUserInfo selectUserAgent(Integer userId) {
+        return this.memUserInfoMapper.selectUserAgent(userId);
+    }
+
+    //更新用户余额
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    @Async
+    public Integer updateUserAmount1(Integer userId, Double capitalAmount2) {
+        return this.memUserInfoMapper.updateUserAmount1(userId, capitalAmount2);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateUserIntegral(Integer userId, Double amount) {
+        return this.memUserInfoMapper.updateUserIntegral(userId, amount);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public List<MemUserInfo> selectRegister(QueryDto where) {
+        return this.memUserInfoMapper.selectRegisterNum(where);
+    }
+
+    public Integer updatePwdByLoginName(String loginPwd, String loginName) {
+        return memUserInfoMapper.updatePwdByLoginName(loginPwd, loginName);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public List<MemUserInfo> countSubordinateUser(Integer userId) {
+        return this.memUserInfoMapper.countSubordinateUser(userId);
+    }
+
+    public Pagination<MemUserInfo> selectAll(MemUserInfo memUserInfo, QueryDto queryDto,
+                                             List<Long> online) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        if (queryDto.getBeginDate() != null) {
+            queryDto.setBeginDate(new DateTime(queryDto.getBeginDate()).withTime(0, 0, 0, 0).toDate());
+        }
+        if (queryDto.getEndDate() != null) {
+            queryDto.setEndDate(new DateTime(queryDto.getEndDate()).withTime(23, 59, 59, 999).toDate());
+        }
+        Page<MemUserInfo> page = this.memUserInfoMapper.selectAll(memUserInfo, queryDto, online);
+        for (MemUserInfo mem : page){
+            if (online.contains(mem.getPkId())){
+                mem.setOnlineFlag(1);
+            }else{
+                mem.setOnlineFlag(0);
+            }
+        }
+        return new Pagination<MemUserInfo>(page.getTotal(), page.getResult());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void unbundling(Integer memId) {
+        this.memUserInfoMapper.unbundling(memId);
+    }
+
+    @Log("解绑信息")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateAuthCodes(MemUserInfo memUserInfo) {
+        return memUserInfoMapper.updateAuthCodes(memUserInfo);
+    }
+
+    public Integer deleteById(Integer memUserInfoId) {
+        return memUserInfoMapper.deleteById(memUserInfoId);
+    }
+
+    public Pagination<MemUserInfo> listManagers(QueryDto queryDto, List<Long> onlines) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        if (queryDto.getBeginDate() != null) {
+            queryDto.setBeginDate(new DateTime(queryDto.getBeginDate()).withTime(0, 0, 0, 0).toDate());
+        }
+        if (queryDto.getEndDate() != null) {
+            queryDto.setEndDate(new DateTime(queryDto.getEndDate()).withTime(23, 59, 59, 999).toDate());
+        }
+        Page<MemUserInfo> page = memUserInfoMapper.listManagers(queryDto, onlines);
+        return new Pagination<>(page.getTotal(), page.getResult());
+    }
+    public Pagination<MemUserInfo> listAgentMember(MemUserInfo userInfo,QueryDto queryDto,List<Long> onlines){
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<MemUserInfo> page = memUserInfoMapper.listAgentMember(userInfo, queryDto, onlines);
+        return  new Pagination<>(page.getTotal(), page.getResult());
+    }
+
+    public Integer updateEnableFlag(Integer enableFlag ,Integer memId){
+        return  memUserInfoMapper.updateEnableFlag(enableFlag,memId);
+    }
+    @Log("修改返佣比例")
+    public Integer updateRebate(MemUserInfo userInfo){
+        return  memUserInfoMapper.updateRebate(userInfo);
+    }
+
+    @Log("修改返备注信息")
+    public Integer updateRemark(MemUserInfo userInfo){
+        return  memUserInfoMapper.updateRemark(userInfo);
+    }
+    @Log("修改推广标识")
+    public Integer updateCampaign(MemUserInfo userInfo){
+        return memUserInfoMapper.updateCampaign(userInfo);
+    }
+
+    public Integer updateExtension(double extension, Integer userId) {
+        return this.memUserInfoMapper.updateExtension(extension, userId);
+    }
+    public ReturnCount selectRechargeCount(Integer memberId){
+        return this.memUserInfoMapper.selectRechargeCount(memberId);
+    }
+    public ReturnCount selectWithdrawCount(Integer memberId){
+        return this.memUserInfoMapper.selectWithdrawCount(memberId);
+    }
+    public List<MemUserInfo> selectSubordinate(Integer agentId){
+        return this.memUserInfoMapper.selectSubordinate(agentId);
+    }
+}

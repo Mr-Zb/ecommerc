@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.MemUserInfoMapper">
+    <resultMap id="MemUserInfo" type="com.fun.client.domain.MemUserInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="BIGINT"/>
+        <result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR"/>
+        <result property="loginPwd" javaType="String" column="login_pwd" jdbcType="VARCHAR"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="Vcode" javaType="String" column="vcode" jdbcType="VARCHAR"/>
+        <result property="userType" javaType="Integer" column="user_type" jdbcType="TINYINT"/>
+        <result property="bankAccount" javaType="String" column="bank_account" jdbcType="VARCHAR"/>
+        <result property="bankAccountName" javaType="String" column="bank_account_name" jdbcType="VARCHAR"/>
+        <result property="bankName" javaType="String" column="bank_name" jdbcType="VARCHAR"/>
+        <result property="bankSubName" javaType="String" column="bank_sub_name" jdbcType="VARCHAR"/>
+        <result property="agentId" javaType="Long" column="agent_id" jdbcType="BIGINT"/>
+        <result property="agentName" javaType="String" column="agent_name" jdbcType="VARCHAR"/>
+        <result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="VARCHAR"/>
+        <result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="VARCHAR"/>
+        <result property="memberReward" javaType="Integer" column="member_reward" jdbcType="TINYINT"/>
+        <result property="Campaign" javaType="String" column="campaign" jdbcType="VARCHAR"/>
+        <result property="Capital1" javaType="Double" column="capital1" jdbcType="DECIMAL"/>
+        <result property="Capital2" javaType="Double" column="capital2" jdbcType="DECIMAL"/>
+        <result property="Capital3" javaType="Double" column="capital3" jdbcType="DECIMAL"/>
+        <result property="Capital4" javaType="Double" column="capital4" jdbcType="DECIMAL"/>
+        <result property="Capital5" javaType="Double" column="capital5" jdbcType="DECIMAL"/>
+        <result property="Capital6" javaType="Double" column="capital6" jdbcType="DECIMAL"/>
+        <result property="Capital7" javaType="Double" column="capital7" jdbcType="DECIMAL"/>
+        <result property="Capital8" javaType="Double" column="capital8" jdbcType="DECIMAL"/>
+        <result property="userScore" javaType="Integer" column="user_score" jdbcType="TINYINT"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+        <result property="authCodes" javaType="String" column="auth_codes" jdbcType="VARCHAR"/>
+        <result property="receivingAddress" javaType="String" column="receiving_address" jdbcType="VARCHAR"/>
+        <result property="receivingName" javaType="String" column="receiving_name" jdbcType="VARCHAR"/>
+        <result property="receivingMobile" javaType="String" column="receiving_mobile" jdbcType="VARCHAR"/>
+        <result property="bankLocked" javaType="Integer" column="bank_locked" jdbcType="TINYINT"/>
+        <result property="enableFlag" javaType="Integer" column="enable_flag" jdbcType="TINYINT"/>
+        <result property="count" javaType="Integer" column="count" jdbcType="TINYINT"/>
+        <result property="rebate" javaType="Double" column="rebate" jdbcType="DECIMAL"/>
+        <result property="extension" javaType="Double" column="extension" jdbcType="DECIMAL"/>
+        <result property="rebate" javaType="Double" column="rebate" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="SysPropSetting" type="com.fun.le.entities.SysPropSetting">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="propKey" javaType="String" column="prop_key" jdbcType="VARCHAR"/>
+        <result property="propValue" javaType="String" column="prop_value" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="FinCapitalLog" type="com.fun.le.entities.FinCapitalLog">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="memberId" javaType="Long" column="member_id" jdbcType="INTEGER"/>
+        <result property="memberName" javaType="String" column="member_name" jdbcType="VARCHAR"/>
+        <result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER"/>
+        <result property="agentName" javaType="String" column="agent_name" jdbcType="VARCHAR"/>
+        <result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="VARCHAR"/>
+        <result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="VARCHAR"/>
+        <result property="capitalType" javaType="Integer" column="capital_type" jdbcType="INTEGER"/>
+        <result property="capitalAmount1" javaType="Double" column="capital_amount1" jdbcType="DECIMAL"/>
+        <result property="capitalAmount2" javaType="Double" column="capital_amount2" jdbcType="DECIMAL"/>
+        <result property="orderId" javaType="Integer" column="order_id" jdbcType="INTEGER"/>
+        <result property="orderNo" javaType="String" column="order_no" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="IntegralOrderInfo" type="com.fun.client.domain.IntegralOrderInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="userId" javaType="Integer" column="user_id" jdbcType="INTEGER"/>
+        <result property="goodId" javaType="Integer" column="good_id" jdbcType="INTEGER"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="orderState" javaType="Integer" column="order_state" jdbcType="INTEGER"/>
+        <result property="amount" javaType="Double" column="amount" jdbcType="DECIMAL"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ReturnCount" type="com.fun.client.domain.ReturnCount">
+        <result property="count" javaType="INTEGER" column="count" jdbcType="INTEGER"/>
+        <result property="sumAmount" javaType="Double" column="sum_amount" jdbcType="DECIMAL"/>
+    </resultMap>
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map">
+        <![CDATA[
+		INSERT INTO t_mem_user_info (
+			pk_id,
+			login_name,
+			login_pwd,
+			create_time,
+			vcode,
+			bank_account,
+            bank_account_name,
+            bank_name,
+            bank_sub_name,
+            agent_id,
+            agent_name,
+            agent_full_id,
+            agent_full_name,
+            user_score,
+            auth_codes,
+            bank_locked,
+            enable_flag,
+            user_type,
+            extension
+		)
+		VALUES
+			(
+				#{memUserInfo.pkId, jdbcType = BIGINT},
+				#{memUserInfo.loginName, jdbcType = VARCHAR},
+				#{memUserInfo.loginPwd, jdbcType = VARCHAR},
+				#{memUserInfo.createTime, jdbcType = TIMESTAMP},
+				#{memUserInfo.Vcode, jdbcType = VARCHAR},
+				#{memUserInfo.bankAccount, jdbcType = VARCHAR},
+				#{memUserInfo.bankAccountName, jdbcType = VARCHAR},
+				#{memUserInfo.bankName, jdbcType = VARCHAR},
+				#{memUserInfo.bankSubName, jdbcType = VARCHAR},
+				#{memUserInfo.agentId, jdbcType = BIGINT},
+				#{memUserInfo.agentName, jdbcType = VARCHAR},
+				#{memUserInfo.agentFullId, jdbcType = VARCHAR},
+				#{memUserInfo.agentFullName, jdbcType = VARCHAR},
+				#{memUserInfo.userScore, jdbcType = TINYINT},
+				#{memUserInfo.authCodes, jdbcType = VARCHAR},
+				#{memUserInfo.bankLocked, jdbcType = TINYINT},
+				#{memUserInfo.enableFlag, jdbcType = TINYINT},
+				#{memUserInfo.userType, jdbcType = TINYINT},
+				#{memUserInfo.extension, jdbcType = DECIMAL}
+			)
+        ]]>
+    </insert>
+
+    <!--查询列表-->
+    <select id="select" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.login_name AS login_name,
+			t.create_time AS create_time,
+			t.vcode AS vcode,
+			t.bank_account bank_account,
+            t.bank_account_name AS bank_account_name,
+            t.bank_name AS bank_name,
+            t.bank_sub_name AS bank_sub_name,
+            t.agent_id AS agent_id,
+            t.agent_name AS agent_name,
+            t.agent_full_id AS agent_full_id,
+            t.agent_full_name AS agent_full_name,
+            t.rebate AS rebate,
+            t.extension AS extension
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{userId, jdbcType=BIGINT}]]>
+        </where>
+    </select>
+    <!--查询下级列表-->
+    <select id="selectSubordinate" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.login_name AS login_name,
+			t.user_type
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND t.agent_id = #{agentId, jdbcType=BIGINT}]]>
+        </where>
+    </select>
+    <!--查询所有用户信息-->
+    <select id="selectAll" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.login_name AS login_name,
+			t.create_time AS create_time,
+            t.agent_name AS agent_name,
+            t.capital1 AS capital1,
+            t.user_score AS user_score
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND user_type = '50']]>
+            <if test="where.keyword != null and where.keyword != ''">
+                <![CDATA[AND (t.pk_id = '${where.keyword}' OR t.login_name LIKE '%${where.keyword}%')]]>
+            </if>
+            <if test="userInfo.bankAccountName != null and userInfo.bankAccountName != ''">
+                <![CDATA[AND (t.bank_account_name LIKE '%${userInfo.bankAccountName}%')]]>
+            </if>
+            <if test="userInfo.bankAccount != null and userInfo.bankAccount != ''">
+                <![CDATA[AND t.bank_account LIKE '%${userInfo.bankAccount}%']]>
+            </if>
+            <if test="userInfo.agentName != null and userInfo.agentName != ''">
+                <![CDATA[AND t.agent_full_name LIKE '%${userInfo.agentName}%']]>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 1">
+                <foreach collection="onlines" item="online" open="AND t.pk_id IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 0">
+                <foreach collection="onlines" item="online" open="AND t.pk_id NOT IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+        </where>
+        <![CDATA[ORDER BY t.pk_id DESC]]>
+    </select>
+
+    <!--查询所有用户信息-->
+    <select id="selectAllAgent" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.login_name AS login_name,
+			t.create_time AS create_time,
+            t.agent_name AS agent_name,
+            t.capital1 AS capital1,
+            t.user_score AS user_score
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND user_type = '20']]>
+            <if test="where.keyword != null and where.keyword != ''">
+                <![CDATA[AND (t.pk_id = '${where.keyword}' OR t.login_name LIKE '%${where.keyword}%')]]>
+            </if>
+            <if test="userInfo.bankAccountName != null and userInfo.bankAccountName != ''">
+                <![CDATA[AND (t.bank_account_name LIKE '%${userInfo.bankAccountName}%')]]>
+            </if>
+            <if test="userInfo.bankAccount != null and userInfo.bankAccount != ''">
+                <![CDATA[AND t.bank_account LIKE '%${userInfo.bankAccount}%']]>
+            </if>
+            <if test="userInfo.agentName != null and userInfo.agentName != ''">
+                <![CDATA[AND t.agent_full_name LIKE '%${userInfo.agentName}%']]>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 1">
+                <foreach collection="onlines" item="online" open="AND t.pk_id IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 0">
+                <foreach collection="onlines" item="online" open="AND t.pk_id NOT IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+        </where>
+        <![CDATA[ORDER BY t.pk_id DESC]]>
+    </select>
+    <!--通过主键查询-->
+    <select id="selectById" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.login_name AS login_name,
+			t.user_type AS user_type,
+			t.bank_account AS bank_account,
+			t.bank_account_name AS bank_account_name,
+			t.bank_name AS bank_name,
+			t.bank_sub_name AS bank_sub_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.member_reward AS member_reward,
+			t.campaign AS campaign,
+			t.capital1 AS capital1,
+			t.capital2 AS capital2,
+			t.capital3 AS capital3,
+			t.capital4 AS capital4,
+			t.capital5 AS capital5,
+			t.capital6 AS capital6,
+			t.capital7 AS capital7,
+			t.capital8 AS capital8,
+			t.user_score AS user_score,
+			t.auth_codes AS auth_codes,
+			t.receiving_address AS receiving_address,
+			t.receiving_name AS receiving_name,
+			t.receiving_mobile AS receiving_mobile,
+			t.rebate as rebate,
+			t.remark AS remark,
+			t.capital1 AS capital1,
+            t.user_score AS user_score,
+            t.extension AS extension
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{memUserInfoId, jdbcType=BIGINT}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+    <select id="selectLoginName" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+           select
+          *
+           FROM t_mem_user_info
+           WHERE 1=1
+           AND login_name = #{loginName,jdbcType=VARCHAR}
+          ]]>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+
+    <!-- 新增銀行卡信息 -->
+    <insert id="insertBankInfo" parameterType="Map">
+        <![CDATA[
+		INSERT INTO t_mem_user_info (
+			bank_name,
+			bank_account,
+			bank_sub_name,
+			bank_account_name
+		)
+		VALUES
+			(
+				#{memUserInfo.bankName, jdbcType = VARCHAR},
+				#{memUserInfo.bankAccount, jdbcType = VARCHAR},
+				#{memUserInfo.bankSubName, jdbcType = VARCHAR},
+				#{memUserInfo.bankAccountName, jdbcType = VARCHAR}
+			)
+        ]]>
+    </insert>
+
+    <!--根据主键更新银行卡数据-->
+    <update id="addBankInfo" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[bank_name = #{memUserInfo.bankName},]]>
+            <![CDATA[bank_account = #{memUserInfo.bankAccount},]]>
+            <![CDATA[bank_sub_name = #{memUserInfo.bankSubName},]]>
+            <![CDATA[bank_account_name = #{memUserInfo.bankAccountName},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{memUserInfoId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--根据主键更新返佣比例-->
+    <update id="updateRebate" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[rebate = #{userInfo.rebate},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{userInfo.pkId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--根据主键更新返佣比例-->
+    <update id="updateRemark" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[remark = #{userInfo.remark},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{userInfo.pkId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--根据主键更新返佣比例-->
+    <update id="updateCampaign" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[campaign = #{userInfo.Campaign},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{userInfo.pkId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--查询银行卡信息-->
+    <select id="selectBankInfo" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+        select
+        t.bank_name AS bank_name,
+        t.bank_account AS bank_account,
+        t.bank_sub_name AS bank_sub_name,
+        t.bank_account_name AS bank_account_name
+        FROM
+        t_mem_user_info t
+        ]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{memUserInfoId, jdbcType=BIGINT}]]>
+        </where>
+    </select>
+
+    <!--查询充值信息-->
+    <select id="selectRechargeCount" parameterType="Map" resultMap="ReturnCount">
+        <![CDATA[
+       SELECT COUNT(0) as count ,IFNULL(SUM(recharge_amount1),0) as sum_amount FROM t_fin_recharge_log
+        ]]>
+        <where>
+            <![CDATA[AND recharge_state = 1]]>
+            <![CDATA[AND member_id =#{memberId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--查询提款信息-->
+    <select id="selectWithdrawCount" parameterType="Map" resultMap="ReturnCount">
+        <![CDATA[
+      SELECT COUNT(0) as count ,IFNULL(SUM(withdraw_amount1),0) as sum_amount FROM t_fin_withdraw_log
+        ]]>
+        <where>
+            <![CDATA[AND withdraw_state = 1 ]]>
+            <![CDATA[AND member_id =#{memberId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+    <!--更新数据-->
+    <update id="updateMemAdd" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[receiving_address = #{memUserInfo.receivingAddress},]]>
+            <![CDATA[receiving_name = #{memUserInfo.receivingName},]]>
+            <![CDATA[receiving_mobile = #{memUserInfo.receivingMobile},]]>
+        </set>
+        <where>
+            <if test="where.pkId != null">
+                <![CDATA[AND pk_id = #{where.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="where.receivingAddress != null">
+                <![CDATA[AND receiving_address = #{where.receivingAddress, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.receivingName != null">
+                <![CDATA[AND receiving_name = #{where.receivingName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.receivingMobile != null">
+                <![CDATA[AND receiving_mobile = #{where.receivingMobile, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!--修改收货地址-->
+    <update id="updateAddress" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[receiving_address = #{memUserInfo.receivingAddress},]]>
+            <![CDATA[receiving_name = #{memUserInfo.receivingName},]]>
+            <![CDATA[receiving_mobile = #{memUserInfo.receivingMobile},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{memUserInfo.pkId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--修改收货地址-->
+    <update id="updateAuthCodes" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[auth_codes = #{memUserInfo.authCodes},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{memUserInfo.pkId, jdbcType=BIGINT}]]>
+        </where>
+    </update>
+
+    <!--查看收货地址-->
+    <select id="selectUserAddress" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+        select
+        t.login_name AS  login_name,
+        t.receiving_address AS receiving_address,
+        t.receiving_name AS receiving_name,
+        t.receiving_mobile AS receiving_mobile
+        FROM
+        t_mem_user_info t
+        ]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{memUserInfoId, jdbcType=BIGINT}]]>
+        </where>
+
+    </select>
+
+    <!--修改登陸密碼-->
+    <update id="updatePwdById" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[login_pwd = #{pwd2},]]>
+        </set>
+        <where>
+            <![CDATA[AND login_pwd = #{pwd1}]]>
+        </where>
+    </update>
+
+    <!--根据手机号修改登陸密碼-->
+    <update id="updatePwdByLoginName" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[login_pwd = #{loginPwd},]]>
+        </set>
+        <where>
+            <![CDATA[AND login_name = #{loginName}]]>
+        </where>
+    </update>
+
+    <!--查询用户的上级代理-->
+    <select id="selectUserAgent" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+        select
+        t.agent_id AS agent_id
+        FROM
+        t_mem_user_info t
+        ]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{memUserInfoId, jdbcType=BIGINT}]]>
+        </where>
+    </select>
+
+    <!-- 获取下级用户-->
+    <select id="countSubordinateUser" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+		 t.pk_id
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--更新用户余额-->
+    <update id="updateUserAmount1" parameterType="Map">
+        <![CDATA[
+        UPDATE t_mem_user_info t1
+        set
+        t1.capital1 = #{capitalAmount2,jdbcType=DECIMAL}
+        WHERE 1=1
+        AND t1.pk_id = #{userId,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <!--注册人数-->
+    <select id="selectRegisterNum" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+		 *
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+    <!--更新用户积分-->
+    <update id="updateUserIntegral" parameterType="Map">
+        <![CDATA[
+        UPDATE t_mem_user_info t1
+        set
+        t1.user_score = #{amount,jdbcType=DECIMAL}
+        WHERE 1=1
+        AND t1.pk_id = #{userId,jdbcType=INTEGER}
+        ]]>
+    </update>
+
+    <!-- 解绑信息 -->
+    <update id="unbundling" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[bank_locked = '0',]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{memId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </update>
+
+    <!--  -->
+    <update id="updateEnableFlag" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[enable_flag = #{enableFlag, jdbcType=INTEGER},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{memId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </update>
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_mem_user_info
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{memUserInfoId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+
+    <!-- 查询管理会员 -->
+    <select id="listManagers" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_time AS create_time,
+			t.login_name AS login_name,
+			t.auth_codes AS auth_codes,
+			t.remark AS remark
+		FROM
+			t_mem_user_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id <> '1']]>
+            <![CDATA[AND t.login_name <> 'daddy']]>
+            <![CDATA[AND t.user_type = '10']]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.keyword != null and where.keyword != ''">
+                <![CDATA[AND (t.pk_id = '${where.keyword}' OR t.login_name LIKE '%${where.keyword}%')]]>
+            </if>
+        </where>
+        <![CDATA[ORDER BY t.pk_id DESC]]>
+    </select>
+
+    <!-- 查询代理会员列表 -->
+    <select id="listAgentMember" parameterType="Map" resultMap="MemUserInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_time AS create_time,
+			t.login_name AS login_name,
+			t.enable_flag AS enable_flag,
+			t.agent_name as agent_name,
+			t.campaign AS campaign,
+			t.remark as remark,
+			t.rebate as rebate,
+			t.bank_account_name as bank_account_name,
+			t.extension AS extension,
+			(SELECT COUNT(*) FROM t_mem_user_info where 1=1 and agent_full_id LIKE t.pk_id)as count
+			FROM
+			t_mem_user_info t
+
+		]]>
+        <where>
+            <![CDATA[AND t.user_type = '20']]>
+            <if test="where.keyword != null and where.keyword != ''">
+                <![CDATA[AND (t.pk_id = '${where.keyword}' OR t.login_name LIKE '%${where.keyword}%')]]>
+            </if>
+            <if test="userInfo.agentName != null and userInfo.agentName != ''">
+                <![CDATA[AND t.agent_name = #{userInfo.agentName, jdbcType=CHAR}]]>
+            </if>
+            <if test="userInfo.bankAccountName != null and userInfo.bankAccountName != ''">
+                <![CDATA[AND t.bank_account_name = #{userInfo.bankAccountName, jdbcType=CHAR}]]>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 1">
+                <foreach collection="onlines" item="online" open="AND t.pk_id IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+            <if test="userInfo.onlineFlag != null and userInfo.onlineFlag == 0">
+                <foreach collection="onlines" item="online" open="AND t.pk_id NOT IN (" close=")" separator=",">
+                    <![CDATA[#{online, jdbcType=INTEGER}]]>
+                </foreach>
+            </if>
+        </where>
+        <![CDATA[ORDER BY t.pk_id DESC]]>
+    </select>
+
+    <!-- 代理设置推广比例-->
+    <update id="updateExtension" parameterType="Map">
+        <![CDATA[UPDATE t_mem_user_info]]>
+        <set>
+            <![CDATA[extension = #{extension,jdbcType=DECIMAL}]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </update>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.IntegralOrderInfoMapper">
+    <resultMap id="IntegralOrderInfo" type="com.fun.client.domain.IntegralOrderInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="userId" javaType="Integer" column="user_id" jdbcType="INTEGER"/>
+        <result property="goodId" javaType="Integer" column="good_id" jdbcType="INTEGER"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="orderState" javaType="Integer" column="order_state" jdbcType="INTEGER"/>
+        <result property="amount" javaType="Double" column="amount" jdbcType="DECIMAL"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--插入数据-->
+    <insert id="insert" parameterType="Map">
+        <![CDATA[
+
+		INSERT INTO t_integral_order_info (
+			pk_id,
+			user_id,
+			good_id,
+			good_name,
+			order_state,
+			amount,
+			create_time
+		)
+		VALUES
+			(
+				#{integralOrderInfo.pkId, jdbcType = INTEGER},
+				#{integralOrderInfo.userId, jdbcType = INTEGER},
+				#{integralOrderInfo.goodId, jdbcType = INTEGER},
+				#{integralOrderInfo.goodName, jdbcType = VARCHAR},
+				#{integralOrderInfo.orderState, jdbcType = INTEGER},
+				#{integralOrderInfo.amount, jdbcType = DECIMAL},
+				#{integralOrderInfo.createTime, jdbcType = TIMESTAMP}
+			)
+
+        ]]>
+    </insert>
+
+    <!--根据userId查询积分订单-->
+    <select id="selectById" parameterType="Map" resultMap="IntegralOrderInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.user_id AS user_id,
+			t.good_id AS good_id,
+ 			t.good_name AS good_name,
+ 			t.order_state AS order_state,
+ 			t.amount AS amount,
+			t.create_time AS create_time
+		FROM
+			t_integral_order_info t
+		]]>
+        <where>
+            <![CDATA[and t.amount > 0 ]]>
+            <![CDATA[AND t.user_id = #{integralOrderInfoId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--根据userId查询兑换-->
+    <select id="selectExchange" parameterType="Map" resultMap="IntegralOrderInfo">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.user_id AS user_id,
+			t.good_id AS good_id,
+ 			t.good_name AS good_name,
+ 			t.order_state AS order_state,
+ 			t.amount AS amount,
+			t.create_time AS create_time
+		FROM
+			t_integral_order_info t
+		]]>
+        <where>
+            <![CDATA[and t.amount < 0 ]]>
+            <![CDATA[AND t.user_id = #{integralOrderInfoId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--查询用户积分余额-->
+    <select id="countUserIntegral" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.amount),
+				0.00
+			) AS amount
+		FROM
+			t_integral_order_info t
+		]]>
+        <where>
+            <![CDATA[AND t.user_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--根据userId修改积分订单信息-->
+    <update id="updateById" parameterType="Map">
+        <![CDATA[UPDATE t_integral_order_info t]]>
+        <set>
+            <![CDATA[ t.good_id = #{integralOrderInfo.goodId},]]>
+            <![CDATA[ t.good_name = #{integralOrderInfo.goodName},]]>
+            <![CDATA[ t.order_state = #{integralOrderInfo.orderState},]]>
+            <![CDATA[ t.amount = #{integralOrderInfo.amount},]]>
+            <![CDATA[ t.create_time = #{integralOrderInfo.createTime},]]>
+        </set>
+        <where>
+            <![CDATA[AND t.user_id = #{integralOrderInfoId,jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+        DELETE
+        FROM
+        t_integral_order_info
+        ]]>
+        <where>
+            <![CDATA[AND pk_id = #{integralOrderInfoId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+
+
+
+</mapper>

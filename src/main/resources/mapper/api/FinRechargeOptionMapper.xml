@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.FinRechargeOptionMapper">
+    <resultMap id="FinRechargeOption" type="com.fun.client.domain.FinRechargeOption">
+        <id property="pkId" javaType="Long" column="pk_id" jdbcType="BIGINT"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT"/>
+        <result property="amount" javaType="Double" column="amount" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <!--插入数据-->
+    <insert id="insert" parameterType="Map">
+           <![CDATA[
+		INSERT INTO t_fin_recharge_option (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			amount
+		)
+		VALUES
+			(
+				#{finRechargeOption.pkId, jdbcType = BIGINT},
+				#{finRechargeOption.createUser, jdbcType = INTEGER},
+				#{finRechargeOption.createTime, jdbcType = TIMESTAMP},
+				#{finRechargeOption.updateUser, jdbcType = INTEGER},
+				#{finRechargeOption.updateTime, jdbcType = TIMESTAMP},
+				#{finRechargeOption.dataVersion, jdbcType = TINYINT},
+			    #{finRechargeOption.amount, jdbcType = DECIMAL}
+			)
+        ]]>
+    </insert>
+
+    <!--更新数据-->
+    <update id="update" parameterType="Map">
+         <![CDATA[UPDATE t_fin_recharge_option]]>
+        <set>
+            <![CDATA[create_user = #{finRechargeOption.createUser},]]>
+            <![CDATA[create_time = #{finRechargeOption.createTime},]]>
+            <![CDATA[update_user = #{finRechargeOption.updateUser},]]>
+            <![CDATA[update_time = #{finRechargeOption.updateTime},]]>
+            <![CDATA[data_version = #{finRechargeOption.dataVersion},]]>
+            <![CDATA[amount = #{finRechargeOption.amount},]]>
+        </set>
+        <where>
+            <if test="finRechargeOption.pkId != null">
+                <![CDATA[AND t.pk_id = #{finRechargeOption.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="finRechargeOption.createUser != null and finRechargeOption.createUser > 0">
+                <![CDATA[AND t.create_user = #{finRechargeOption.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finRechargeOption.createTime != null">
+                <![CDATA[AND t.create_time = #{finRechargeOption.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finRechargeOption.updateUser != null and finRechargeOption.updateUser > 0">
+                <![CDATA[AND t.update_user = #{finRechargeOption.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finRechargeOption.updateTime != null">
+                <![CDATA[AND t.update_time = #{finRechargeOption.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finRechargeOption.dataVersion != null and finRechargeOption.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{finRechargeOption.dataVersion, jdbcType=TINYINT}]]>
+            </if>
+            <if test="finRechargeOption.amount != null">
+                <![CDATA[AND t.amount = #{finRechargeOption.amount, jdbcType=TINYINT}]]>
+            </if>
+        </where>
+
+    </update>
+
+    <!--查询数据-->
+    <select id="select" parameterType="Map" resultMap="FinRechargeOption">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+ 			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.amount AS amount
+		FROM
+			t_fin_recharge_option t
+		]]>
+        <where>
+            <if test="finRechargeOption.pkId != null">
+                <![CDATA[AND t.pk_id = #{finRechargeOption.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="finRechargeOption.createUser != null and finRechargeOption.createUser > 0">
+                <![CDATA[AND t.create_user = #{finRechargeOption.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finRechargeOption.createTime != null">
+                <![CDATA[AND t.create_time = #{finRechargeOption.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finRechargeOption.updateUser != null and finRechargeOption.updateUser > 0">
+                <![CDATA[AND t.update_user = #{finRechargeOption.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finRechargeOption.updateTime != null">
+                <![CDATA[AND t.update_time = #{finRechargeOption.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finRechargeOption.dataVersion != null and finRechargeOption.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{finRechargeOption.dataVersion, jdbcType=TINYINT}]]>
+            </if>
+            <if test="finRechargeOption.amount != null">
+                <![CDATA[AND t.amount = #{finRechargeOption.amount, jdbcType=TINYINT}]]>
+            </if>
+        </where>
+    </select>
+
+   <!--根据ID查询-->
+    <select id="selectById" parameterType="Map" resultMap="FinRechargeOption">
+         <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+ 			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.amount AS amount
+		FROM
+			t_fin_recharge_option t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{finRechargeOptionId, jdbcType=BIGINT}]]>
+        </where>
+    </select>
+</mapper>

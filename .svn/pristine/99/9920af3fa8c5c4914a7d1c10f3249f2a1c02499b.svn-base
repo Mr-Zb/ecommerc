@@ -1,0 +1,256 @@
+package com.fun.le.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import com.fun.client.domain.BannerInfo;
+import com.fun.client.domain.MemTeam;
+import com.fun.client.repository.BannerInfoMapper;
+import com.fun.le.entities.SysPropSetting;
+import com.fun.le.repository.SysPropSettingMapper;
+import groovy.lang.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.fun.framework.support.BusinessException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+@Service
+public class SysPropSettingService {
+
+	@Autowired
+	@org.springframework.context.annotation.Lazy
+	private SysPropSettingMapper sysPropSettingMapper;
+
+    @Autowired
+    private BannerInfoMapper bannerInfoMapper;
+
+	public Integer insert(Integer userId, SysPropSetting sysPropSetting) throws BusinessException {
+		sysPropSetting.setCreateTime(new Date());
+		sysPropSetting.setCreateUser(userId);
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		sysPropSetting.setDataVersion(Integer.valueOf(1));
+		return this.sysPropSettingMapper.insert(sysPropSetting);
+	}
+
+	public Integer insert(Integer userId, List<SysPropSetting> sysPropSettings) throws BusinessException {
+		for (SysPropSetting sysPropSetting : sysPropSettings) {
+			sysPropSetting.setCreateTime(new Date());
+			sysPropSetting.setCreateUser(userId);
+			sysPropSetting.setUpdateTime(new Date());
+			sysPropSetting.setUpdateUser(userId);
+			sysPropSetting.setDataVersion(Integer.valueOf(1));
+		}
+		return this.sysPropSettingMapper.insertBatch(sysPropSettings);
+	}
+
+	public Integer update(Integer userId, SysPropSetting sysPropSetting, SysPropSetting where)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.update(sysPropSetting, where);
+	}
+
+	public Integer updateById(Integer userId, SysPropSetting sysPropSetting, Integer sysPropSettingId)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateById(sysPropSetting, sysPropSettingId);
+	}
+
+	public Integer updateByIdnew(Integer userId, SysPropSetting sysPropSetting)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateById(sysPropSetting, userId);
+	}
+
+
+	public Integer updateActive(Integer userId, SysPropSetting sysPropSetting, SysPropSetting where)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateActive(sysPropSetting, where);
+	}
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+	public void updateActiveNew(Integer userId,String sysPropSetting1,String sysPropSetting2,String sysPropSetting3,
+								   String sysPropSetting4,String[] param1,String[] param2,String alipayAccount
+			,String alipayName,String alipayCode,String wepayAccount
+			,String wepayName,String wepayCode,String qq){
+		SysPropSetting sysPropSetting = new SysPropSetting();
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		//修改支付宝账号
+		sysPropSetting.setPropKey("sys.fin.alipay1.acc");
+		SysPropSetting alipayddd = new SysPropSetting();
+		alipayddd.setPropValue(alipayAccount);
+		sysPropSettingMapper.updateActive(alipayddd,sysPropSetting);
+		//修改支付宝姓名
+		sysPropSetting.setPropKey("sys.fin.alipay1.nme");
+		SysPropSetting alipaydddas = new SysPropSetting();
+		alipaydddas.setPropValue(alipayName);
+		sysPropSettingMapper.updateActive(alipaydddas,sysPropSetting);
+		//修改支付宝二维码
+		sysPropSetting.setPropKey("sys.fin.alipay1.cde");
+		SysPropSetting alipaySele = new SysPropSetting();
+		alipaySele.setPropValue(alipayCode);
+		sysPropSettingMapper.updateActive(alipaySele,sysPropSetting);
+		//修改微信账号
+		sysPropSetting.setPropKey("sys.fin.wepay1.acc");
+		SysPropSetting wepaySele = new SysPropSetting();
+		wepaySele.setPropValue(wepayAccount);
+		sysPropSettingMapper.updateActive(wepaySele,sysPropSetting);
+		//修改微信名称
+		sysPropSetting.setPropKey("sys.fin.wepay1.nme");
+		SysPropSetting wepaysele = new SysPropSetting();
+		wepaysele.setPropValue(wepayName);
+		sysPropSettingMapper.updateActive(wepaysele,sysPropSetting);
+		//修改微信二维码
+		sysPropSetting.setPropKey("sys.fin.wepay1.cde");
+		SysPropSetting wepayCodeSele = new SysPropSetting();
+		wepayCodeSele.setPropValue(wepayCode);
+		sysPropSettingMapper.updateActive(wepayCodeSele,sysPropSetting);
+		//修改红包中奖率
+		sysPropSetting.setPropKey("sys.user.red.envelop");
+		SysPropSetting sysPropSettingg = new SysPropSetting();
+		sysPropSettingg.setPropValue(sysPropSetting1);
+		sysPropSettingMapper.updateActive(sysPropSettingg,sysPropSetting);
+		//修改版本信息
+		SysPropSetting sysPropSettingf = new SysPropSetting();
+		sysPropSettingf.setPropKey("sys.version");
+		SysPropSetting sysPropSettingt = new SysPropSetting();
+		sysPropSettingt.setPropValue(sysPropSetting2);
+		sysPropSettingMapper.updateActive(sysPropSettingt,sysPropSettingf);
+		//修改下载地址
+		SysPropSetting sysPropSettingw = new SysPropSetting();
+		sysPropSettingw.setPropKey("sys.download.adress");
+		SysPropSetting sysPropSettinggt = new SysPropSetting();
+		sysPropSettinggt.setPropValue(sysPropSetting3);
+		sysPropSettingMapper.updateActive(sysPropSettinggt,sysPropSettingw);
+		//修改公告信息
+		SysPropSetting sysPropSettinkk = new SysPropSetting();
+		sysPropSettinkk.setPropKey("sys.goods.notice");
+		SysPropSetting sysPropSettinggo = new SysPropSetting();
+		sysPropSettinggo.setPropValue(sysPropSetting4);
+		sysPropSettingMapper.updateActive(sysPropSettinggo,sysPropSettinkk);
+		//修改客服QQ
+		SysPropSetting serviceqq = new SysPropSetting();
+		serviceqq.setPropKey("sys.service.qq");
+		SysPropSetting serviceqq11 = new SysPropSetting();
+		serviceqq11.setPropValue(qq);
+		sysPropSettingMapper.updateActive(serviceqq11,serviceqq);
+		//删除首页轮播图信息
+		if (param1.length>0){
+			bannerInfoMapper.deleteById(1);
+		}
+		//插入首页轮播图信息
+		for (String str : param1){
+			int i =1;
+			BannerInfo bannerInfo = new BannerInfo();
+			bannerInfo.setBannerLocation(1);
+			bannerInfo.setState(1);
+			bannerInfo.setBannerName("轮播图"+i);
+			bannerInfo.setBannerSrc(str);
+			bannerInfo.setCreateTime(new Date());
+			bannerInfo.setCreateUser(userId);
+			bannerInfo.setUpdateTime(new Date());
+			bannerInfo.setUpdateUser(userId);
+			bannerInfo.setDataVersion(Integer.valueOf(1));
+			bannerInfo.setDetail("自动上传");
+			bannerInfoMapper.insert(bannerInfo);
+			i++;
+		}
+		//删除积分商城轮播图信息
+		bannerInfoMapper.deleteById(2);
+		//插入积分商城轮播图信息
+		for (String str : param2){
+			int i =1;
+			BannerInfo bannerInfo = new BannerInfo();
+			bannerInfo.setBannerLocation(2);
+			bannerInfo.setState(1);
+			bannerInfo.setBannerName("轮播图"+i);
+			bannerInfo.setBannerSrc(str);
+			bannerInfo.setCreateTime(new Date());
+			bannerInfo.setCreateUser(userId);
+			bannerInfo.setUpdateTime(new Date());
+			bannerInfo.setUpdateUser(userId);
+			bannerInfo.setDataVersion(Integer.valueOf(1));
+			bannerInfo.setDetail("自动上传");
+			bannerInfoMapper.insert(bannerInfo);
+			i++;
+		}
+	}
+
+	public Integer updateActiveById(Integer userId, SysPropSetting sysPropSetting, Integer sysPropSettingId)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateActiveById(sysPropSetting, sysPropSettingId);
+	}
+
+	public Integer updateByUserId(SysPropSetting sysPropSetting, Integer userId) {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		sysPropSetting.setDataVersion(1);
+		return this.sysPropSettingMapper.updateByUserId(sysPropSetting, userId);
+	}
+
+	public List<SysPropSetting> select(Integer userId, SysPropSetting sysPropSetting) throws BusinessException {
+		return this.sysPropSettingMapper.select(sysPropSetting);
+	}
+
+	public List<SysPropSetting> select(SysPropSetting sysPropSetting) {
+		List<SysPropSetting> select = this.sysPropSettingMapper.select(sysPropSetting);
+		return select;
+	}
+
+	public SysPropSetting selectById(Integer userId, Integer sysPropSettingId) throws BusinessException {
+		return this.sysPropSettingMapper.selectById(sysPropSettingId);
+	}
+
+	public List<SysPropSetting> selectByUserId(Integer userId) throws BusinessException {
+		return this.sysPropSettingMapper.selectByUserId(userId);
+	}
+
+	public Integer delete(Integer userId, SysPropSetting where) throws BusinessException {
+		return this.sysPropSettingMapper.delete(where);
+	}
+
+	public Integer deleteById(Integer userId, Integer sysPropSettingId) throws BusinessException {
+		return this.sysPropSettingMapper.deleteById(sysPropSettingId);
+	}
+
+	//查询代理返水比例
+	public String sysUserRebate(Integer userId) {
+		return this.sysPropSettingMapper.sysUserRebate(userId);
+	}
+
+	//查询推广比率
+	public String sysUserExtension(Integer userId) {
+		return this.sysPropSettingMapper.sysUserExtension(userId);
+	}
+
+	public String selectSuperiorExtension(Integer userId) {
+		return this.sysPropSettingMapper.selectSuperiorExtension(userId);
+	}
+
+	public List<SysPropSetting> selectALiMessageSetting() {
+		return this.sysPropSettingMapper.selectALiMessageSetting();
+	}
+
+	public List<SysPropSetting> selectDataVersion(){
+		return this.sysPropSettingMapper.selectDataVersion();
+	}
+
+}

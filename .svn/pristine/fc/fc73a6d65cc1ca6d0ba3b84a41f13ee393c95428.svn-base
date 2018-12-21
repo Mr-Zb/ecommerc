@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.LotLotteryIssueMapper">
+	<resultMap id="LotLotteryIssue" type="com.fun.le.entities.LotLotteryIssue">
+		<id property="pkId" javaType="Long" column="pk_id" jdbcType="BIGINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="lotteryIssue" javaType="String" column="lottery_issue" jdbcType="CHAR" />
+		<result property="bgnTime" javaType="Date" column="bgn_time" jdbcType="TIMESTAMP" />
+		<result property="endTime" javaType="Date" column="end_time" jdbcType="TIMESTAMP" />
+		<result property="openTime" javaType="Date" column="open_time" jdbcType="TIMESTAMP" />
+		<result property="openFlag" javaType="Integer" column="open_flag" jdbcType="TINYINT" />
+		<result property="openCode" javaType="String" column="open_code" jdbcType="VARCHAR" />
+		<result property="openCodeScource" javaType="Integer" column="open_code_scource" jdbcType="TINYINT" />
+		<result property="openFeature1" javaType="String" column="open_feature1" jdbcType="CHAR" />
+		<result property="openFeature2" javaType="String" column="open_feature2" jdbcType="CHAR" />
+		<result property="openFeature3" javaType="String" column="open_feature3" jdbcType="CHAR" />
+		<result property="openFeature4" javaType="String" column="open_feature4" jdbcType="CHAR" />
+		<result property="openFeature5" javaType="String" column="open_feature5" jdbcType="LONGVARCHAR" />
+		<result property="amount1" javaType="Double" column="amount1" jdbcType="DECIMAL" />
+		<result property="amount2" javaType="Double" column="amount2" jdbcType="DECIMAL" />
+		<result property="amount3" javaType="Double" column="amount3" jdbcType="DECIMAL" />
+		<result property="amount4" javaType="Double" column="amount4" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="lotLotteryIssue.pkId">
+		<![CDATA[
+		INSERT INTO t_lot_lottery_issue (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			lottery_issue,
+			bgn_time,
+			end_time,
+			open_time,
+			open_flag,
+			open_code,
+			open_code_scource,
+			open_feature1,
+			open_feature2,
+			open_feature3,
+			open_feature4,
+			open_feature5,
+			amount1,
+			amount2,
+			amount3,
+			amount4
+		)
+		VALUES
+			(
+				#{lotLotteryIssue.pkId, jdbcType = BIGINT},
+				#{lotLotteryIssue.createUser, jdbcType = INTEGER},
+				#{lotLotteryIssue.createTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.updateUser, jdbcType = INTEGER},
+				#{lotLotteryIssue.updateTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.dataVersion, jdbcType = TINYINT},
+				#{lotLotteryIssue.productId, jdbcType = INTEGER},
+				#{lotLotteryIssue.lotteryIssue, jdbcType = CHAR},
+				#{lotLotteryIssue.bgnTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.endTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.openTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.openFlag, jdbcType = TINYINT},
+				#{lotLotteryIssue.openCode, jdbcType = VARCHAR},
+				#{lotLotteryIssue.openCodeScource, jdbcType = TINYINT},
+				#{lotLotteryIssue.openFeature1, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature2, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature3, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature4, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature5, jdbcType = LONGVARCHAR},
+				#{lotLotteryIssue.amount1, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount2, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount3, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount4, jdbcType = DECIMAL}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_lot_lottery_issue (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			lottery_issue,
+			bgn_time,
+			end_time,
+			open_time,
+			open_flag,
+			open_code,
+			open_code_scource,
+			open_feature1,
+			open_feature2,
+			open_feature3,
+			open_feature4,
+			open_feature5,
+			amount1,
+			amount2,
+			amount3,
+			amount4
+		)
+		]]>
+		<foreach collection="lotLotteryIssues" item="lotLotteryIssue" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{lotLotteryIssue.pkId, jdbcType = BIGINT},
+				#{lotLotteryIssue.createUser, jdbcType = INTEGER},
+				#{lotLotteryIssue.createTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.updateUser, jdbcType = INTEGER},
+				#{lotLotteryIssue.updateTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.dataVersion, jdbcType = TINYINT},
+				#{lotLotteryIssue.productId, jdbcType = INTEGER},
+				#{lotLotteryIssue.lotteryIssue, jdbcType = CHAR},
+				#{lotLotteryIssue.bgnTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.endTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.openTime, jdbcType = TIMESTAMP},
+				#{lotLotteryIssue.openFlag, jdbcType = TINYINT},
+				#{lotLotteryIssue.openCode, jdbcType = VARCHAR},
+				#{lotLotteryIssue.openCodeScource, jdbcType = TINYINT},
+				#{lotLotteryIssue.openFeature1, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature2, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature3, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature4, jdbcType = CHAR},
+				#{lotLotteryIssue.openFeature5, jdbcType = LONGVARCHAR},
+				#{lotLotteryIssue.amount1, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount2, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount3, jdbcType = DECIMAL},
+				#{lotLotteryIssue.amount4, jdbcType = DECIMAL}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+		<![CDATA[update_user = #{lotLotteryIssue.updateUser},]]>
+		<![CDATA[update_time = #{lotLotteryIssue.updateTime},]]>
+		<![CDATA[data_version = #{lotLotteryIssue.dataVersion},]]>
+		<![CDATA[product_id = #{lotLotteryIssue.productId},]]>
+		<![CDATA[lottery_issue = #{lotLotteryIssue.lotteryIssue},]]>
+		<![CDATA[bgn_time = #{lotLotteryIssue.bgnTime},]]>
+		<![CDATA[end_time = #{lotLotteryIssue.endTime},]]>
+		<![CDATA[open_time = #{lotLotteryIssue.openTime},]]>
+		<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+		<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+		<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+		<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+		<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+		<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+		<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+		<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+		<![CDATA[amount1 = #{lotLotteryIssue.amount1},]]>
+		<![CDATA[amount2 = #{lotLotteryIssue.amount2},]]>
+		<![CDATA[amount3 = #{lotLotteryIssue.amount3},]]>
+		<![CDATA[amount4 = #{lotLotteryIssue.amount4},]]>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.lotteryIssue != null and where.lotteryIssue != ''">
+			<![CDATA[AND lottery_issue = #{where.lotteryIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openFlag != null">
+			<![CDATA[AND open_flag = #{where.openFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.openCodeScource != null">
+			<![CDATA[AND open_code_scource = #{where.openCodeScource, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openFeature1 != null and where.openFeature1 != ''">
+			<![CDATA[AND open_feature1 = #{where.openFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature2 != null and where.openFeature2 != ''">
+			<![CDATA[AND open_feature2 = #{where.openFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature3 != null and where.openFeature3 != ''">
+			<![CDATA[AND open_feature3 = #{where.openFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature4 != null and where.openFeature4 != ''">
+			<![CDATA[AND open_feature4 = #{where.openFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature5 != null and where.openFeature5 != ''">
+			<![CDATA[AND open_feature5 = #{where.openFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+		<![CDATA[update_user = #{lotLotteryIssue.updateUser},]]>
+		<![CDATA[update_time = #{lotLotteryIssue.updateTime},]]>
+		<![CDATA[data_version = #{lotLotteryIssue.dataVersion},]]>
+		<![CDATA[product_id = #{lotLotteryIssue.productId},]]>
+		<![CDATA[lottery_issue = #{lotLotteryIssue.lotteryIssue},]]>
+		<![CDATA[bgn_time = #{lotLotteryIssue.bgnTime},]]>
+		<![CDATA[end_time = #{lotLotteryIssue.endTime},]]>
+		<![CDATA[open_time = #{lotLotteryIssue.openTime},]]>
+		<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+		<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+		<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+		<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+		<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+		<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+		<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+		<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+		<![CDATA[amount1 = #{lotLotteryIssue.amount1},]]>
+		<![CDATA[amount2 = #{lotLotteryIssue.amount2},]]>
+		<![CDATA[amount3 = #{lotLotteryIssue.amount3},]]>
+		<![CDATA[amount4 = #{lotLotteryIssue.amount4},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotLotteryIssueId, jdbcType=BIGINT}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+			<if test="lotLotteryIssue.updateUser != null">
+			<![CDATA[update_user = #{lotLotteryIssue.updateUser},]]>
+			</if>
+			<if test="lotLotteryIssue.updateTime != null">
+			<![CDATA[update_time = #{lotLotteryIssue.updateTime},]]>
+			</if>
+			<if test="lotLotteryIssue.dataVersion != null">
+			<![CDATA[data_version = #{lotLotteryIssue.dataVersion},]]>
+			</if>
+			<if test="lotLotteryIssue.productId != null">
+			<![CDATA[product_id = #{lotLotteryIssue.productId},]]>
+			</if>
+			<if test="lotLotteryIssue.lotteryIssue != null and lotLotteryIssue.lotteryIssue != ''">
+			<![CDATA[lottery_issue = #{lotLotteryIssue.lotteryIssue},]]>
+			</if>
+			<if test="lotLotteryIssue.bgnTime != null">
+			<![CDATA[bgn_time = #{lotLotteryIssue.bgnTime},]]>
+			</if>
+			<if test="lotLotteryIssue.endTime != null">
+			<![CDATA[end_time = #{lotLotteryIssue.endTime},]]>
+			</if>
+			<if test="lotLotteryIssue.openTime != null">
+			<![CDATA[open_time = #{lotLotteryIssue.openTime},]]>
+			</if>
+			<if test="lotLotteryIssue.openFlag != null">
+			<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+			</if>
+			<if test="lotLotteryIssue.openCode != null and lotLotteryIssue.openCode != ''">
+			<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+			</if>
+			<if test="lotLotteryIssue.openCodeScource != null">
+			<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature1 != null and lotLotteryIssue.openFeature1 != ''">
+			<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature2 != null and lotLotteryIssue.openFeature2 != ''">
+			<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature3 != null and lotLotteryIssue.openFeature3 != ''">
+			<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature4 != null and lotLotteryIssue.openFeature4 != ''">
+			<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature5 != null and lotLotteryIssue.openFeature5 != ''">
+			<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+			</if>
+			<if test="lotLotteryIssue.amount1 != null">
+			<![CDATA[amount1 = #{lotLotteryIssue.amount1},]]>
+			</if>
+			<if test="lotLotteryIssue.amount2 != null">
+			<![CDATA[amount2 = #{lotLotteryIssue.amount2},]]>
+			</if>
+			<if test="lotLotteryIssue.amount3 != null">
+			<![CDATA[amount3 = #{lotLotteryIssue.amount3},]]>
+			</if>
+			<if test="lotLotteryIssue.amount4 != null">
+			<![CDATA[amount4 = #{lotLotteryIssue.amount4},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.lotteryIssue != null and where.lotteryIssue != ''">
+			<![CDATA[AND lottery_issue = #{where.lotteryIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openFlag != null">
+			<![CDATA[AND open_flag = #{where.openFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.openCodeScource != null">
+			<![CDATA[AND open_code_scource = #{where.openCodeScource, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openFeature1 != null and where.openFeature1 != ''">
+			<![CDATA[AND open_feature1 = #{where.openFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature2 != null and where.openFeature2 != ''">
+			<![CDATA[AND open_feature2 = #{where.openFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature3 != null and where.openFeature3 != ''">
+			<![CDATA[AND open_feature3 = #{where.openFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature4 != null and where.openFeature4 != ''">
+			<![CDATA[AND open_feature4 = #{where.openFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature5 != null and where.openFeature5 != ''">
+			<![CDATA[AND open_feature5 = #{where.openFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+			<if test="lotLotteryIssue.updateUser != null">
+			<![CDATA[update_user = #{lotLotteryIssue.updateUser},]]>
+			</if>
+			<if test="lotLotteryIssue.updateTime != null">
+			<![CDATA[update_time = #{lotLotteryIssue.updateTime},]]>
+			</if>
+			<if test="lotLotteryIssue.dataVersion != null">
+			<![CDATA[data_version = #{lotLotteryIssue.dataVersion},]]>
+			</if>
+			<if test="lotLotteryIssue.productId != null">
+			<![CDATA[product_id = #{lotLotteryIssue.productId},]]>
+			</if>
+			<if test="lotLotteryIssue.lotteryIssue != null and lotLotteryIssue.lotteryIssue != ''">
+			<![CDATA[lottery_issue = #{lotLotteryIssue.lotteryIssue},]]>
+			</if>
+			<if test="lotLotteryIssue.bgnTime != null">
+			<![CDATA[bgn_time = #{lotLotteryIssue.bgnTime},]]>
+			</if>
+			<if test="lotLotteryIssue.endTime != null">
+			<![CDATA[end_time = #{lotLotteryIssue.endTime},]]>
+			</if>
+			<if test="lotLotteryIssue.openTime != null">
+			<![CDATA[open_time = #{lotLotteryIssue.openTime},]]>
+			</if>
+			<if test="lotLotteryIssue.openFlag != null">
+			<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+			</if>
+			<if test="lotLotteryIssue.openCode != null and lotLotteryIssue.openCode != ''">
+			<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+			</if>
+			<if test="lotLotteryIssue.openCodeScource != null">
+			<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature1 != null and lotLotteryIssue.openFeature1 != ''">
+			<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature2 != null and lotLotteryIssue.openFeature2 != ''">
+			<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature3 != null and lotLotteryIssue.openFeature3 != ''">
+			<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature4 != null and lotLotteryIssue.openFeature4 != ''">
+			<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature5 != null and lotLotteryIssue.openFeature5 != ''">
+			<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+			</if>
+			<if test="lotLotteryIssue.amount1 != null">
+			<![CDATA[amount1 = #{lotLotteryIssue.amount1},]]>
+			</if>
+			<if test="lotLotteryIssue.amount2 != null">
+			<![CDATA[amount2 = #{lotLotteryIssue.amount2},]]>
+			</if>
+			<if test="lotLotteryIssue.amount3 != null">
+			<![CDATA[amount3 = #{lotLotteryIssue.amount3},]]>
+			</if>
+			<if test="lotLotteryIssue.amount4 != null">
+			<![CDATA[amount4 = #{lotLotteryIssue.amount4},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotLotteryIssueId, jdbcType=BIGINT}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.lottery_issue AS lottery_issue,
+			t.bgn_time AS bgn_time,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_flag AS open_flag,
+			t.open_code AS open_code,
+			t.open_code_scource AS open_code_scource,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2,
+			t.amount3 AS amount3,
+			t.amount4 AS amount4
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<if test="lotLotteryIssue.pkId != null and lotLotteryIssue.pkId > 0">
+			<![CDATA[AND t.pk_id = #{lotLotteryIssue.pkId, jdbcType=BIGINT}]]>
+			</if>
+			<if test="lotLotteryIssue.createUser != null and lotLotteryIssue.createUser > 0">
+			<![CDATA[AND t.create_user = #{lotLotteryIssue.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotLotteryIssue.createTime != null">
+			<![CDATA[AND t.create_time = #{lotLotteryIssue.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotLotteryIssue.updateUser != null and lotLotteryIssue.updateUser > 0">
+			<![CDATA[AND t.update_user = #{lotLotteryIssue.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotLotteryIssue.updateTime != null">
+			<![CDATA[AND t.update_time = #{lotLotteryIssue.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotLotteryIssue.dataVersion != null and lotLotteryIssue.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{lotLotteryIssue.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotLotteryIssue.productId != null and lotLotteryIssue.productId > 0">
+			<![CDATA[AND t.product_id = #{lotLotteryIssue.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotLotteryIssue.lotteryIssue != null and lotLotteryIssue.lotteryIssue != ''">
+			<![CDATA[AND t.lottery_issue = #{lotLotteryIssue.lotteryIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.bgnTime != null">
+			<![CDATA[AND t.bgn_time = #{lotLotteryIssue.bgnTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotLotteryIssue.endTime != null">
+			<![CDATA[AND t.end_time = #{lotLotteryIssue.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotLotteryIssue.openTime != null">
+			<![CDATA[AND t.open_time = #{lotLotteryIssue.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotLotteryIssue.openFlag != null and lotLotteryIssue.openFlag > 0">
+			<![CDATA[AND t.open_flag = #{lotLotteryIssue.openFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotLotteryIssue.openCode != null and lotLotteryIssue.openCode != ''">
+			<![CDATA[AND t.open_code = #{lotLotteryIssue.openCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.openCodeScource != null and lotLotteryIssue.openCodeScource > 0">
+			<![CDATA[AND t.open_code_scource = #{lotLotteryIssue.openCodeScource, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature1 != null and lotLotteryIssue.openFeature1 != ''">
+			<![CDATA[AND t.open_feature1 = #{lotLotteryIssue.openFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature2 != null and lotLotteryIssue.openFeature2 != ''">
+			<![CDATA[AND t.open_feature2 = #{lotLotteryIssue.openFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature3 != null and lotLotteryIssue.openFeature3 != ''">
+			<![CDATA[AND t.open_feature3 = #{lotLotteryIssue.openFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature4 != null and lotLotteryIssue.openFeature4 != ''">
+			<![CDATA[AND t.open_feature4 = #{lotLotteryIssue.openFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.openFeature5 != null and lotLotteryIssue.openFeature5 != ''">
+			<![CDATA[AND t.open_feature5 = #{lotLotteryIssue.openFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="lotLotteryIssue.amount1 != null and lotLotteryIssue.amount1 > 0">
+			<![CDATA[AND t.amount1 = #{lotLotteryIssue.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="lotLotteryIssue.amount2 != null and lotLotteryIssue.amount2 > 0">
+			<![CDATA[AND t.amount2 = #{lotLotteryIssue.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="lotLotteryIssue.amount3 != null and lotLotteryIssue.amount3 > 0">
+			<![CDATA[AND t.amount3 = #{lotLotteryIssue.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="lotLotteryIssue.amount4 != null and lotLotteryIssue.amount4 > 0">
+			<![CDATA[AND t.amount4 = #{lotLotteryIssue.amount4, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.lottery_issue AS lottery_issue,
+			t.bgn_time AS bgn_time,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_flag AS open_flag,
+			t.open_code AS open_code,
+			t.open_code_scource AS open_code_scource,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2,
+			t.amount3 AS amount3,
+			t.amount4 AS amount4
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{lotLotteryIssueId, jdbcType=BIGINT}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_lottery_issue
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=BIGINT}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.lotteryIssue != null and where.lotteryIssue != ''">
+			<![CDATA[AND lottery_issue = #{where.lotteryIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bgnTime != null">
+			<![CDATA[AND bgn_time = #{where.bgnTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openFlag != null">
+			<![CDATA[AND open_flag = #{where.openFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.openCodeScource != null">
+			<![CDATA[AND open_code_scource = #{where.openCodeScource, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openFeature1 != null and where.openFeature1 != ''">
+			<![CDATA[AND open_feature1 = #{where.openFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature2 != null and where.openFeature2 != ''">
+			<![CDATA[AND open_feature2 = #{where.openFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature3 != null and where.openFeature3 != ''">
+			<![CDATA[AND open_feature3 = #{where.openFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature4 != null and where.openFeature4 != ''">
+			<![CDATA[AND open_feature4 = #{where.openFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.openFeature5 != null and where.openFeature5 != ''">
+			<![CDATA[AND open_feature5 = #{where.openFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_lottery_issue
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{lotLotteryIssueId, jdbcType=BIGINT}]]>
+		</where>
+	</delete>
+</mapper>

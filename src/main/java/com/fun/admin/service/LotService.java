@@ -1,0 +1,603 @@
+package com.fun.admin.service;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.script.Invocable;
+
+import com.fun.client.domain.GoodsInfo;
+import com.fun.client.domain.GoodsOrderInfo;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.service.GoodsInfoService;
+import com.fun.client.service.GoodsOrderInfoService;
+import com.fun.client.service.MemUserInfoService;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.admin.repository.LotMapper;
+import com.fun.admin.repository.SchMapper;
+import com.fun.le.entities.*;
+import com.fun.le.service.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.http.util.TextUtils;
+import org.joda.time.DateTime;
+import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSON;
+import com.fun.framework.utils.CollectionUtils;
+import com.github.pagehelper.PageHelper;
+
+@Lazy(false)
+@Service
+public class LotService extends BaseService {
+    @Autowired
+    private LotMapper lotMapper;
+    @Autowired
+    private SchMapper schMapper;
+    @Autowired
+    private LotLotteryIssueService issueService;
+    @Autowired
+    private ProdService prodService;
+    @Autowired
+    private SchSchemeInfoService schemeInfoService;
+    @Autowired
+    private SchSchemeIssueService schemeIssueService;
+    @Autowired
+    private SchSchemeOfferService schemeOfferService;
+    @Autowired
+    private SchSchemeDetailService schemeDetailService;
+    @Autowired
+    private GoodsOrderInfoService goodsOrderInfoService;
+    @Autowired
+    private GoodsInfoService goodsInfoService;
+    private @Autowired
+    MemUserInfoService memUserInfoService;
+    private Scheduler scheduler;
+    private Invocable invocable;
+
+    public LotService() {
+        this.invocable = null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public LotLotteryIssue currentOpenTime(String product) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            LotLotteryIssue currentOpenTime = this.lotMapper.currentOpenTime(prodId, new Date());
+            return currentOpenTime;
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public LotLotteryIssue currentEndTime(String product) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return this.lotMapper.currentEndTime(prodId, new Date());
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listCurrentIssues(String product) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            Date beginDate = DateTime.now().withTime(0, 0, 0, 0).toDate();
+            Date endDate = DateTime.now().withTime(23, 59, 59, 999).toDate();
+            return (List<LotLotteryIssue>) this.lotMapper.listCurrentIssues(prodId, beginDate, endDate);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listCurrentOpenIssues(String product) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return (List<LotLotteryIssue>) this.lotMapper.listCurrentOpenIssues(prodId);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public LotLotteryIssue getLotIssue(String product, String issue) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return getLotIssue(prodId, issue);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public LotLotteryIssue getLotIssue(Integer productId, String issue) throws BusinessException {
+        return this.lotMapper.getLotIssue(productId, issue);
+    }
+
+    @Cacheable(value = {"cache-omitted-by-product"}, key = "#product")
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listOmittedIssues(String product) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return (List<LotLotteryIssue>) this.lotMapper.listOmittedIssues(prodId);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listIssues(String product, Date beginDate, Date endDate) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return (List<LotLotteryIssue>) this.lotMapper.listCurrentIssues(prodId, beginDate, endDate);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listIssuesByTend(String product, Integer type, Integer num) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            if (type == 1) {
+                LotLotteryIssue lotteryIssue = this.currentOpenTime(product);
+                List<LotLotteryIssue> dtos = (List<LotLotteryIssue>) this.lotMapper.listIssuesByTend(prodId,
+                        lotteryIssue.getLotteryIssue(), num);
+                Collections.reverse(dtos);
+                return dtos;
+            }
+            if (type == 2) {
+                Date beginDate = DateTime.now().minusDays((int) num).withTime(0, 0, 0, 0).toDate();
+                Date endDate = DateTime.now().withTime(23, 59, 59, 999).toDate();
+                return (List<LotLotteryIssue>) this.lotMapper.listCurrentIssues(prodId, beginDate, endDate);
+            }
+            if (type == 3) {
+                Date beginDate = DateTime.now().minusYears((int) num).withMonthOfYear(1).withDayOfMonth(1)
+                        .withTime(0, 0, 0, 0).toDate();
+                Date endDate = DateTime.now().withMonthOfYear(12).withDayOfMonth(31).withTime(23, 59, 59, 999).toDate();
+                return (List<LotLotteryIssue>) this.lotMapper.listCurrentIssues(prodId, beginDate, endDate);
+            }
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listIssuesByTend(String product, Date beginDate, Date endDate) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            return (List<LotLotteryIssue>) this.lotMapper.listCurrentIssues(prodId, beginDate, endDate);
+        }
+        return null;
+    }
+
+    @Cacheable(value = {"cache-lot-issue-current"}, key = "'-'")
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotProductInfo> listCurrentCodes() throws BusinessException {
+        List<LotProductInfo> list = (List<LotProductInfo>) this.lotMapper.listCurrentCodes();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (LotProductInfo info : list) {
+                LotLotteryIssue issue = this.lotMapper.getLastOpenCode(info.getPkId());
+                if (issue != null) {
+                    info.setPkId((Integer) null);
+                    info.setLastOpenCode(issue.getOpenCode());
+                    info.setLastIssue(issue.getLotteryIssue());
+                    info.setLastOpenTime(issue.getOpenTime());
+                }
+            }
+        }
+        return list;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void filing() throws BusinessException {
+        this.lotMapper.filing((Date) null, DateTime.now().minusDays(5).toDate(), 0);
+        this.lotMapper.filing(DateTime.now().plusDays(5).toDate(), (Date) null, 0);
+        this.lotMapper.filing(DateTime.now().minusDays(5).toDate(), DateTime.now().plusDays(5).toDate(), 1);
+    }
+
+    //	@Scheduled(fixedRate = 10000L)
+    //TODO,生成截止订单
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public void endTaskEnter() throws BusinessException {
+        List<SchSchemeInfo> infos = (List<SchSchemeInfo>) this.schMapper.listSchemesForEndTask(DateTime.now().toDate());
+        if (CollectionUtils.isNotEmpty(infos)) {
+            infos.parallelStream().forEach(info -> {
+                try {
+                    endTaskEnter(info.getPkId());
+                } catch (Exception e) {
+                    this.logger.error("自动截止时发生异常", (Throwable) e);
+                }
+                return;
+            });
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, readOnly = false)
+    public void endTaskEnter(Integer schemeId) throws BusinessException {
+        SchSchemeInfo schemeInfo = this.schemeInfoService.selectById(0, schemeId);
+        LotProductInfo productInfo = this.prodService.getProdById(schemeInfo.getProductId());
+        SchSchemeOffer schSchemeOffer = new SchSchemeOffer();
+        schSchemeOffer.setSchemeId(schemeId);
+        List<SchSchemeOffer> offers = (List<SchSchemeOffer>) this.schemeOfferService.select(0, schSchemeOffer);
+        if (schemeInfo.getGather() == 1) {
+            SchSchemeInfo active = new SchSchemeInfo();
+            active.setSchemeState(5);
+            this.schemeInfoService.updateActiveById(0, active, schemeId);
+        } else if (schemeInfo.getGather() > schemeInfo.getGatherd() + schemeInfo.getMinimum()) {
+//			if (schemeInfo.getMinimum() > 0) {
+//				String remark = "方案流产，" + productInfo.getProductName() + "，第 "
+//						+ schemeInfo.getEndIssue() + "</span> 期";
+//				double amount = schemeInfo.getMinimum() * schemeInfo.getAmount2();
+//				this.finService.addCapitalLog(0, schemeInfo.getMemberId(), 22, amount, schemeId,
+//						schemeInfo.getScheneNo(), remark);
+//			}
+//			for (SchSchemeOffer offer : offers) {
+//				String remark2 = "方案流产，" + productInfo.getProductName() + "，第 <span class='blue'>"
+//						+ schemeInfo.getEndIssue() + "</span> 期";
+//				double amount2 = offer.getOfferAmount1();
+//				this.finService.addCapitalLog(0, offer.getMemberId(), 21, amount2, schemeId, schemeInfo.getScheneNo(),
+//						remark2);
+//			}
+            SchSchemeInfo active = new SchSchemeInfo();
+            active.setSchemeState(4);
+            this.schemeInfoService.updateActiveById(0, active, schemeId);
+        } else {
+            if (schemeInfo.getMinimum() > 0) {
+//				if (schemeInfo.getMinimum() > 0) {
+//					String remark = "保底解冻，" + productInfo.getProductName() + "，第 <span class='blue'>"
+//							+ schemeInfo.getEndIssue() + "</span> 期";
+//					double amount = schemeInfo.getMinimum() * schemeInfo.getAmount2();
+//					this.finService.addCapitalLog(0, schemeInfo.getMemberId(), 22, amount, schemeId,
+//							schemeInfo.getScheneNo(), remark);
+//				}
+                if (schemeInfo.getGather() - schemeInfo.getGatherd() > 0) {
+//					String remark = "保底生效，" + productInfo.getProductName() + "，第 <span class='blue'>"
+//							+ schemeInfo.getEndIssue() + "</span> 期";
+//					double amount = (schemeInfo.getGather() - schemeInfo.getGatherd()) * schemeInfo.getAmount2();
+//					this.finService.addCapitalLog(0, schemeInfo.getMemberId(), 21, -amount, schemeId,
+//							schemeInfo.getScheneNo(), remark);
+                    SchSchemeOffer schemeOffer = new SchSchemeOffer();
+                    schemeOffer.setOfferNum(schemeInfo.getGather() - schemeInfo.getGatherd());
+                    schemeOffer.setOfferType(4);
+                    schemeOffer.setOfferAmount1(schemeInfo.getAmount2() * schemeOffer.getOfferNum());
+                    schemeOffer.setOfferAmount2(0.0);
+                    schemeOffer.setOfferAmount3(0.0);
+                    schemeOffer.setProductId(schemeInfo.getProductId());
+                    schemeOffer.setMemberId(schemeInfo.getMemberId());
+                    schemeOffer.setMemberName(schemeInfo.getMemberName());
+                    schemeOffer.setNiceName(schemeInfo.getNiceName());
+                    schemeOffer.setAgentId(schemeInfo.getAgentId());
+                    schemeOffer.setAgentName(schemeInfo.getAgentName());
+                    schemeOffer.setAgentFullId(schemeInfo.getAgentFullId());
+                    schemeOffer.setAgentFullName(schemeInfo.getAgentFullName());
+                    schemeOffer.setSchemeId(schemeId);
+                    schemeInfo.setGatherd(schemeInfo.getGather());
+                    schemeInfo.setSchemeSchedule(100);
+                    this.schemeOfferService.insert(schemeInfo.getMemberId(), schemeOffer);
+                }
+
+            }
+            SchSchemeInfo active = new SchSchemeInfo();
+            active.setSchemeState(5);
+            this.schemeInfoService.updateActiveById(0, active, schemeId);
+
+        }
+    }
+
+
+    //	@Scheduled(fixedRate = 10000L)
+    // TODO,生成中奖方案
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public void rewardTaskEnter() throws BusinessException {
+        List<SchSchemeInfo> infos = (List<SchSchemeInfo>) this.schMapper
+                .listSchemesForRewardTask(DateTime.now().toDate());
+        if (CollectionUtils.isNotEmpty(infos)) {
+            infos.parallelStream().forEach(info -> {
+                try {
+                    LotLotteryIssue issue = getLotIssue(info.getProductId(), info.getNextOpenIssue());
+                    if (issue == null || StringUtils.isNotBlank(issue.getOpenCode())) {
+                        rewardTaskEnter(info.getPkId());
+                    }
+                } catch (Exception e) {
+                    this.logger.error("自动开奖时发生异常，单号:{}", info.getPkId(), (Object) e);
+                }
+                return;
+            });
+        }
+        try {
+            TimeUnit.SECONDS.sleep(2L);
+        } catch (Exception ex) {
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, readOnly = false)
+    public void rewardTaskEnter(Integer schemeId) throws BusinessException {
+        SchSchemeInfo schemeInfo = this.schemeInfoService.selectById(0, schemeId);
+        GoodsOrderInfo goodsOrderInfo = this.goodsOrderInfoService.selectGoodsInfo(schemeInfo.getOrderNo(), schemeInfo.getMemberId());
+        MemUserInfo memUserInfo = this.memUserInfoService.selectById(schemeInfo.getMemberId());//用户
+        MemUserInfo memUserInfo1 = this.memUserInfoService.selectById(memUserInfo.getAgentId().intValue());//用户上级
+        this.memUserInfoService.updateUserAmount1(memUserInfo1.getPkId(), memUserInfo1.getCapital1() + memUserInfo1.getRebate() * goodsOrderInfo.getPayMoney());
+        LotLotteryIssue issue = getLotIssue(schemeInfo.getProductId(),
+                schemeInfo.getNextOpenIssue());
+        if (issue != null && StringUtils.isBlank(issue.getOpenCode())) {
+            return;
+        }
+        if (issue == null) {
+            issue = new LotLotteryIssue();
+            issue.setOpenCode("-----");
+        }
+        if (schemeInfo.getSchemeState() == 5 || schemeInfo.getSchemeState() == 6) {
+            SchSchemeDetail schemeDetail = new SchSchemeDetail();
+            schemeDetail.setSchemeId(schemeId);
+            List<SchSchemeDetail> details = (List<SchSchemeDetail>) this.schemeDetailService.select(0, schemeDetail);
+            double amount = 0.0;
+            for (SchSchemeDetail detail : details) {
+                try {
+                    schemeDetail.setGameContext(detail.getGameContext());
+                    //开奖算法
+                    if (!TextUtils.isBlank(detail.getGameContext()) && !TextUtils.isBlank(issue.getOpenCode())) {
+                        //截取开奖号最后一位
+                        String openCode = issue.getOpenCode();
+                        String openCodeLast = openCode.substring(openCode.length() - 1);
+                        Integer openCodes = Integer.parseInt(openCodeLast);
+                        logger.info("最后一位 :" + openCodes);
+                        if (openCodes % 2 == 1) {//开奖的是奇数
+                            if ("1".equals(detail.getGameContext())) {//中奖
+                                amount += detail.getAmount2();
+//                                logger.info("奇数最后一位 :中奖");
+                            }
+                        } else {//开奖的是偶数
+                            if ("2".equals(detail.getGameContext())) {//中奖
+                                amount += detail.getAmount2();
+//                                logger.info("偶数最后一位 :中奖");
+                            }
+                        }
+//                        logger.info("for----amount="+amount);
+                    } else {
+                        logger.error("未开奖");
+                    }
+                    detail.setAmount2(amount);
+                } catch (Exception e) {
+                    this.logger.error("配奖时发生异常,玩法：" + detail.getGameId(), (Throwable) e);
+                }
+            }
+            logger.info("amount=" + amount);
+            SchSchemeIssue where = new SchSchemeIssue();
+            where.setSchemeId(schemeId);
+            where.setSchemeIssue(schemeInfo.getNextOpenIssue());
+            List<SchSchemeIssue> issues = (List<SchSchemeIssue>) this.schemeIssueService.select(0, where);
+            for (SchSchemeIssue schemeIssue : issues) {
+                amount *= schemeIssue.getSchemeMultiple();
+                SchSchemeIssue active = new SchSchemeIssue();
+                active.setOpenState(1);
+                active.setOpenCode(issue.getOpenCode());
+                active.setSchemeAmount2(amount);
+                if (amount > 0.0) {
+                    active.setIssueState(1);
+                } else {
+                    active.setIssueState(2);
+                }
+                this.schemeIssueService.updateActiveById(0, active, schemeIssue.getPkId());
+                schemeInfo.setAmount5(schemeInfo.getAmount5() + schemeIssue.getSchemeAmount1());
+            }
+//            logger.info("amount="+amount);
+
+            if (amount > 0.0) {
+                schemeInfo.setSchemeState(8);
+                logger.info("----大升级---" + schemeInfo.getOrderNo() + "," + schemeInfo.getNextOpenIssue());
+                //已中奖,大升级
+                if (!TextUtils.isBlank(schemeDetail.getGameContext())) {
+                    goodsOrderInfoService.updateStateAndResult(schemeInfo.getOrderNo(), 2, Integer.parseInt(schemeDetail.getGameContext()));
+                    //更新用户中奖金额
+                    memUserInfo.setPkId(schemeInfo.getMemberId());
+                    memUserInfo.setCapital6(memUserInfo.getCapital6() + goodsOrderInfo.getPayMoney() * memUserInfo1.getExtension());
+                    this.memUserInfoService.updateUserAmount(memUserInfo, schemeInfo.getMemberId());
+                    //给上级代理加钱
+                    GoodsInfo goodsInfo = this.goodsInfoService.selectById(goodsOrderInfo.getGoodsId());//升级商品
+                    this.goodsOrderInfoService.updateGoods(goodsOrderInfo.getPayMoney()*memUserInfo1.getExtension(),goodsInfo.getPkId(),goodsOrderInfo.getPkId());
+                    if (memUserInfo1.getAgentId().equals(0)) {
+                        this.memUserInfoService.updateUserAmount1(memUserInfo1.getPkId(), memUserInfo1.getCapital1() + memUserInfo1.getRebate() * goodsOrderInfo.getPayMoney() + (1.9 - memUserInfo1.getExtension() * goodsOrderInfo.getPayMoney()));
+                    }else{
+                        MemUserInfo memUserInfo11 = this.memUserInfoService.selectById(memUserInfo1.getAgentId().intValue());
+                        this.memUserInfoService.updateUserAmount1(memUserInfo1.getPkId(), memUserInfo1.getCapital1() + memUserInfo1.getRebate() * goodsOrderInfo.getPayMoney() + (memUserInfo11.getExtension() - memUserInfo1.getExtension()) * goodsOrderInfo.getPayMoney());
+                    }
+                }
+            } else {
+                this.memUserInfoService.updateUserAmount1(memUserInfo1.getPkId(), memUserInfo1.getCapital1() + memUserInfo1.getRebate() * goodsOrderInfo.getPayMoney());//上级代理返佣金额
+                logger.info("----小升级---" + schemeInfo.getOrderNo() + "," + schemeInfo.getNextOpenIssue());
+                schemeInfo.setSchemeState(9);
+                //未中奖，小升级
+                if (!TextUtils.isBlank(schemeDetail.getGameContext())) {
+                    goodsOrderInfoService.updateStateAndResult(schemeInfo.getOrderNo(), 3, Integer.parseInt(schemeDetail.getGameContext()));
+                }
+            }
+            schemeInfo.setExpressIssue(schemeInfo.getExpressIssue() + 1);
+            SchSchemeInfo active4 = new SchSchemeInfo();
+            active4.setAmount6(schemeInfo.getAmount6() + amount);
+            active4.setAmount5(schemeInfo.getAmount5());
+            active4.setExpressIssue(schemeInfo.getExpressIssue());
+            active4.setNextOpenIssue(schemeInfo.getNextOpenIssue());
+            active4.setNextOpenTime(schemeInfo.getNextOpenTime());
+            active4.setSchemeState(schemeInfo.getSchemeState());
+            this.schemeInfoService.updateActiveById(0, active4, schemeId);
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] issues = {"234", "456", "123", "132"};
+        Arrays.sort(issues);
+        System.out.println(JSON.toJSONString((Object) issues));
+        System.out.println(DigestUtils.md5Hex("111aaa"));
+        List<String> list = Arrays.asList("234", "456", "123", "132");
+        Collections.sort(list);
+        System.out.println(JSON.toJSONString((Object) list));
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<LotLotteryIssue> listIssuesByPage(String product, Integer page, Integer rows) throws BusinessException {
+        int prodId = this.prodService.getProdId(product);
+        if (prodId > 0) {
+            PageHelper.startPage((int) page, (int) rows, false);
+            return (List<LotLotteryIssue>) this.lotMapper.listIssuesByPage(prodId);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void saveOpenCode(Long issueId, Date endTime, Date openTime, String openCode) throws BusinessException {
+        LotLotteryIssue issue = this.issueService.selectById(0, issueId);
+        Validate.isTrue(StringUtils.isNotBlank(openCode));
+        Validate.isTrue(issue != null && issue.getOpenFlag() == 0);
+        openCode = openCode.replaceAll("\\D", "");
+//		Validate.isTrue(issue.getOpenTime().before(new Date()));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String endTimeStr = sdf.format(issue.getEndTime());
+        String openTimeStr = sdf.format(openTime);
+        logger.info(endTimeStr + "," + openTimeStr);
+        Validate.isTrue(issue.getEndTime().before(openTime));
+        LotLotteryIssue lotLotteryIssue = new LotLotteryIssue();
+        lotLotteryIssue.setPkId(issueId);
+        lotLotteryIssue.setOpenCode(openCode);
+        lotLotteryIssue.setOpenFlag(1);
+        lotLotteryIssue.setOpenCodeScource(1);
+        lotLotteryIssue.setProductId(issue.getProductId());
+        lotLotteryIssue.setLotteryIssue(issue.getLotteryIssue());
+        int prodId = issue.getProductId();
+        if (prodId == 1100 || prodId == 1200 || prodId == 7200 || prodId == 7400) {
+            Validate.isTrue(openCode.length() == 5);
+            int l3 = openCode.charAt(2);
+            int l4 = openCode.charAt(3);
+            int l5 = openCode.charAt(4);
+            String h3Style = "";
+            String h2Style = "";
+            String sw = "";
+            String gw = "";
+            if (l3 == l4 && l4 == l5 && l5 == l3) {
+                h3Style = "豹子";
+            } else if (l3 != l4 && l4 != l5 && l5 != l3) {
+                h3Style = "组六";
+            } else {
+                h3Style = "组三";
+            }
+            if (l4 == l5) {
+                h2Style = "对子";
+            } else if (Math.abs(l4 - l5) == 1) {
+                h2Style = "连号";
+            }
+            if (l4 > 4) {
+                sw += "大";
+            } else {
+                sw += "小";
+            }
+            if (l4 % 2 == 1) {
+                sw += "单";
+            } else {
+                sw += "双";
+            }
+            if (l5 > 4) {
+                gw += "大";
+            } else {
+                gw += "小";
+            }
+            if (l5 % 2 == 1) {
+                gw += "单";
+            } else {
+                gw += "双";
+            }
+            lotLotteryIssue.setOpenFeature1(StringUtils.isBlank(h3Style) ? "" : h3Style);
+            lotLotteryIssue.setOpenFeature2(StringUtils.isBlank(h2Style) ? "" : h2Style);
+            lotLotteryIssue.setOpenFeature3((StringUtils.isBlank(sw) ? "" : sw) + (StringUtils.isBlank(gw) ? "" : gw));
+            lotLotteryIssue.setOpenFeature4("");
+            lotLotteryIssue.setOpenFeature5("{}");
+        } else {
+            lotLotteryIssue.setOpenFeature1("");
+            lotLotteryIssue.setOpenFeature2("");
+            lotLotteryIssue.setOpenFeature3("");
+            lotLotteryIssue.setOpenFeature4("");
+            lotLotteryIssue.setOpenFeature5("");
+        }
+        this.lotMapper.saveOpenCode(lotLotteryIssue);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void saveOpenCodeNew(Long issueId, Date endTime, Date openTime, String openCode, int userId) throws BusinessException {
+        LotLotteryIssue issue = this.issueService.selectById(0, issueId);
+        Validate.isTrue(StringUtils.isNotBlank(openCode));
+        Validate.isTrue(issue != null && issue.getOpenFlag() == 0);
+        openCode = openCode.replaceAll("\\D", "");
+        Validate.isTrue(issue.getOpenTime().before(new Date()));
+//		Validate.isTrue(issue.getEndTime().before(openTime));
+        LotLotteryIssue lotLotteryIssue = new LotLotteryIssue();
+        lotLotteryIssue.setPkId(issueId);
+        lotLotteryIssue.setOpenCode(openCode);
+        lotLotteryIssue.setOpenFlag(1);
+        lotLotteryIssue.setOpenCodeScource(1);
+        lotLotteryIssue.setProductId(issue.getProductId());
+        lotLotteryIssue.setLotteryIssue(issue.getLotteryIssue());
+        lotLotteryIssue.setUpdateUser(userId);
+        lotLotteryIssue.setUpdateTime(new Date());
+        int prodId = issue.getProductId();
+        if (prodId == 1100 || prodId == 1200 || prodId == 7200 || prodId == 7400) {
+            Validate.isTrue(openCode.length() == 5);
+            int l3 = openCode.charAt(2);
+            int l4 = openCode.charAt(3);
+            int l5 = openCode.charAt(4);
+            String h3Style = "";
+            String h2Style = "";
+            String sw = "";
+            String gw = "";
+            if (l3 == l4 && l4 == l5 && l5 == l3) {
+                h3Style = "豹子";
+            } else if (l3 != l4 && l4 != l5 && l5 != l3) {
+                h3Style = "组六";
+            } else {
+                h3Style = "组三";
+            }
+            if (l4 == l5) {
+                h2Style = "对子";
+            } else if (Math.abs(l4 - l5) == 1) {
+                h2Style = "连号";
+            }
+            if (l4 > 4) {
+                sw += "大";
+            } else {
+                sw += "小";
+            }
+            if (l4 % 2 == 1) {
+                sw += "单";
+            } else {
+                sw += "双";
+            }
+            if (l5 > 4) {
+                gw += "大";
+            } else {
+                gw += "小";
+            }
+            if (l5 % 2 == 1) {
+                gw += "单";
+            } else {
+                gw += "双";
+            }
+            lotLotteryIssue.setOpenFeature1(StringUtils.isBlank(h3Style) ? "" : h3Style);
+            lotLotteryIssue.setOpenFeature2(StringUtils.isBlank(h2Style) ? "" : h2Style);
+            lotLotteryIssue.setOpenFeature3((StringUtils.isBlank(sw) ? "" : sw) + (StringUtils.isBlank(gw) ? "" : gw));
+            lotLotteryIssue.setOpenFeature4("");
+            lotLotteryIssue.setOpenFeature5("{}");
+        } else {
+            lotLotteryIssue.setOpenFeature1("");
+            lotLotteryIssue.setOpenFeature2("");
+            lotLotteryIssue.setOpenFeature3("");
+            lotLotteryIssue.setOpenFeature4("");
+            lotLotteryIssue.setOpenFeature5("");
+        }
+        this.lotMapper.saveOpenCodeNew(lotLotteryIssue);
+    }
+
+}

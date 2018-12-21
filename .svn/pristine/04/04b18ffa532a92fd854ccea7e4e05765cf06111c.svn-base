@@ -1,0 +1,67 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.MenuInfo;
+import com.fun.client.repository.MenuInfoMapper;
+import com.fun.framework.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class MenuInfoService extends BaseService {
+    private @Autowired MenuInfoMapper menuInfoMapper;
+
+    /**
+     * 插入新菜单
+     * @param menuInfo
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+  public Integer insert(MenuInfo menuInfo){
+      return menuInfoMapper.insert(menuInfo);
+  }
+
+    /**
+     * 查询所有的菜单
+     * @param menuInfo
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public List<MenuInfo> select(MenuInfo menuInfo){
+        return menuInfoMapper.select(menuInfo);
+    }
+
+    /**
+     * 通过ID查询菜单
+     * @param menuInfoId
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public MenuInfo selectById(Integer menuInfoId){
+        return menuInfoMapper.selectById(menuInfoId);
+    }
+
+    /**
+     * 修改菜单
+     * @param menuInfo
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer update(MenuInfo menuInfo){
+        return menuInfoMapper.update(menuInfo);
+    }
+
+    /**
+     * 根据ID删除菜单
+     * @param menuInfoId
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer deleteById(Integer menuInfoId){
+        return menuInfoMapper.deleteById(menuInfoId);
+    }
+
+}

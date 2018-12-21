@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.GoodsInfoMapper">
+    <resultMap id="GoodsInfo" type="com.fun.client.domain.GoodsInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodSrc" javaType="String" column="good_src" jdbcType="VARCHAR"/>
+        <result property="catId" javaType="Integer" column="cat_id" jdbcType="INTEGER"/>
+        <result property="detail" javaType="String" column="detail" jdbcType="VARCHAR"/>
+        <result property="price" javaType="Double" column="price" jdbcType="DECIMAL"/>
+        <result property="coin" javaType="Double" column="coin" jdbcType="DECIMAL"/>
+        <result property="isIntegral" javaType="Integer" column="is_integral" jdbcType="INTEGER"/>
+        <result property="isPromotion" javaType="Integer" column="is_promotion" jdbcType="INTEGER"/>
+        <result property="goodSourceId" javaType="Integer" column="good_source_id" jdbcType="INTEGER"/>
+        <result property="repertoryNum" javaType="Integer" column="repertory_num" jdbcType="INTEGER"/>
+        <result property="purchasePrice" javaType="Double" column="purchase_price" jdbcType="DECIMAL"/>
+        <result property="goodsState" javaType="Integer" column="goods_state" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="GoodImg" type="com.fun.client.domain.GoodImg">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="goodId" javaType="Integer" column="good_id" jdbcType="INTEGER"/>
+        <result property="goodSrc" javaType="String" column="good_src" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- 插入数据 -->
+    <insert id="insertGoodImgs" parameterType="Map">
+		<![CDATA[
+
+		INSERT INTO t_goods_img_detail (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			good_id,
+			good_src
+		)
+		VALUES
+			(
+				#{goodImg.pkId, jdbcType = INTEGER},
+				#{goodImg.createUser, jdbcType = INTEGER},
+				#{goodImg.createTime, jdbcType = TIMESTAMP},
+				#{goodImg.updateUser, jdbcType = INTEGER},
+				#{goodImg.updateTime, jdbcType = TIMESTAMP},
+				#{goodImg.dataVersion, jdbcType = TINYINT},
+				#{goodImg.goodId, jdbcType = INTEGER},
+				#{goodImg.goodSrc, jdbcType = VARCHAR}
+			)
+
+        ]]>
+	</insert>
+
+    <!--修改商品详情图-->
+    <update id="updateGoodImg" parameterType="Map">
+        <![CDATA[UPDATE t_goods_img_detail t]]>
+        <set>
+            <![CDATA[ t.update_user = #{goodImg.updateUser},]]>
+            <![CDATA[ t.update_time = #{goodImg.updateTime},]]>
+            <![CDATA[ t.good_src = #{goodImg.goodSrc},]]>
+        </set>
+        <where>
+            <![CDATA[AND t.pk_id = #{goodImg.pkId,jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteDetailImgById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_goods_img_detail
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{Id, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </delete>
+
+    <!-- 按GoodId删除 -->
+    <delete id="deleteDetailImgByGoodId" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_goods_img_detail
+		]]>
+        <where>
+            <![CDATA[AND good_id = #{goodId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+    <!-- 插入数据 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="goodsInfo.pkId"
+            parameterType="com.fun.client.domain.GoodsInfo">
+		<![CDATA[
+
+		INSERT INTO t_goods_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			good_name,
+			good_src,
+			cat_id,
+			detail,
+			price,
+			coin,
+			is_integral,
+			is_promotion,
+			good_source_id,
+			repertory_num,
+			purchase_price
+		)
+		VALUES
+			(
+				#{goodsInfo.pkId, jdbcType = INTEGER},
+				#{goodsInfo.createUser, jdbcType = INTEGER},
+				#{goodsInfo.createTime, jdbcType = TIMESTAMP},
+				#{goodsInfo.updateUser, jdbcType = INTEGER},
+				#{goodsInfo.updateTime, jdbcType = TIMESTAMP},
+				#{goodsInfo.dataVersion, jdbcType = TINYINT},
+				#{goodsInfo.goodName, jdbcType = VARCHAR},
+				#{goodsInfo.goodSrc, jdbcType = VARCHAR},
+				#{goodsInfo.catId, jdbcType = INTEGER},
+				#{goodsInfo.detail, jdbcType = VARCHAR},
+				#{goodsInfo.price, jdbcType = DECIMAL},
+				#{goodsInfo.coin, jdbcType = DECIMAL},
+				#{goodsInfo.isIntegral, jdbcType = INTEGER},
+				#{goodsInfo.isPromotion, jdbcType = INTEGER},
+				#{goodsInfo.goodSourceId, jdbcType = INTEGER},
+				#{goodsInfo.repertoryNum, jdbcType = INTEGER},
+				#{goodsInfo.purchasePrice, jdbcType = DECIMAL}
+			)
+
+        ]]>
+	</insert>
+
+    <update id="updateById" parameterType="Map">
+        <![CDATA[UPDATE t_goods_info t]]>
+        <set>
+            <![CDATA[ t.repertory_num = #{goodsInfo.repertoryNum},]]>
+        </set>
+        <where>
+            <![CDATA[AND t.pk_id = #{goodsInfo.pkId,jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <!--修改商品信息-->
+    <update id="updateGoodInfoById" parameterType="Map">
+        <![CDATA[UPDATE t_goods_info t]]>
+        <set>
+            <![CDATA[ t.update_user = #{goodsInfo.updateUser},]]>
+            <![CDATA[ t.update_time = #{goodsInfo.updateTime},]]>
+            <![CDATA[ t.good_name = #{goodsInfo.goodName},]]>
+            <![CDATA[ t.good_src = #{goodsInfo.goodSrc},]]>
+            <![CDATA[ t.detail = #{goodsInfo.detail},]]>
+            <![CDATA[ t.price = #{goodsInfo.price},]]>
+            <![CDATA[ t.coin = #{goodsInfo.coin},]]>
+            <![CDATA[ t.repertory_num = #{goodsInfo.repertoryNum},]]>
+            <![CDATA[ t.purchase_price = #{goodsInfo.purchasePrice},]]>
+        </set>
+        <where>
+            <![CDATA[AND t.pk_id = #{goodsInfo.pkId,jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <!-- 查询所有普通商品 -->
+    <select id="selectGoods" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsInfo.createUser != null and goodsInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{goodsInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{goodsInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.updateUser != null and goodsInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{goodsInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{goodsInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.dataVersion != null and goodsInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{goodsInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodName != null and goodsInfo.goodName != ''">
+                <![CDATA[AND t.good_name = #{goodsInfo.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.goodSrc != null and goodsInfo.goodSrc != ''">
+                <![CDATA[AND t.good_src = #{goodsInfo.goodSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.catId != null">
+                <![CDATA[AND t.cat_id = #{goodsInfo.catId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.detail != null and goodsInfo.datail != ''">
+                <![CDATA[AND t.detail = #{goodsInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.price != null and goodsInfo.price > 0 ">
+                <![CDATA[AND t.price = #{goodsInfo.price, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.coin != null and goodsInfo.coin > 0 ">
+                <![CDATA[AND t.coin = #{goodsInfo.coin, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null ">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodSourceId != null">
+                <![CDATA[AND t.good_source_id = #{goodsInfo.goodSourceId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+    <!-- 查询所有普通商品 -->
+    <select id="select" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.is_promotion = 0 ]]>
+            <![CDATA[AND t.is_integral = 0 ]]>
+            <if test="goodsInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsInfo.createUser != null and goodsInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{goodsInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{goodsInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.updateUser != null and goodsInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{goodsInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{goodsInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.dataVersion != null and goodsInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{goodsInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodName != null and goodsInfo.goodName != ''">
+                <![CDATA[AND t.good_name = #{goodsInfo.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.goodSrc != null and goodsInfo.goodSrc != ''">
+                <![CDATA[AND t.good_src = #{goodsInfo.goodSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.catId != null">
+                <![CDATA[AND t.cat_id = #{goodsInfo.catId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.detail != null and goodsInfo.datail != ''">
+                <![CDATA[AND t.detail = #{goodsInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.price != null and goodsInfo.price > 0 ">
+                <![CDATA[AND t.price = #{goodsInfo.price, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.coin != null and goodsInfo.coin > 0 ">
+                <![CDATA[AND t.coin = #{goodsInfo.coin, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null ">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodSourceId != null">
+                <![CDATA[AND t.good_source_id = #{goodsInfo.goodSourceId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有普通商品 -->
+    <select id="selectCount" parameterType="Map" resultType="java.lang.Integer">
+        <![CDATA[
+		SELECT
+			count(*)
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <if test="catId != null">
+                <![CDATA[AND t.cat_id = #{catId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有促销商品列表(不包括原商品) -->
+    <select id="selectByPromotion" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.is_promotion = 1 ]]>
+            <![CDATA[AND t.good_source_id > 0 ]]>
+            <![CDATA[AND t.goods_state > 0 ]]>
+            <if test="goodsInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsInfo.createUser != null and goodsInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{goodsInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{goodsInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.updateUser != null and goodsInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{goodsInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{goodsInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.dataVersion != null and goodsInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{goodsInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodName != null and goodsInfo.goodName != ''">
+                <![CDATA[AND t.good_name = #{goodsInfo.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.goodSrc != null and goodsInfo.goodSrc != ''">
+                <![CDATA[AND t.good_src = #{goodsInfo.goodSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.catId != null">
+                <![CDATA[AND t.cat_id = #{goodsInfo.catId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.detail != null and goodsInfo.datail != ''">
+                <![CDATA[AND t.detail = #{goodsInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.price != null and goodsInfo.price > 0 ">
+                <![CDATA[AND t.price = #{goodsInfo.price, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.coin != null and goodsInfo.coin > 0 ">
+                <![CDATA[AND t.coin = #{goodsInfo.coin, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null ">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodSourceId != null">
+                <![CDATA[AND t.good_source_id = #{goodsInfo.goodSourceId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有促销商品列表(不包括原商品) -->
+    <select id="selectBackByPromotion" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.is_promotion = 1 ]]>
+            <![CDATA[AND t.good_source_id > 0 ]]>
+            <if test="goodsInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsInfo.createUser != null and goodsInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{goodsInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{goodsInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.updateUser != null and goodsInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{goodsInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{goodsInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.dataVersion != null and goodsInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{goodsInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodName != null and goodsInfo.goodName != ''">
+                <![CDATA[AND t.good_name = #{goodsInfo.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.goodSrc != null and goodsInfo.goodSrc != ''">
+                <![CDATA[AND t.good_src = #{goodsInfo.goodSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.catId != null">
+                <![CDATA[AND t.cat_id = #{goodsInfo.catId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.detail != null and goodsInfo.datail != ''">
+                <![CDATA[AND t.detail = #{goodsInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.price != null and goodsInfo.price > 0 ">
+                <![CDATA[AND t.price = #{goodsInfo.price, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.coin != null and goodsInfo.coin > 0 ">
+                <![CDATA[AND t.coin = #{goodsInfo.coin, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null ">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodSourceId != null">
+                <![CDATA[AND t.good_source_id = #{goodsInfo.goodSourceId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有积分商品列表 -->
+    <select id="selectByIntegral" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.is_integral = 1 ]]>
+            <![CDATA[AND t.goods_state > 0 ]]>
+            <if test="goodsInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{goodsInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="goodsInfo.createUser != null and goodsInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{goodsInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{goodsInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.updateUser != null and goodsInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{goodsInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{goodsInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="goodsInfo.dataVersion != null and goodsInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{goodsInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodName != null and goodsInfo.goodName != ''">
+                <![CDATA[AND t.good_name = #{goodsInfo.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.goodSrc != null and goodsInfo.goodSrc != ''">
+                <![CDATA[AND t.good_src = #{goodsInfo.goodSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.catId != null">
+                <![CDATA[AND t.cat_id = #{goodsInfo.catId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.detail != null and goodsInfo.datail != ''">
+                <![CDATA[AND t.detail = #{goodsInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.price != null and goodsInfo.price > 0 ">
+                <![CDATA[AND t.price = #{goodsInfo.price, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.coin != null and goodsInfo.coin > 0 ">
+                <![CDATA[AND t.coin = #{goodsInfo.coin, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="goodsInfo.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{goodsInfo.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.isPromotion != null ">
+                <![CDATA[AND t.is_promotion = #{goodsInfo.isPromotion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="goodsInfo.goodSourceId != null">
+                <![CDATA[AND t.good_source_id = #{goodsInfo.goodSourceId, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectById" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{goodsInfoId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectByGoodSourceId" parameterType="Map" resultMap="GoodsInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_info t
+		]]>
+        <where>
+            <![CDATA[AND t.good_source_id = #{goodSourceId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+    <!-- 根据商品ID查询商品详情图 -->
+    <select id="selectImgs" parameterType="Map" resultMap="GoodImg">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_goods_img_detail t
+		]]>
+        <where>
+            <![CDATA[AND t.good_id = #{goodId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_goods_info
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{goodsInfoId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </delete>
+
+    <update id="updateGoodsState" parameterType="Map">
+		<![CDATA[
+        UPDATE
+        t_goods_info t
+        SET
+        t.goods_state = #{goodsState,jdbcType=INTEGER}
+        ]]>
+        <where>
+            <![CDATA[AND pk_id = #{goodsId, jdbcType=INTEGER}]]>
+        </where>
+	</update>
+</mapper>

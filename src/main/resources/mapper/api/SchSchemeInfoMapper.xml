@@ -1,0 +1,1194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SchSchemeInfoMapper">
+	<resultMap id="SchSchemeInfo" type="com.fun.le.entities.SchSchemeInfo">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="memberId" javaType="Integer" column="member_id" jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name" jdbcType="CHAR" />
+		<result property="memberScore" javaType="Integer" column="member_score" jdbcType="INTEGER" />
+		<result property="memberLevel" javaType="Integer" column="member_level" jdbcType="INTEGER" />
+		<result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER" />
+		<result property="agentName" javaType="String" column="agent_name" jdbcType="CHAR" />
+		<result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="CHAR" />
+		<result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="CHAR" />
+		<result property="scheneNo" javaType="String" column="schene_no" jdbcType="CHAR" />
+		<result property="schemeState" javaType="Integer" column="scheme_state" jdbcType="TINYINT" />
+		<result property="cancellationFlag" javaType="Integer" column="cancellation_flag" jdbcType="TINYINT" />
+		<result property="authFlag" javaType="Integer" column="auth_flag" jdbcType="TINYINT" />
+		<result property="title" javaType="String" column="title" jdbcType="CHAR" />
+		<result property="royalty" javaType="Integer" column="royalty" jdbcType="TINYINT" />
+		<result property="endIssue" javaType="String" column="end_issue" jdbcType="CHAR" />
+		<result property="endTime" javaType="Date" column="end_time" jdbcType="TIMESTAMP" />
+		<result property="nextEndIssue" javaType="String" column="next_end_issue" jdbcType="CHAR" />
+		<result property="nextEndTime" javaType="Date" column="next_end_time" jdbcType="TIMESTAMP" />
+		<result property="nextOpenIssue" javaType="String" column="next_open_issue" jdbcType="CHAR" />
+		<result property="nextOpenTime" javaType="Date" column="next_open_time" jdbcType="TIMESTAMP" />
+		<result property="amount1" javaType="Double" column="amount1" jdbcType="DECIMAL" />
+		<result property="amount2" javaType="Double" column="amount2" jdbcType="DECIMAL" />
+		<result property="amount3" javaType="Double" column="amount3" jdbcType="DECIMAL" />
+		<result property="amount4" javaType="Double" column="amount4" jdbcType="DECIMAL" />
+		<result property="amount5" javaType="Double" column="amount5" jdbcType="DECIMAL" />
+		<result property="amount6" javaType="Double" column="amount6" jdbcType="DECIMAL" />
+		<result property="gather" javaType="Integer" column="gather" jdbcType="INTEGER" />
+		<result property="minimum" javaType="Integer" column="minimum" jdbcType="INTEGER" />
+		<result property="gatherd" javaType="Integer" column="gatherd" jdbcType="INTEGER" />
+		<result property="schemeSchedule" javaType="Integer" column="scheme_schedule" jdbcType="INTEGER" />
+		<result property="schemeLocked" javaType="Integer" column="scheme_locked" jdbcType="TINYINT" />
+		<result property="totalIssue" javaType="Integer" column="total_issue" jdbcType="INTEGER" />
+		<result property="expressIssue" javaType="Integer" column="express_issue" jdbcType="INTEGER" />
+		<result property="totalMultiple" javaType="Integer" column="total_multiple" jdbcType="INTEGER" />
+		<result property="niceName" javaType="String" column="nice_name" jdbcType="CHAR" />
+		<result property="orderNo" javaType="String" column="order_no" jdbcType="CHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="schSchemeInfo.pkId">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			member_id,
+			member_name,
+			member_score,
+			member_level,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			schene_no,
+			scheme_state,
+			cancellation_flag,
+			auth_flag,
+			title,
+			royalty,
+			end_issue,
+			end_time,
+			next_end_issue,
+			next_end_time,
+			next_open_issue,
+			next_open_time,
+			amount1,
+			amount2,
+			amount3,
+			amount4,
+			amount5,
+			amount6,
+			gather,
+			minimum,
+			gatherd,
+			scheme_schedule,
+			scheme_locked,
+			total_issue,
+			express_issue,
+			total_multiple,
+			nice_name,
+			order_no
+		)
+		VALUES
+			(
+				#{schSchemeInfo.pkId, jdbcType = INTEGER},
+				#{schSchemeInfo.createUser, jdbcType = INTEGER},
+				#{schSchemeInfo.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.updateUser, jdbcType = INTEGER},
+				#{schSchemeInfo.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.dataVersion, jdbcType = TINYINT},
+				#{schSchemeInfo.productId, jdbcType = INTEGER},
+				#{schSchemeInfo.memberId, jdbcType = INTEGER},
+				#{schSchemeInfo.memberName, jdbcType = CHAR},
+				#{schSchemeInfo.memberScore, jdbcType = INTEGER},
+				#{schSchemeInfo.memberLevel, jdbcType = INTEGER},
+				#{schSchemeInfo.agentId, jdbcType = INTEGER},
+				#{schSchemeInfo.agentName, jdbcType = CHAR},
+				#{schSchemeInfo.agentFullId, jdbcType = CHAR},
+				#{schSchemeInfo.agentFullName, jdbcType = CHAR},
+				#{schSchemeInfo.scheneNo, jdbcType = CHAR},
+				#{schSchemeInfo.schemeState, jdbcType = TINYINT},
+				#{schSchemeInfo.cancellationFlag, jdbcType = TINYINT},
+				#{schSchemeInfo.authFlag, jdbcType = TINYINT},
+				#{schSchemeInfo.title, jdbcType = CHAR},
+				#{schSchemeInfo.royalty, jdbcType = TINYINT},
+				#{schSchemeInfo.endIssue, jdbcType = CHAR},
+				#{schSchemeInfo.endTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.nextEndIssue, jdbcType = CHAR},
+				#{schSchemeInfo.nextEndTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.nextOpenIssue, jdbcType = CHAR},
+				#{schSchemeInfo.nextOpenTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.amount1, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount2, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount3, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount4, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount5, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount6, jdbcType = DECIMAL},
+				#{schSchemeInfo.gather, jdbcType = INTEGER},
+				#{schSchemeInfo.minimum, jdbcType = INTEGER},
+				#{schSchemeInfo.gatherd, jdbcType = INTEGER},
+				#{schSchemeInfo.schemeSchedule, jdbcType = INTEGER},
+				#{schSchemeInfo.schemeLocked, jdbcType = TINYINT},
+				#{schSchemeInfo.totalIssue, jdbcType = INTEGER},
+				#{schSchemeInfo.expressIssue, jdbcType = INTEGER},
+				#{schSchemeInfo.totalMultiple, jdbcType = INTEGER},
+				#{schSchemeInfo.niceName, jdbcType = CHAR},
+				#{schSchemeInfo.orderNo, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_id,
+			member_id,
+			member_name,
+			member_score,
+			member_level,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			schene_no,
+			scheme_state,
+			cancellation_flag,
+			auth_flag,
+			title,
+			royalty,
+			end_issue,
+			end_time,
+			next_end_issue,
+			next_end_time,
+			next_open_issue,
+			next_open_time,
+			amount1,
+			amount2,
+			amount3,
+			amount4,
+			amount5,
+			amount6,
+			gather,
+			minimum,
+			gatherd,
+			scheme_schedule,
+			scheme_locked,
+			total_issue,
+			express_issue,
+			total_multiple,
+			nice_name
+		)
+		]]>
+		<foreach collection="schSchemeInfos" item="schSchemeInfo" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{schSchemeInfo.pkId, jdbcType = INTEGER},
+				#{schSchemeInfo.createUser, jdbcType = INTEGER},
+				#{schSchemeInfo.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.updateUser, jdbcType = INTEGER},
+				#{schSchemeInfo.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.dataVersion, jdbcType = TINYINT},
+				#{schSchemeInfo.productId, jdbcType = INTEGER},
+				#{schSchemeInfo.memberId, jdbcType = INTEGER},
+				#{schSchemeInfo.memberName, jdbcType = CHAR},
+				#{schSchemeInfo.memberScore, jdbcType = INTEGER},
+				#{schSchemeInfo.memberLevel, jdbcType = INTEGER},
+				#{schSchemeInfo.agentId, jdbcType = INTEGER},
+				#{schSchemeInfo.agentName, jdbcType = CHAR},
+				#{schSchemeInfo.agentFullId, jdbcType = CHAR},
+				#{schSchemeInfo.agentFullName, jdbcType = CHAR},
+				#{schSchemeInfo.scheneNo, jdbcType = CHAR},
+				#{schSchemeInfo.schemeState, jdbcType = TINYINT},
+				#{schSchemeInfo.cancellationFlag, jdbcType = TINYINT},
+				#{schSchemeInfo.authFlag, jdbcType = TINYINT},
+				#{schSchemeInfo.title, jdbcType = CHAR},
+				#{schSchemeInfo.royalty, jdbcType = TINYINT},
+				#{schSchemeInfo.endIssue, jdbcType = CHAR},
+				#{schSchemeInfo.endTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.nextEndIssue, jdbcType = CHAR},
+				#{schSchemeInfo.nextEndTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.nextOpenIssue, jdbcType = CHAR},
+				#{schSchemeInfo.nextOpenTime, jdbcType = TIMESTAMP},
+				#{schSchemeInfo.amount1, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount2, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount3, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount4, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount5, jdbcType = DECIMAL},
+				#{schSchemeInfo.amount6, jdbcType = DECIMAL},
+				#{schSchemeInfo.gather, jdbcType = INTEGER},
+				#{schSchemeInfo.minimum, jdbcType = INTEGER},
+				#{schSchemeInfo.gatherd, jdbcType = INTEGER},
+				#{schSchemeInfo.schemeSchedule, jdbcType = INTEGER},
+				#{schSchemeInfo.schemeLocked, jdbcType = TINYINT},
+				#{schSchemeInfo.totalIssue, jdbcType = INTEGER},
+				#{schSchemeInfo.expressIssue, jdbcType = INTEGER},
+				#{schSchemeInfo.totalMultiple, jdbcType = INTEGER},
+				#{schSchemeInfo.niceName, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_info]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeInfo.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeInfo.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeInfo.dataVersion},]]>
+		<![CDATA[product_id = #{schSchemeInfo.productId},]]>
+		<![CDATA[member_id = #{schSchemeInfo.memberId},]]>
+		<![CDATA[member_name = #{schSchemeInfo.memberName},]]>
+		<![CDATA[member_score = #{schSchemeInfo.memberScore},]]>
+		<![CDATA[member_level = #{schSchemeInfo.memberLevel},]]>
+		<![CDATA[agent_id = #{schSchemeInfo.agentId},]]>
+		<![CDATA[agent_name = #{schSchemeInfo.agentName},]]>
+		<![CDATA[agent_full_id = #{schSchemeInfo.agentFullId},]]>
+		<![CDATA[agent_full_name = #{schSchemeInfo.agentFullName},]]>
+		<![CDATA[schene_no = #{schSchemeInfo.scheneNo},]]>
+		<![CDATA[scheme_state = #{schSchemeInfo.schemeState},]]>
+		<![CDATA[cancellation_flag = #{schSchemeInfo.cancellationFlag},]]>
+		<![CDATA[auth_flag = #{schSchemeInfo.authFlag},]]>
+		<![CDATA[title = #{schSchemeInfo.title},]]>
+		<![CDATA[royalty = #{schSchemeInfo.royalty},]]>
+		<![CDATA[end_issue = #{schSchemeInfo.endIssue},]]>
+		<![CDATA[end_time = #{schSchemeInfo.endTime},]]>
+		<![CDATA[next_end_issue = #{schSchemeInfo.nextEndIssue},]]>
+		<![CDATA[next_end_time = #{schSchemeInfo.nextEndTime},]]>
+		<![CDATA[next_open_issue = #{schSchemeInfo.nextOpenIssue},]]>
+		<![CDATA[next_open_time = #{schSchemeInfo.nextOpenTime},]]>
+		<![CDATA[amount1 = #{schSchemeInfo.amount1},]]>
+		<![CDATA[amount2 = #{schSchemeInfo.amount2},]]>
+		<![CDATA[amount3 = #{schSchemeInfo.amount3},]]>
+		<![CDATA[amount4 = #{schSchemeInfo.amount4},]]>
+		<![CDATA[amount5 = #{schSchemeInfo.amount5},]]>
+		<![CDATA[amount6 = #{schSchemeInfo.amount6},]]>
+		<![CDATA[gather = #{schSchemeInfo.gather},]]>
+		<![CDATA[minimum = #{schSchemeInfo.minimum},]]>
+		<![CDATA[gatherd = #{schSchemeInfo.gatherd},]]>
+		<![CDATA[scheme_schedule = #{schSchemeInfo.schemeSchedule},]]>
+		<![CDATA[scheme_locked = #{schSchemeInfo.schemeLocked},]]>
+		<![CDATA[total_issue = #{schSchemeInfo.totalIssue},]]>
+		<![CDATA[express_issue = #{schSchemeInfo.expressIssue},]]>
+		<![CDATA[total_multiple = #{schSchemeInfo.totalMultiple},]]>
+		<![CDATA[nice_name = #{schSchemeInfo.niceName},]]>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.memberScore != null">
+			<![CDATA[AND member_score = #{where.memberScore, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberLevel != null">
+			<![CDATA[AND member_level = #{where.memberLevel, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.scheneNo != null and where.scheneNo != ''">
+			<![CDATA[AND schene_no = #{where.scheneNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeState != null">
+			<![CDATA[AND scheme_state = #{where.schemeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.cancellationFlag != null">
+			<![CDATA[AND cancellation_flag = #{where.cancellationFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.authFlag != null">
+			<![CDATA[AND auth_flag = #{where.authFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.title != null and where.title != ''">
+			<![CDATA[AND title = #{where.title, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.royalty != null">
+			<![CDATA[AND royalty = #{where.royalty, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endIssue != null and where.endIssue != ''">
+			<![CDATA[AND end_issue = #{where.endIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextEndIssue != null and where.nextEndIssue != ''">
+			<![CDATA[AND next_end_issue = #{where.nextEndIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextEndTime != null">
+			<![CDATA[AND next_end_time = #{where.nextEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextOpenIssue != null and where.nextOpenIssue != ''">
+			<![CDATA[AND next_open_issue = #{where.nextOpenIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextOpenTime != null">
+			<![CDATA[AND next_open_time = #{where.nextOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount5 != null">
+			<![CDATA[AND amount5 = #{where.amount5, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount6 != null">
+			<![CDATA[AND amount6 = #{where.amount6, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.gather != null">
+			<![CDATA[AND gather = #{where.gather, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.minimum != null">
+			<![CDATA[AND minimum = #{where.minimum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gatherd != null">
+			<![CDATA[AND gatherd = #{where.gatherd, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeSchedule != null">
+			<![CDATA[AND scheme_schedule = #{where.schemeSchedule, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeLocked != null">
+			<![CDATA[AND scheme_locked = #{where.schemeLocked, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.totalIssue != null">
+			<![CDATA[AND total_issue = #{where.totalIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.expressIssue != null">
+			<![CDATA[AND express_issue = #{where.expressIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.totalMultiple != null">
+			<![CDATA[AND total_multiple = #{where.totalMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_info]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeInfo.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeInfo.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeInfo.dataVersion},]]>
+		<![CDATA[product_id = #{schSchemeInfo.productId},]]>
+		<![CDATA[member_id = #{schSchemeInfo.memberId},]]>
+		<![CDATA[member_name = #{schSchemeInfo.memberName},]]>
+		<![CDATA[member_score = #{schSchemeInfo.memberScore},]]>
+		<![CDATA[member_level = #{schSchemeInfo.memberLevel},]]>
+		<![CDATA[agent_id = #{schSchemeInfo.agentId},]]>
+		<![CDATA[agent_name = #{schSchemeInfo.agentName},]]>
+		<![CDATA[agent_full_id = #{schSchemeInfo.agentFullId},]]>
+		<![CDATA[agent_full_name = #{schSchemeInfo.agentFullName},]]>
+		<![CDATA[schene_no = #{schSchemeInfo.scheneNo},]]>
+		<![CDATA[scheme_state = #{schSchemeInfo.schemeState},]]>
+		<![CDATA[cancellation_flag = #{schSchemeInfo.cancellationFlag},]]>
+		<![CDATA[auth_flag = #{schSchemeInfo.authFlag},]]>
+		<![CDATA[title = #{schSchemeInfo.title},]]>
+		<![CDATA[royalty = #{schSchemeInfo.royalty},]]>
+		<![CDATA[end_issue = #{schSchemeInfo.endIssue},]]>
+		<![CDATA[end_time = #{schSchemeInfo.endTime},]]>
+		<![CDATA[next_end_issue = #{schSchemeInfo.nextEndIssue},]]>
+		<![CDATA[next_end_time = #{schSchemeInfo.nextEndTime},]]>
+		<![CDATA[next_open_issue = #{schSchemeInfo.nextOpenIssue},]]>
+		<![CDATA[next_open_time = #{schSchemeInfo.nextOpenTime},]]>
+		<![CDATA[amount1 = #{schSchemeInfo.amount1},]]>
+		<![CDATA[amount2 = #{schSchemeInfo.amount2},]]>
+		<![CDATA[amount3 = #{schSchemeInfo.amount3},]]>
+		<![CDATA[amount4 = #{schSchemeInfo.amount4},]]>
+		<![CDATA[amount5 = #{schSchemeInfo.amount5},]]>
+		<![CDATA[amount6 = #{schSchemeInfo.amount6},]]>
+		<![CDATA[gather = #{schSchemeInfo.gather},]]>
+		<![CDATA[minimum = #{schSchemeInfo.minimum},]]>
+		<![CDATA[gatherd = #{schSchemeInfo.gatherd},]]>
+		<![CDATA[scheme_schedule = #{schSchemeInfo.schemeSchedule},]]>
+		<![CDATA[scheme_locked = #{schSchemeInfo.schemeLocked},]]>
+		<![CDATA[total_issue = #{schSchemeInfo.totalIssue},]]>
+		<![CDATA[express_issue = #{schSchemeInfo.expressIssue},]]>
+		<![CDATA[total_multiple = #{schSchemeInfo.totalMultiple},]]>
+		<![CDATA[nice_name = #{schSchemeInfo.niceName},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_info]]>
+		<set>
+			<if test="schSchemeInfo.updateUser != null">
+			<![CDATA[update_user = #{schSchemeInfo.updateUser},]]>
+			</if>
+			<if test="schSchemeInfo.updateTime != null">
+			<![CDATA[update_time = #{schSchemeInfo.updateTime},]]>
+			</if>
+			<if test="schSchemeInfo.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeInfo.dataVersion},]]>
+			</if>
+			<if test="schSchemeInfo.productId != null">
+			<![CDATA[product_id = #{schSchemeInfo.productId},]]>
+			</if>
+			<if test="schSchemeInfo.memberId != null">
+			<![CDATA[member_id = #{schSchemeInfo.memberId},]]>
+			</if>
+			<if test="schSchemeInfo.memberName != null and schSchemeInfo.memberName != ''">
+			<![CDATA[member_name = #{schSchemeInfo.memberName},]]>
+			</if>
+			<if test="schSchemeInfo.memberScore != null">
+			<![CDATA[member_score = #{schSchemeInfo.memberScore},]]>
+			</if>
+			<if test="schSchemeInfo.memberLevel != null">
+			<![CDATA[member_level = #{schSchemeInfo.memberLevel},]]>
+			</if>
+			<if test="schSchemeInfo.agentId != null">
+			<![CDATA[agent_id = #{schSchemeInfo.agentId},]]>
+			</if>
+			<if test="schSchemeInfo.agentName != null and schSchemeInfo.agentName != ''">
+			<![CDATA[agent_name = #{schSchemeInfo.agentName},]]>
+			</if>
+			<if test="schSchemeInfo.agentFullId != null and schSchemeInfo.agentFullId != ''">
+			<![CDATA[agent_full_id = #{schSchemeInfo.agentFullId},]]>
+			</if>
+			<if test="schSchemeInfo.agentFullName != null and schSchemeInfo.agentFullName != ''">
+			<![CDATA[agent_full_name = #{schSchemeInfo.agentFullName},]]>
+			</if>
+			<if test="schSchemeInfo.scheneNo != null and schSchemeInfo.scheneNo != ''">
+			<![CDATA[schene_no = #{schSchemeInfo.scheneNo},]]>
+			</if>
+			<if test="schSchemeInfo.schemeState != null">
+			<![CDATA[scheme_state = #{schSchemeInfo.schemeState},]]>
+			</if>
+			<if test="schSchemeInfo.cancellationFlag != null">
+			<![CDATA[cancellation_flag = #{schSchemeInfo.cancellationFlag},]]>
+			</if>
+			<if test="schSchemeInfo.authFlag != null">
+			<![CDATA[auth_flag = #{schSchemeInfo.authFlag},]]>
+			</if>
+			<if test="schSchemeInfo.title != null and schSchemeInfo.title != ''">
+			<![CDATA[title = #{schSchemeInfo.title},]]>
+			</if>
+			<if test="schSchemeInfo.royalty != null">
+			<![CDATA[royalty = #{schSchemeInfo.royalty},]]>
+			</if>
+			<if test="schSchemeInfo.endIssue != null and schSchemeInfo.endIssue != ''">
+			<![CDATA[end_issue = #{schSchemeInfo.endIssue},]]>
+			</if>
+			<if test="schSchemeInfo.endTime != null">
+			<![CDATA[end_time = #{schSchemeInfo.endTime},]]>
+			</if>
+			<if test="schSchemeInfo.nextEndIssue != null and schSchemeInfo.nextEndIssue != ''">
+			<![CDATA[next_end_issue = #{schSchemeInfo.nextEndIssue},]]>
+			</if>
+			<if test="schSchemeInfo.nextEndTime != null">
+			<![CDATA[next_end_time = #{schSchemeInfo.nextEndTime},]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenIssue != null and schSchemeInfo.nextOpenIssue != ''">
+			<![CDATA[next_open_issue = #{schSchemeInfo.nextOpenIssue},]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenTime != null">
+			<![CDATA[next_open_time = #{schSchemeInfo.nextOpenTime},]]>
+			</if>
+			<if test="schSchemeInfo.amount1 != null">
+			<![CDATA[amount1 = #{schSchemeInfo.amount1},]]>
+			</if>
+			<if test="schSchemeInfo.amount2 != null">
+			<![CDATA[amount2 = #{schSchemeInfo.amount2},]]>
+			</if>
+			<if test="schSchemeInfo.amount3 != null">
+			<![CDATA[amount3 = #{schSchemeInfo.amount3},]]>
+			</if>
+			<if test="schSchemeInfo.amount4 != null">
+			<![CDATA[amount4 = #{schSchemeInfo.amount4},]]>
+			</if>
+			<if test="schSchemeInfo.amount5 != null">
+			<![CDATA[amount5 = #{schSchemeInfo.amount5},]]>
+			</if>
+			<if test="schSchemeInfo.amount6 != null">
+			<![CDATA[amount6 = #{schSchemeInfo.amount6},]]>
+			</if>
+			<if test="schSchemeInfo.gather != null">
+			<![CDATA[gather = #{schSchemeInfo.gather},]]>
+			</if>
+			<if test="schSchemeInfo.minimum != null">
+			<![CDATA[minimum = #{schSchemeInfo.minimum},]]>
+			</if>
+			<if test="schSchemeInfo.gatherd != null">
+			<![CDATA[gatherd = #{schSchemeInfo.gatherd},]]>
+			</if>
+			<if test="schSchemeInfo.schemeSchedule != null">
+			<![CDATA[scheme_schedule = #{schSchemeInfo.schemeSchedule},]]>
+			</if>
+			<if test="schSchemeInfo.schemeLocked != null">
+			<![CDATA[scheme_locked = #{schSchemeInfo.schemeLocked},]]>
+			</if>
+			<if test="schSchemeInfo.totalIssue != null">
+			<![CDATA[total_issue = #{schSchemeInfo.totalIssue},]]>
+			</if>
+			<if test="schSchemeInfo.expressIssue != null">
+			<![CDATA[express_issue = #{schSchemeInfo.expressIssue},]]>
+			</if>
+			<if test="schSchemeInfo.totalMultiple != null">
+			<![CDATA[total_multiple = #{schSchemeInfo.totalMultiple},]]>
+			</if>
+			<if test="schSchemeInfo.niceName != null and schSchemeInfo.niceName != ''">
+			<![CDATA[nice_name = #{schSchemeInfo.niceName},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.memberScore != null">
+			<![CDATA[AND member_score = #{where.memberScore, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberLevel != null">
+			<![CDATA[AND member_level = #{where.memberLevel, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.scheneNo != null and where.scheneNo != ''">
+			<![CDATA[AND schene_no = #{where.scheneNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeState != null">
+			<![CDATA[AND scheme_state = #{where.schemeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.cancellationFlag != null">
+			<![CDATA[AND cancellation_flag = #{where.cancellationFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.authFlag != null">
+			<![CDATA[AND auth_flag = #{where.authFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.title != null and where.title != ''">
+			<![CDATA[AND title = #{where.title, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.royalty != null">
+			<![CDATA[AND royalty = #{where.royalty, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endIssue != null and where.endIssue != ''">
+			<![CDATA[AND end_issue = #{where.endIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextEndIssue != null and where.nextEndIssue != ''">
+			<![CDATA[AND next_end_issue = #{where.nextEndIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextEndTime != null">
+			<![CDATA[AND next_end_time = #{where.nextEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextOpenIssue != null and where.nextOpenIssue != ''">
+			<![CDATA[AND next_open_issue = #{where.nextOpenIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextOpenTime != null">
+			<![CDATA[AND next_open_time = #{where.nextOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount5 != null">
+			<![CDATA[AND amount5 = #{where.amount5, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount6 != null">
+			<![CDATA[AND amount6 = #{where.amount6, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.gather != null">
+			<![CDATA[AND gather = #{where.gather, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.minimum != null">
+			<![CDATA[AND minimum = #{where.minimum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gatherd != null">
+			<![CDATA[AND gatherd = #{where.gatherd, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeSchedule != null">
+			<![CDATA[AND scheme_schedule = #{where.schemeSchedule, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeLocked != null">
+			<![CDATA[AND scheme_locked = #{where.schemeLocked, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.totalIssue != null">
+			<![CDATA[AND total_issue = #{where.totalIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.expressIssue != null">
+			<![CDATA[AND express_issue = #{where.expressIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.totalMultiple != null">
+			<![CDATA[AND total_multiple = #{where.totalMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_info]]>
+		<set>
+			<if test="schSchemeInfo.updateUser != null">
+			<![CDATA[update_user = #{schSchemeInfo.updateUser},]]>
+			</if>
+			<if test="schSchemeInfo.updateTime != null">
+			<![CDATA[update_time = #{schSchemeInfo.updateTime},]]>
+			</if>
+			<if test="schSchemeInfo.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeInfo.dataVersion},]]>
+			</if>
+			<if test="schSchemeInfo.productId != null">
+			<![CDATA[product_id = #{schSchemeInfo.productId},]]>
+			</if>
+			<if test="schSchemeInfo.memberId != null">
+			<![CDATA[member_id = #{schSchemeInfo.memberId},]]>
+			</if>
+			<if test="schSchemeInfo.memberName != null and schSchemeInfo.memberName != ''">
+			<![CDATA[member_name = #{schSchemeInfo.memberName},]]>
+			</if>
+			<if test="schSchemeInfo.memberScore != null">
+			<![CDATA[member_score = #{schSchemeInfo.memberScore},]]>
+			</if>
+			<if test="schSchemeInfo.memberLevel != null">
+			<![CDATA[member_level = #{schSchemeInfo.memberLevel},]]>
+			</if>
+			<if test="schSchemeInfo.agentId != null">
+			<![CDATA[agent_id = #{schSchemeInfo.agentId},]]>
+			</if>
+			<if test="schSchemeInfo.agentName != null and schSchemeInfo.agentName != ''">
+			<![CDATA[agent_name = #{schSchemeInfo.agentName},]]>
+			</if>
+			<if test="schSchemeInfo.agentFullId != null and schSchemeInfo.agentFullId != ''">
+			<![CDATA[agent_full_id = #{schSchemeInfo.agentFullId},]]>
+			</if>
+			<if test="schSchemeInfo.agentFullName != null and schSchemeInfo.agentFullName != ''">
+			<![CDATA[agent_full_name = #{schSchemeInfo.agentFullName},]]>
+			</if>
+			<if test="schSchemeInfo.scheneNo != null and schSchemeInfo.scheneNo != ''">
+			<![CDATA[schene_no = #{schSchemeInfo.scheneNo},]]>
+			</if>
+			<if test="schSchemeInfo.schemeState != null">
+			<![CDATA[scheme_state = #{schSchemeInfo.schemeState},]]>
+			</if>
+			<if test="schSchemeInfo.cancellationFlag != null">
+			<![CDATA[cancellation_flag = #{schSchemeInfo.cancellationFlag},]]>
+			</if>
+			<if test="schSchemeInfo.authFlag != null">
+			<![CDATA[auth_flag = #{schSchemeInfo.authFlag},]]>
+			</if>
+			<if test="schSchemeInfo.title != null and schSchemeInfo.title != ''">
+			<![CDATA[title = #{schSchemeInfo.title},]]>
+			</if>
+			<if test="schSchemeInfo.royalty != null">
+			<![CDATA[royalty = #{schSchemeInfo.royalty},]]>
+			</if>
+			<if test="schSchemeInfo.endIssue != null and schSchemeInfo.endIssue != ''">
+			<![CDATA[end_issue = #{schSchemeInfo.endIssue},]]>
+			</if>
+			<if test="schSchemeInfo.endTime != null">
+			<![CDATA[end_time = #{schSchemeInfo.endTime},]]>
+			</if>
+			<if test="schSchemeInfo.nextEndIssue != null and schSchemeInfo.nextEndIssue != ''">
+			<![CDATA[next_end_issue = #{schSchemeInfo.nextEndIssue},]]>
+			</if>
+			<if test="schSchemeInfo.nextEndTime != null">
+			<![CDATA[next_end_time = #{schSchemeInfo.nextEndTime},]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenIssue != null and schSchemeInfo.nextOpenIssue != ''">
+			<![CDATA[next_open_issue = #{schSchemeInfo.nextOpenIssue},]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenTime != null">
+			<![CDATA[next_open_time = #{schSchemeInfo.nextOpenTime},]]>
+			</if>
+			<if test="schSchemeInfo.amount1 != null">
+			<![CDATA[amount1 = #{schSchemeInfo.amount1},]]>
+			</if>
+			<if test="schSchemeInfo.amount2 != null">
+			<![CDATA[amount2 = #{schSchemeInfo.amount2},]]>
+			</if>
+			<if test="schSchemeInfo.amount3 != null">
+			<![CDATA[amount3 = #{schSchemeInfo.amount3},]]>
+			</if>
+			<if test="schSchemeInfo.amount4 != null">
+			<![CDATA[amount4 = #{schSchemeInfo.amount4},]]>
+			</if>
+			<if test="schSchemeInfo.amount5 != null">
+			<![CDATA[amount5 = #{schSchemeInfo.amount5},]]>
+			</if>
+			<if test="schSchemeInfo.amount6 != null">
+			<![CDATA[amount6 = #{schSchemeInfo.amount6},]]>
+			</if>
+			<if test="schSchemeInfo.gather != null">
+			<![CDATA[gather = #{schSchemeInfo.gather},]]>
+			</if>
+			<if test="schSchemeInfo.minimum != null">
+			<![CDATA[minimum = #{schSchemeInfo.minimum},]]>
+			</if>
+			<if test="schSchemeInfo.gatherd != null">
+			<![CDATA[gatherd = #{schSchemeInfo.gatherd},]]>
+			</if>
+			<if test="schSchemeInfo.schemeSchedule != null">
+			<![CDATA[scheme_schedule = #{schSchemeInfo.schemeSchedule},]]>
+			</if>
+			<if test="schSchemeInfo.schemeLocked != null">
+			<![CDATA[scheme_locked = #{schSchemeInfo.schemeLocked},]]>
+			</if>
+			<if test="schSchemeInfo.totalIssue != null">
+			<![CDATA[total_issue = #{schSchemeInfo.totalIssue},]]>
+			</if>
+			<if test="schSchemeInfo.expressIssue != null">
+			<![CDATA[express_issue = #{schSchemeInfo.expressIssue},]]>
+			</if>
+			<if test="schSchemeInfo.totalMultiple != null">
+			<![CDATA[total_multiple = #{schSchemeInfo.totalMultiple},]]>
+			</if>
+			<if test="schSchemeInfo.niceName != null and schSchemeInfo.niceName != ''">
+			<![CDATA[nice_name = #{schSchemeInfo.niceName},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="SchSchemeInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.member_score AS member_score,
+			t.member_level AS member_level,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.schene_no AS schene_no,
+			t.scheme_state AS scheme_state,
+			t.cancellation_flag AS cancellation_flag,
+			t.auth_flag AS auth_flag,
+			t.title AS title,
+			t.royalty AS royalty,
+			t.end_issue AS end_issue,
+			t.end_time AS end_time,
+			t.next_end_issue AS next_end_issue,
+			t.next_end_time AS next_end_time,
+			t.next_open_issue AS next_open_issue,
+			t.next_open_time AS next_open_time,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2,
+			t.amount3 AS amount3,
+			t.amount4 AS amount4,
+			t.amount5 AS amount5,
+			t.amount6 AS amount6,
+			t.gather AS gather,
+			t.minimum AS minimum,
+			t.gatherd AS gatherd,
+			t.scheme_schedule AS scheme_schedule,
+			t.scheme_locked AS scheme_locked,
+			t.total_issue AS total_issue,
+			t.express_issue AS express_issue,
+			t.total_multiple AS total_multiple,
+			t.nice_name AS nice_name
+		FROM
+			t_sch_scheme_info t
+		]]>
+		<where>
+			<if test="schSchemeInfo.pkId != null and schSchemeInfo.pkId > 0">
+			<![CDATA[AND t.pk_id = #{schSchemeInfo.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.createUser != null and schSchemeInfo.createUser > 0">
+			<![CDATA[AND t.create_user = #{schSchemeInfo.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.createTime != null">
+			<![CDATA[AND t.create_time = #{schSchemeInfo.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeInfo.updateUser != null and schSchemeInfo.updateUser > 0">
+			<![CDATA[AND t.update_user = #{schSchemeInfo.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.updateTime != null">
+			<![CDATA[AND t.update_time = #{schSchemeInfo.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeInfo.dataVersion != null and schSchemeInfo.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{schSchemeInfo.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.productId != null and schSchemeInfo.productId > 0">
+			<![CDATA[AND t.product_id = #{schSchemeInfo.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.memberId != null and schSchemeInfo.memberId > 0">
+			<![CDATA[AND t.member_id = #{schSchemeInfo.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.memberName != null and schSchemeInfo.memberName != ''">
+			<![CDATA[AND t.member_name = #{schSchemeInfo.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.memberScore != null and schSchemeInfo.memberScore > 0">
+			<![CDATA[AND t.member_score = #{schSchemeInfo.memberScore, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.memberLevel != null and schSchemeInfo.memberLevel > 0">
+			<![CDATA[AND t.member_level = #{schSchemeInfo.memberLevel, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.agentId != null and schSchemeInfo.agentId > 0">
+			<![CDATA[AND t.agent_id = #{schSchemeInfo.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.agentName != null and schSchemeInfo.agentName != ''">
+			<![CDATA[AND t.agent_name = #{schSchemeInfo.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.agentFullId != null and schSchemeInfo.agentFullId != ''">
+			<![CDATA[AND t.agent_full_id = #{schSchemeInfo.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.agentFullName != null and schSchemeInfo.agentFullName != ''">
+			<![CDATA[AND t.agent_full_name = #{schSchemeInfo.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.scheneNo != null and schSchemeInfo.scheneNo != ''">
+			<![CDATA[AND t.schene_no = #{schSchemeInfo.scheneNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.schemeState != null and schSchemeInfo.schemeState > 0">
+			<![CDATA[AND t.scheme_state = #{schSchemeInfo.schemeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.cancellationFlag != null and schSchemeInfo.cancellationFlag > 0">
+			<![CDATA[AND t.cancellation_flag = #{schSchemeInfo.cancellationFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.authFlag != null and schSchemeInfo.authFlag > 0">
+			<![CDATA[AND t.auth_flag = #{schSchemeInfo.authFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.title != null and schSchemeInfo.title != ''">
+			<![CDATA[AND t.title = #{schSchemeInfo.title, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.royalty != null and schSchemeInfo.royalty > 0">
+			<![CDATA[AND t.royalty = #{schSchemeInfo.royalty, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.endIssue != null and schSchemeInfo.endIssue != ''">
+			<![CDATA[AND t.end_issue = #{schSchemeInfo.endIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.endTime != null">
+			<![CDATA[AND t.end_time = #{schSchemeInfo.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeInfo.nextEndIssue != null and schSchemeInfo.nextEndIssue != ''">
+			<![CDATA[AND t.next_end_issue = #{schSchemeInfo.nextEndIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.nextEndTime != null">
+			<![CDATA[AND t.next_end_time = #{schSchemeInfo.nextEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenIssue != null and schSchemeInfo.nextOpenIssue != ''">
+			<![CDATA[AND t.next_open_issue = #{schSchemeInfo.nextOpenIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeInfo.nextOpenTime != null">
+			<![CDATA[AND t.next_open_time = #{schSchemeInfo.nextOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeInfo.amount1 != null and schSchemeInfo.amount1 > 0">
+			<![CDATA[AND t.amount1 = #{schSchemeInfo.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.amount2 != null and schSchemeInfo.amount2 > 0">
+			<![CDATA[AND t.amount2 = #{schSchemeInfo.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.amount3 != null and schSchemeInfo.amount3 > 0">
+			<![CDATA[AND t.amount3 = #{schSchemeInfo.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.amount4 != null and schSchemeInfo.amount4 > 0">
+			<![CDATA[AND t.amount4 = #{schSchemeInfo.amount4, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.amount5 != null and schSchemeInfo.amount5 > 0">
+			<![CDATA[AND t.amount5 = #{schSchemeInfo.amount5, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.amount6 != null and schSchemeInfo.amount6 > 0">
+			<![CDATA[AND t.amount6 = #{schSchemeInfo.amount6, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeInfo.gather != null and schSchemeInfo.gather > 0">
+			<![CDATA[AND t.gather = #{schSchemeInfo.gather, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.minimum != null and schSchemeInfo.minimum > 0">
+			<![CDATA[AND t.minimum = #{schSchemeInfo.minimum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.gatherd != null and schSchemeInfo.gatherd > 0">
+			<![CDATA[AND t.gatherd = #{schSchemeInfo.gatherd, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.schemeSchedule != null and schSchemeInfo.schemeSchedule > 0">
+			<![CDATA[AND t.scheme_schedule = #{schSchemeInfo.schemeSchedule, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.schemeLocked != null and schSchemeInfo.schemeLocked > 0">
+			<![CDATA[AND t.scheme_locked = #{schSchemeInfo.schemeLocked, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeInfo.totalIssue != null and schSchemeInfo.totalIssue > 0">
+			<![CDATA[AND t.total_issue = #{schSchemeInfo.totalIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.expressIssue != null and schSchemeInfo.expressIssue > 0">
+			<![CDATA[AND t.express_issue = #{schSchemeInfo.expressIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.totalMultiple != null and schSchemeInfo.totalMultiple > 0">
+			<![CDATA[AND t.total_multiple = #{schSchemeInfo.totalMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeInfo.niceName != null and schSchemeInfo.niceName != ''">
+			<![CDATA[AND t.nice_name = #{schSchemeInfo.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="SchSchemeInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_id AS product_id,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.member_score AS member_score,
+			t.member_level AS member_level,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.schene_no AS schene_no,
+			t.scheme_state AS scheme_state,
+			t.cancellation_flag AS cancellation_flag,
+			t.auth_flag AS auth_flag,
+			t.title AS title,
+			t.royalty AS royalty,
+			t.end_issue AS end_issue,
+			t.end_time AS end_time,
+			t.next_end_issue AS next_end_issue,
+			t.next_end_time AS next_end_time,
+			t.next_open_issue AS next_open_issue,
+			t.next_open_time AS next_open_time,
+			t.amount1 AS amount1,
+			t.amount2 AS amount2,
+			t.amount3 AS amount3,
+			t.amount4 AS amount4,
+			t.amount5 AS amount5,
+			t.amount6 AS amount6,
+			t.gather AS gather,
+			t.minimum AS minimum,
+			t.gatherd AS gatherd,
+			t.scheme_schedule AS scheme_schedule,
+			t.scheme_locked AS scheme_locked,
+			t.total_issue AS total_issue,
+			t.express_issue AS express_issue,
+			t.total_multiple AS total_multiple,
+			t.nice_name AS nice_name,
+			t.order_no AS order_no
+		FROM
+			t_sch_scheme_info t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{schSchemeInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_info
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.memberScore != null">
+			<![CDATA[AND member_score = #{where.memberScore, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberLevel != null">
+			<![CDATA[AND member_level = #{where.memberLevel, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.scheneNo != null and where.scheneNo != ''">
+			<![CDATA[AND schene_no = #{where.scheneNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeState != null">
+			<![CDATA[AND scheme_state = #{where.schemeState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.cancellationFlag != null">
+			<![CDATA[AND cancellation_flag = #{where.cancellationFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.authFlag != null">
+			<![CDATA[AND auth_flag = #{where.authFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.title != null and where.title != ''">
+			<![CDATA[AND title = #{where.title, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.royalty != null">
+			<![CDATA[AND royalty = #{where.royalty, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endIssue != null and where.endIssue != ''">
+			<![CDATA[AND end_issue = #{where.endIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextEndIssue != null and where.nextEndIssue != ''">
+			<![CDATA[AND next_end_issue = #{where.nextEndIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextEndTime != null">
+			<![CDATA[AND next_end_time = #{where.nextEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.nextOpenIssue != null and where.nextOpenIssue != ''">
+			<![CDATA[AND next_open_issue = #{where.nextOpenIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.nextOpenTime != null">
+			<![CDATA[AND next_open_time = #{where.nextOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.amount1 != null">
+			<![CDATA[AND amount1 = #{where.amount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount2 != null">
+			<![CDATA[AND amount2 = #{where.amount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount3 != null">
+			<![CDATA[AND amount3 = #{where.amount3, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount4 != null">
+			<![CDATA[AND amount4 = #{where.amount4, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount5 != null">
+			<![CDATA[AND amount5 = #{where.amount5, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.amount6 != null">
+			<![CDATA[AND amount6 = #{where.amount6, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.gather != null">
+			<![CDATA[AND gather = #{where.gather, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.minimum != null">
+			<![CDATA[AND minimum = #{where.minimum, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.gatherd != null">
+			<![CDATA[AND gatherd = #{where.gatherd, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeSchedule != null">
+			<![CDATA[AND scheme_schedule = #{where.schemeSchedule, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeLocked != null">
+			<![CDATA[AND scheme_locked = #{where.schemeLocked, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.totalIssue != null">
+			<![CDATA[AND total_issue = #{where.totalIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.expressIssue != null">
+			<![CDATA[AND express_issue = #{where.expressIssue, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.totalMultiple != null">
+			<![CDATA[AND total_multiple = #{where.totalMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.niceName != null and where.niceName != ''">
+			<![CDATA[AND nice_name = #{where.niceName, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_info
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

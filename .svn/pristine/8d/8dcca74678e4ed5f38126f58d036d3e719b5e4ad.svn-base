@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.api.repository.OrderManageMapper">
+    <resultMap id="OrderManage" type="com.fun.api.domain.OrderManage">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="goodsId" javaType="Integer" column="goods_id" jdbcType="INTEGER"/>
+        <result property="gameType" javaType="Integer" column="game_type" jdbcType="INTEGER"/>
+        <result property="orderState" javaType="Integer" column="order_state" jdbcType="INTEGER"/>
+        <result property="orderNo" javaType="String" column="order_no" jdbcType="VARCHAR"/>
+        <result property="logisticsNo" javaType="String" column="logistics_no" jdbcType="VARCHAR"/>
+        <result property="buyNum" javaType="Integer" column="buy_num" jdbcType="INTEGER"/>
+        <result property="payMoney" javaType="Double" column="pay_money" jdbcType="DECIMAL"/>
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR"/>
+        <result property="goodSrc" javaType="String" column="good_src" jdbcType="VARCHAR"/>
+        <result property="catId" javaType="Integer" column="cat_id" jdbcType="INTEGER"/>
+        <result property="detail" javaType="String" column="detail" jdbcType="VARCHAR"/>
+        <result property="price" javaType="Double" column="price" jdbcType="DECIMAL"/>
+        <result property="coin" javaType="Double" column="coin" jdbcType="DECIMAL"/>
+        <result property="isIntegral" javaType="Integer" column="is_integral" jdbcType="INTEGER"/>
+        <result property="isPromotion" javaType="Integer" column="is_promotion" jdbcType="INTEGER"/>
+        <result property="goodSourceId" javaType="Integer" column="good_source_id" jdbcType="INTEGER"/>
+        <result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR"/>
+        <result property="receivingAddress" javaType="String" column="receiving_Address" jdbcType="VARCHAR"/>
+        <result property="receivingName" javaType="String" column="receiving_name" jdbcType="VARCHAR"/>
+        <result property="receivingMobile" javaType="String" column="receiving_mobile" jdbcType="VARCHAR"/>
+        <result property="logisticsCompany" javaType="String" column="logistics_company" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+        <result property="winMoney" javaType="Double" column="win_money" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <!--发货订单列表-->
+    <select id="selectGoodsOrderList" parameterType="Map" resultMap="OrderManage">
+        <![CDATA[
+        SELECT * FROM (t_goods_order_info t
+        LEFT JOIN t_mem_user_info t2 on t.create_user = t2.pk_id)
+        LEFT JOIN t_goods_info t3
+        ON t.goods_id = t3.pk_id
+        LEFT JOIN t_logistics_info t4
+        on t.pk_id = t4.order_id
+        ]]>
+        <where>
+            <![CDATA[AND t.is_integral = 0]]>
+            <if test="orderManage.pkId != null">
+                <![CDATA[AND t.pk_id = #{orderManage.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="orderManage.createUser != null">
+                <![CDATA[AND t.create_user = #{orderManage.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="orderManage.orderState != null">
+                <![CDATA[AND t.order_state = #{orderManage.orderState, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="orderManage.loginName != null">
+                <![CDATA[AND t2.login_name = #{orderManage.loginName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="orderManage.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{orderManage.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--积分订单-->
+    <select id="selectIsIntegralOrderList" parameterType="Map" resultMap="OrderManage">
+        <![CDATA[
+        SELECT * FROM (t_goods_order_info t
+        LEFT JOIN t_mem_user_info t2 on t.create_user = t2.pk_id)
+        LEFT JOIN t_goods_info t3
+        ON t.goods_id = t3.pk_id
+        LEFT JOIN t_logistics_info t4
+        on t.pk_id = t4.order_id
+        ]]>
+        <where>
+            <![CDATA[AND t.is_integral = 1]]>
+            <if test="orderManage.pkId != null">
+                <![CDATA[AND t.pk_id = #{orderManage.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="orderManage.createUser != null">
+                <![CDATA[AND t.create_user = #{orderManage.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="orderManage.orderState != null">
+                <![CDATA[AND t.order_state = #{orderManage.orderState, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="orderManage.loginName != null">
+                <![CDATA[AND t2.login_name = #{orderManage.loginName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="orderManage.isIntegral != null">
+                <![CDATA[AND t.is_integral = #{orderManage.isIntegral, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--促销管理-大吉大利-->
+    <select id="promotionManageDjdlList" parameterType="Map" resultMap="OrderManage">
+        <![CDATA[
+        SELECT t.*,t2.login_name,t3.price FROM (t_goods_order_info t
+        LEFT JOIN t_mem_user_info t2 on t.create_user = t2.pk_id)
+        LEFT JOIN t_goods_info t3 ON t.goods_id = t3.pk_id
+        WHERE 1=1
+        AND t.game_type = 1
+        ]]>
+        <if test="orderManage.pkId != null">
+            <![CDATA[AND t.pk_id = #{orderManage.pkId, jdbcType=INTEGER}]]>
+        </if>
+        <if test="orderManage.loginName != null">
+            <![CDATA[AND t2.login_name = #{orderManage.loginName, jdbcType=VARCHAR}]]>
+        </if>
+        <if test="orderManage.orderState != null">
+            <![CDATA[AND t.order_state = #{orderManage.orderState, jdbcType=INTEGER}]]>
+        </if>
+        <if test="where.beginDate != null">
+            <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="where.endDate != null">
+            <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+
+    <!--促销管理-抢红包-->
+    <select id="promotionManageQhbList" parameterType="Map" resultMap="OrderManage">
+        <![CDATA[
+          SELECT t.*,t2.login_name,t3.price FROM (t_goods_order_info t
+        LEFT JOIN t_mem_user_info t2 on t.create_user = t2.pk_id)
+        LEFT JOIN t_goods_info t3 ON t.goods_id = t3.pk_id
+        WHERE 1=1
+        AND t.game_type = 2
+        ]]>
+        <if test="orderManage.pkId != null">
+            <![CDATA[AND t.pk_id = #{orderManage.pkId, jdbcType=INTEGER}]]>
+        </if>
+        <if test="orderManage.loginName != null">
+            <![CDATA[AND t2.login_name = #{orderManage.loginName, jdbcType=VARCHAR}]]>
+        </if>
+        <if test="orderManage.orderState != null">
+            <![CDATA[AND t.order_state = #{orderManage.orderState, jdbcType=INTEGER}]]>
+        </if>
+        <if test="where.beginDate != null">
+            <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="where.endDate != null">
+            <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+        </if>
+
+    </select>
+</mapper>

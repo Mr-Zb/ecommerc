@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.ExtensionInfoMapper">
+    <resultMap id="ExtensionInfo" type="com.fun.client.domain.ExtensionInfo">
+        <id property="pkId" javaType="Long" column="pk_id" jdbcType="BIGINT"/>
+        <result property="userId" javaType="Integer" column="user_id" jdbcType="BIGINT"/>
+        <result property="userName" javaType="String" column="user_name" jdbcType="VARCHAR"/>
+        <result property="promotersId" javaType="Integer" column="promoters_id" jdbcType="BIGINT"/>
+        <result property="promotersName" javaType="String" column="promoters_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map">
+        <![CDATA[
+        INSERT INTO t_extension_info (
+			pk_id,
+			user_id,
+			user_name,
+			promoters_id,
+			promoters_name
+		)
+		VALUES
+			(
+				#{extensionInfo.pkId, jdbcType = BIGINT},
+				#{extensionInfo.userId,jdbcType = BIGINT},
+				#{extensionInfo.userName,jdbcType = VARCHAR},
+				#{extensionInfo.promotersId,jdbcType = BIGINT},
+				#{extensionInfo.promotersName,jdbcType = VARCHAR}
+			)
+ 
+        ]]>
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update" parameterType="Map">
+        <![CDATA[ UPDATE t_extension_info]]>
+        <set>
+            <![CDATA[user_id = #{extensionInfo.userId},]]>
+            <![CDATA[user_name = #{extensionInfo.userName},]]>
+            <![CDATA[promoters_id = #{extensionInfo.promotersId},]]>
+            <![CDATA[promoters_name = #{extensionInfo.promotersName},]]>
+        </set>
+        <where>
+            <if test="where.pkId != null">
+                <![CDATA[AND pk_id = #{where.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="where.userId != null">
+                <![CDATA[AND user_id = #{where.userId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="where.userName != null and where.userName != ''">
+                <![CDATA[AND user_name = #{where.userName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.promotersId != null">
+                <![CDATA[AND promoters_id = #{where.promotersId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="where.promotersName != null and where.promotersName != '' ">
+                <![CDATA[AND promoters_name = #{where.promotersName, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据主键更新 -->
+    <update id="updateById" parameterType="Map">
+        <![CDATA[ UPDATE t_extension_info]]>
+        <set>
+            <![CDATA[user_id = #{extensionInfo.userId},]]
+            <![CDATA[user_name = #{extensionInfo.userName},]]>
+            <![CDATA[promoters_id = #{extensionInfo.promotersId},]]>
+            <![CDATA[promoters_name = #{extensionInfo.promotersName},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{extensionInfoId, jdbcType=BIGINT}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </update>
+
+    <!-- 查询列表 -->
+    <select id="select" parameterType="Map" resultMap="ExtensionInfo">
+        <![CDATA[
+        SELECT
+            t.pk_id AS pk_id,
+			t.user_id AS user_id,
+			t.user_name AS user_name,
+			t.promoters_id AS promoters_id,
+			t.promoters_name AS promoters_name
+			FROM
+			t_extension_info t
+        ]]>
+        <where>
+            <if test="extensionInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{extensionInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="extensionInfo.userId != null">
+                <![CDATA[AND t.user_id = #{extensionInfo.userId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="extensionInfo.userName != null">
+                <![CDATA[AND t.user_name = #{extensionInfo.userName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="extensionInfo.promotersId != null">
+                <![CDATA[AND t.promoters_id = #{extensionInfo.promotersId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="extensionInfo.promotersName != null">
+                <![CDATA[AND t.promoters_name = #{extensionInfo.promotersName, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--根据ID查询-->
+    <select id="selectById" parameterType="Map" resultMap="ExtensionInfo">
+        <![CDATA[
+        SELECT
+            t.pk_id AS pk_id,
+			t.user_id AS user_id,
+			t.user_name AS user_name,
+			t.promoters_id AS promoters_id,
+			t.promoters_name AS promoters_name
+			FROM
+			t_extension_info t
+        ]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{extensionInfoId, jdbcType=BIGINT}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+
+
+</mapper>

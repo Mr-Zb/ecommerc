@@ -1,0 +1,128 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.*;
+import com.fun.client.repository.GoodsOrderInfoMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class GoodsOrderInfoService extends BaseService {
+    private @Autowired
+    GoodsOrderInfoMapper goodsOrderInfoMapper;
+    private @Autowired
+    GoodsInfoService goodsInfoService;
+    private @Autowired
+    MemUserInfoService memUserInfoService;
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    @Async
+    public Integer add(GoodsOrderInfo goodsOrderInfo) throws BusinessException {
+        return this.goodsOrderInfoMapper.addGoodsOrderInfo(goodsOrderInfo);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    public Pagination<GoodsOrderInfo> select(Integer userId, QueryDto queryDto) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<GoodsOrderInfo> page = this.goodsOrderInfoMapper.select(userId, queryDto);
+        return new Pagination<GoodsOrderInfo>(page.getTotal(), page.getResult());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    public GoodsOrderInfo selectGoodsInfo(String orderNo, Integer userId) {
+        return this.goodsOrderInfoMapper.selectGoodsInfo(orderNo, userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    @Async
+    public Integer updateOrderState(String orderNo, Integer orderState,Integer updateUser) throws BusinessException {
+        Date date = new Date();
+        return this.goodsOrderInfoMapper.updateOrderState(orderNo, orderState,date,updateUser);
+    }
+
+    public List<NewPromotion> selectNewPromotion() {
+        return goodsOrderInfoMapper.selectNewPromotion();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    public Integer updateStateAndResult(String orderNo, Integer orderState, Integer result) throws BusinessException {
+        return this.goodsOrderInfoMapper.updateStateAndResult(orderNo, orderState, result);
+    }
+
+    public Double selectPromotionMoney(Integer userId) {
+        return this.goodsOrderInfoMapper.selectPromotionMoney(userId);
+    }
+
+    public Double selectRedPacketMoney(Integer userId) {
+        return this.goodsOrderInfoMapper.selectRedPacketMoney(userId);
+    }
+
+    public List<GoodsOrderInfo> promotionWinList(QueryDto queryDto) {
+        return this.goodsOrderInfoMapper.promotionWinList(queryDto);
+    }
+
+    public List<GoodsOrderInfo> redEnvelopeList(QueryDto queryDto) {
+        return this.goodsOrderInfoMapper.redEnvelopeList(queryDto);
+    }
+
+    public Pagination<FinManage> userPromotionList(FinManage finManage, QueryDto queryDto) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<FinManage> page = this.goodsOrderInfoMapper.userPromotionList(finManage, queryDto);
+//        for (int i = 0; i < page.getResult().size(); i++) {
+//            if (page.getResult().get(i).getGameType() == 1 && page.getResult().get(i).getPromotionType() == page.getResult().get(i).getResult()) {//
+//                GoodsInfo goodsInfo = this.goodsInfoService.selectById(page.getResult().get(i).getGoodSourceId());
+//                MemUserInfo memUserInfo = this.memUserInfoService.selectById(page.getResult().get(i).getCreateUser());//用户
+//                if (memUserInfo.getAgentId().intValue() == 0) {
+//                    page.getResult().get(i).setPrice(goodsInfo.getPrice() * 1.9);
+//                } else {
+//                    MemUserInfo memUserInfo1 = this.memUserInfoService.selectById(memUserInfo.getAgentId().intValue());
+//                    page.getResult().get(i).setPrice(goodsInfo.getPrice() * memUserInfo1.getExtension());
+//                }
+//            }
+//            if (page.getResult().get(i).getGameType() == 2 && page.getResult().get(i).getResult() == 3) {
+//                GoodsInfo goodsInfo = this.goodsInfoService.selectById(page.getResult().get(i).getGoodSourceId());
+//                MemUserInfo memUserInfo = this.memUserInfoService.selectById(page.getResult().get(i).getCreateUser());//用户
+//                if (memUserInfo.getAgentId().intValue() == 0) {
+//                    page.getResult().get(i).setPrice(goodsInfo.getPrice() * 1.9);
+//                } else {
+//                    MemUserInfo memUserInfo1 = this.memUserInfoService.selectById(memUserInfo.getAgentId().intValue());
+//                    page.getResult().get(i).setPrice(goodsInfo.getPrice() * memUserInfo1.getExtension());
+//                }
+//            }
+//            else {
+//                page.getResult().get(i).setPrice(0.0);
+//            }
+//        }
+        return new Pagination<>(page.getTotal(), page.getResult());
+    }
+    public Integer selectOrderByGoodId(Integer goodId){
+        return goodsOrderInfoMapper.selectOrderByGoodId(goodId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    public Integer updatePickState(Integer pickState,Integer pkId,Integer updateUser,String remark){
+        return this.goodsOrderInfoMapper.updatePickState(pickState,pkId,updateUser,remark);
+    }
+
+    public GoodsOrderInfo selectGoodsOrderById(Integer pkId){
+        return this.goodsOrderInfoMapper.selectGoodsOrderById(pkId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
+    @Async
+    public Integer updateGoods(double payMoney,Integer goodsId,Integer pkId){
+        return this.goodsOrderInfoMapper.updateGoods(payMoney,goodsId,pkId);
+    }
+}
+

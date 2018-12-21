@@ -1,0 +1,21 @@
+package com.fun.admin.controller;
+
+import com.fun.client.service.MemUserInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class SysMemInfo extends BaseController {
+    @Autowired
+    private MemUserInfoService memUserInfoService;
+
+    @RequestMapping(path = {"show-sys-mem-list"}, method = {RequestMethod.POST})
+    public AjaxReturn showMemList(){
+        return null;
+    }
+}

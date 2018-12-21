@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SchSchemeIssueMapper">
+	<resultMap id="SchSchemeIssue" type="com.fun.le.entities.SchSchemeIssue">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="schemeId" javaType="Integer" column="scheme_id" jdbcType="INTEGER" />
+		<result property="issueState" javaType="Integer" column="issue_state" jdbcType="TINYINT" />
+		<result property="openState" javaType="Integer" column="open_state" jdbcType="TINYINT" />
+		<result property="endTime" javaType="Date" column="end_time" jdbcType="TIMESTAMP" />
+		<result property="openTime" javaType="Date" column="open_time" jdbcType="TIMESTAMP" />
+		<result property="openCode" javaType="String" column="open_code" jdbcType="CHAR" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="schemeIssue" javaType="String" column="scheme_issue" jdbcType="CHAR" />
+		<result property="schemeMultiple" javaType="Integer" column="scheme_multiple" jdbcType="INTEGER" />
+		<result property="schemeAmount1" javaType="Double" column="scheme_amount1" jdbcType="DECIMAL" />
+		<result property="schemeAmount2" javaType="Double" column="scheme_amount2" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="schSchemeIssue.pkId">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_issue (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			issue_state,
+			open_state,
+			end_time,
+			open_time,
+			open_code,
+			product_id,
+			scheme_issue,
+			scheme_multiple,
+			scheme_amount1,
+			scheme_amount2
+		)
+		VALUES
+			(
+				#{schSchemeIssue.pkId, jdbcType = INTEGER},
+				#{schSchemeIssue.createUser, jdbcType = INTEGER},
+				#{schSchemeIssue.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.updateUser, jdbcType = INTEGER},
+				#{schSchemeIssue.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.dataVersion, jdbcType = TINYINT},
+				#{schSchemeIssue.schemeId, jdbcType = INTEGER},
+				#{schSchemeIssue.issueState, jdbcType = TINYINT},
+				#{schSchemeIssue.openState, jdbcType = TINYINT},
+				#{schSchemeIssue.endTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.openTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.openCode, jdbcType = CHAR},
+				#{schSchemeIssue.productId, jdbcType = INTEGER},
+				#{schSchemeIssue.schemeIssue, jdbcType = CHAR},
+				#{schSchemeIssue.schemeMultiple, jdbcType = INTEGER},
+				#{schSchemeIssue.schemeAmount1, jdbcType = DECIMAL},
+				#{schSchemeIssue.schemeAmount2, jdbcType = DECIMAL}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_sch_scheme_issue (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			scheme_id,
+			issue_state,
+			open_state,
+			end_time,
+			open_time,
+			open_code,
+			product_id,
+			scheme_issue,
+			scheme_multiple,
+			scheme_amount1,
+			scheme_amount2
+		)
+		]]>
+		<foreach collection="schSchemeIssues" item="schSchemeIssue" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{schSchemeIssue.pkId, jdbcType = INTEGER},
+				#{schSchemeIssue.createUser, jdbcType = INTEGER},
+				#{schSchemeIssue.createTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.updateUser, jdbcType = INTEGER},
+				#{schSchemeIssue.updateTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.dataVersion, jdbcType = TINYINT},
+				#{schSchemeIssue.schemeId, jdbcType = INTEGER},
+				#{schSchemeIssue.issueState, jdbcType = TINYINT},
+				#{schSchemeIssue.openState, jdbcType = TINYINT},
+				#{schSchemeIssue.endTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.openTime, jdbcType = TIMESTAMP},
+				#{schSchemeIssue.openCode, jdbcType = CHAR},
+				#{schSchemeIssue.productId, jdbcType = INTEGER},
+				#{schSchemeIssue.schemeIssue, jdbcType = CHAR},
+				#{schSchemeIssue.schemeMultiple, jdbcType = INTEGER},
+				#{schSchemeIssue.schemeAmount1, jdbcType = DECIMAL},
+				#{schSchemeIssue.schemeAmount2, jdbcType = DECIMAL}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_issue]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeIssue.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeIssue.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeIssue.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeIssue.schemeId},]]>
+		<![CDATA[issue_state = #{schSchemeIssue.issueState},]]>
+		<![CDATA[open_state = #{schSchemeIssue.openState},]]>
+		<![CDATA[end_time = #{schSchemeIssue.endTime},]]>
+		<![CDATA[open_time = #{schSchemeIssue.openTime},]]>
+		<![CDATA[open_code = #{schSchemeIssue.openCode},]]>
+		<![CDATA[product_id = #{schSchemeIssue.productId},]]>
+		<![CDATA[scheme_issue = #{schSchemeIssue.schemeIssue},]]>
+		<![CDATA[scheme_multiple = #{schSchemeIssue.schemeMultiple},]]>
+		<![CDATA[scheme_amount1 = #{schSchemeIssue.schemeAmount1},]]>
+		<![CDATA[scheme_amount2 = #{schSchemeIssue.schemeAmount2},]]>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.issueState != null">
+			<![CDATA[AND issue_state = #{where.issueState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openState != null">
+			<![CDATA[AND open_state = #{where.openState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeIssue != null and where.schemeIssue != ''">
+			<![CDATA[AND scheme_issue = #{where.schemeIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeMultiple != null">
+			<![CDATA[AND scheme_multiple = #{where.schemeMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeAmount1 != null">
+			<![CDATA[AND scheme_amount1 = #{where.schemeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.schemeAmount2 != null">
+			<![CDATA[AND scheme_amount2 = #{where.schemeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_issue]]>
+		<set>
+		<![CDATA[update_user = #{schSchemeIssue.updateUser},]]>
+		<![CDATA[update_time = #{schSchemeIssue.updateTime},]]>
+		<![CDATA[data_version = #{schSchemeIssue.dataVersion},]]>
+		<![CDATA[scheme_id = #{schSchemeIssue.schemeId},]]>
+		<![CDATA[issue_state = #{schSchemeIssue.issueState},]]>
+		<![CDATA[open_state = #{schSchemeIssue.openState},]]>
+		<![CDATA[end_time = #{schSchemeIssue.endTime},]]>
+		<![CDATA[open_time = #{schSchemeIssue.openTime},]]>
+		<![CDATA[open_code = #{schSchemeIssue.openCode},]]>
+		<![CDATA[product_id = #{schSchemeIssue.productId},]]>
+		<![CDATA[scheme_issue = #{schSchemeIssue.schemeIssue},]]>
+		<![CDATA[scheme_multiple = #{schSchemeIssue.schemeMultiple},]]>
+		<![CDATA[scheme_amount1 = #{schSchemeIssue.schemeAmount1},]]>
+		<![CDATA[scheme_amount2 = #{schSchemeIssue.schemeAmount2},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeIssueId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_issue]]>
+		<set>
+			<if test="schSchemeIssue.updateUser != null">
+			<![CDATA[update_user = #{schSchemeIssue.updateUser},]]>
+			</if>
+			<if test="schSchemeIssue.updateTime != null">
+			<![CDATA[update_time = #{schSchemeIssue.updateTime},]]>
+			</if>
+			<if test="schSchemeIssue.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeIssue.dataVersion},]]>
+			</if>
+			<if test="schSchemeIssue.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeIssue.schemeId},]]>
+			</if>
+			<if test="schSchemeIssue.issueState != null">
+			<![CDATA[issue_state = #{schSchemeIssue.issueState},]]>
+			</if>
+			<if test="schSchemeIssue.openState != null">
+			<![CDATA[open_state = #{schSchemeIssue.openState},]]>
+			</if>
+			<if test="schSchemeIssue.endTime != null">
+			<![CDATA[end_time = #{schSchemeIssue.endTime},]]>
+			</if>
+			<if test="schSchemeIssue.openTime != null">
+			<![CDATA[open_time = #{schSchemeIssue.openTime},]]>
+			</if>
+			<if test="schSchemeIssue.openCode != null and schSchemeIssue.openCode != ''">
+			<![CDATA[open_code = #{schSchemeIssue.openCode},]]>
+			</if>
+			<if test="schSchemeIssue.productId != null">
+			<![CDATA[product_id = #{schSchemeIssue.productId},]]>
+			</if>
+			<if test="schSchemeIssue.schemeIssue != null and schSchemeIssue.schemeIssue != ''">
+			<![CDATA[scheme_issue = #{schSchemeIssue.schemeIssue},]]>
+			</if>
+			<if test="schSchemeIssue.schemeMultiple != null">
+			<![CDATA[scheme_multiple = #{schSchemeIssue.schemeMultiple},]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount1 != null">
+			<![CDATA[scheme_amount1 = #{schSchemeIssue.schemeAmount1},]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount2 != null">
+			<![CDATA[scheme_amount2 = #{schSchemeIssue.schemeAmount2},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.issueState != null">
+			<![CDATA[AND issue_state = #{where.issueState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openState != null">
+			<![CDATA[AND open_state = #{where.openState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeIssue != null and where.schemeIssue != ''">
+			<![CDATA[AND scheme_issue = #{where.schemeIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeMultiple != null">
+			<![CDATA[AND scheme_multiple = #{where.schemeMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeAmount1 != null">
+			<![CDATA[AND scheme_amount1 = #{where.schemeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.schemeAmount2 != null">
+			<![CDATA[AND scheme_amount2 = #{where.schemeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_sch_scheme_issue]]>
+		<set>
+			<if test="schSchemeIssue.updateUser != null">
+			<![CDATA[update_user = #{schSchemeIssue.updateUser},]]>
+			</if>
+			<if test="schSchemeIssue.updateTime != null">
+			<![CDATA[update_time = #{schSchemeIssue.updateTime},]]>
+			</if>
+			<if test="schSchemeIssue.dataVersion != null">
+			<![CDATA[data_version = #{schSchemeIssue.dataVersion},]]>
+			</if>
+			<if test="schSchemeIssue.schemeId != null">
+			<![CDATA[scheme_id = #{schSchemeIssue.schemeId},]]>
+			</if>
+			<if test="schSchemeIssue.issueState != null">
+			<![CDATA[issue_state = #{schSchemeIssue.issueState},]]>
+			</if>
+			<if test="schSchemeIssue.openState != null">
+			<![CDATA[open_state = #{schSchemeIssue.openState},]]>
+			</if>
+			<if test="schSchemeIssue.endTime != null">
+			<![CDATA[end_time = #{schSchemeIssue.endTime},]]>
+			</if>
+			<if test="schSchemeIssue.openTime != null">
+			<![CDATA[open_time = #{schSchemeIssue.openTime},]]>
+			</if>
+			<if test="schSchemeIssue.openCode != null and schSchemeIssue.openCode != ''">
+			<![CDATA[open_code = #{schSchemeIssue.openCode},]]>
+			</if>
+			<if test="schSchemeIssue.productId != null">
+			<![CDATA[product_id = #{schSchemeIssue.productId},]]>
+			</if>
+			<if test="schSchemeIssue.schemeIssue != null and schSchemeIssue.schemeIssue != ''">
+			<![CDATA[scheme_issue = #{schSchemeIssue.schemeIssue},]]>
+			</if>
+			<if test="schSchemeIssue.schemeMultiple != null">
+			<![CDATA[scheme_multiple = #{schSchemeIssue.schemeMultiple},]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount1 != null">
+			<![CDATA[scheme_amount1 = #{schSchemeIssue.schemeAmount1},]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount2 != null">
+			<![CDATA[scheme_amount2 = #{schSchemeIssue.schemeAmount2},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeIssueId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="SchSchemeIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.issue_state AS issue_state,
+			t.open_state AS open_state,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code,
+			t.product_id AS product_id,
+			t.scheme_issue AS scheme_issue,
+			t.scheme_multiple AS scheme_multiple,
+			t.scheme_amount1 AS scheme_amount1,
+			t.scheme_amount2 AS scheme_amount2
+		FROM
+			t_sch_scheme_issue t
+		]]>
+		<where>
+			<if test="schSchemeIssue.pkId != null and schSchemeIssue.pkId > 0">
+			<![CDATA[AND t.pk_id = #{schSchemeIssue.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.createUser != null and schSchemeIssue.createUser > 0">
+			<![CDATA[AND t.create_user = #{schSchemeIssue.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.createTime != null">
+			<![CDATA[AND t.create_time = #{schSchemeIssue.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeIssue.updateUser != null and schSchemeIssue.updateUser > 0">
+			<![CDATA[AND t.update_user = #{schSchemeIssue.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.updateTime != null">
+			<![CDATA[AND t.update_time = #{schSchemeIssue.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeIssue.dataVersion != null and schSchemeIssue.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{schSchemeIssue.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeIssue.schemeId != null and schSchemeIssue.schemeId > 0">
+			<![CDATA[AND t.scheme_id = #{schSchemeIssue.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.issueState != null and schSchemeIssue.issueState > 0">
+			<![CDATA[AND t.issue_state = #{schSchemeIssue.issueState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeIssue.openState != null and schSchemeIssue.openState > 0">
+			<![CDATA[AND t.open_state = #{schSchemeIssue.openState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="schSchemeIssue.endTime != null">
+			<![CDATA[AND t.end_time = #{schSchemeIssue.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeIssue.openTime != null">
+			<![CDATA[AND t.open_time = #{schSchemeIssue.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="schSchemeIssue.openCode != null and schSchemeIssue.openCode != ''">
+			<![CDATA[AND t.open_code = #{schSchemeIssue.openCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeIssue.productId != null and schSchemeIssue.productId > 0">
+			<![CDATA[AND t.product_id = #{schSchemeIssue.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.schemeIssue != null and schSchemeIssue.schemeIssue != ''">
+			<![CDATA[AND t.scheme_issue = #{schSchemeIssue.schemeIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="schSchemeIssue.schemeMultiple != null and schSchemeIssue.schemeMultiple > 0">
+			<![CDATA[AND t.scheme_multiple = #{schSchemeIssue.schemeMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount1 != null and schSchemeIssue.schemeAmount1 > 0">
+			<![CDATA[AND t.scheme_amount1 = #{schSchemeIssue.schemeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="schSchemeIssue.schemeAmount2 != null and schSchemeIssue.schemeAmount2 > 0">
+			<![CDATA[AND t.scheme_amount2 = #{schSchemeIssue.schemeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="SchSchemeIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.scheme_id AS scheme_id,
+			t.issue_state AS issue_state,
+			t.open_state AS open_state,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code,
+			t.product_id AS product_id,
+			t.scheme_issue AS scheme_issue,
+			t.scheme_multiple AS scheme_multiple,
+			t.scheme_amount1 AS scheme_amount1,
+			t.scheme_amount2 AS scheme_amount2
+		FROM
+			t_sch_scheme_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{schSchemeIssueId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 查询获取号码的期数 -->
+	<select id="listIssues" parameterType="Map" resultMap="SchSchemeIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.scheme_issue AS scheme_issue,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code
+		FROM
+			t_sch_scheme_issue t
+		]]>
+		<where>
+			<!--<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>-->
+			<if test="where.beginDate != null">
+				<![CDATA[AND t.end_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endDate != null">
+				<![CDATA[AND t.end_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+			</if>
+		</where>
+		<![CDATA[ORDER BY t.pk_id ASC]]>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_issue
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.schemeId != null">
+			<![CDATA[AND scheme_id = #{where.schemeId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.issueState != null">
+			<![CDATA[AND issue_state = #{where.issueState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.openState != null">
+			<![CDATA[AND open_state = #{where.openState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.endTime != null">
+			<![CDATA[AND end_time = #{where.endTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openTime != null">
+			<![CDATA[AND open_time = #{where.openTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.openCode != null and where.openCode != ''">
+			<![CDATA[AND open_code = #{where.openCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productId != null">
+			<![CDATA[AND product_id = #{where.productId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeIssue != null and where.schemeIssue != ''">
+			<![CDATA[AND scheme_issue = #{where.schemeIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.schemeMultiple != null">
+			<![CDATA[AND scheme_multiple = #{where.schemeMultiple, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.schemeAmount1 != null">
+			<![CDATA[AND scheme_amount1 = #{where.schemeAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.schemeAmount2 != null">
+			<![CDATA[AND scheme_amount2 = #{where.schemeAmount2, jdbcType=DECIMAL}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_sch_scheme_issue
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{schSchemeIssueId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

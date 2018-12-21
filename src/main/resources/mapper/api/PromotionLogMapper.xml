@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.PromotionLogMapper">
+    <resultMap id="PromotionLog" type="com.fun.client.domain.PromotionLog">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+        <result property="userId" javaType="Integer" column="user_id" jdbcType="INTEGER" />
+        <result property="gameType" javaType="Integer" column="game_type" jdbcType="INTEGER" />
+        <result property="goodName" javaType="String" column="good_name" jdbcType="VARCHAR" />
+        <result property="promotionType" javaType="Integer" column="promotion_type" jdbcType="INTEGER" />
+        <result property="upgradeState" javaType="Integer" column="upgrade_state" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!--新增促销记录-->
+    <insert id="addPromotionLog" parameterType="Map">
+        <![CDATA[
+        INSERT INTO t_promotion_log(
+        pk_id,
+        user_id,
+        game_type,
+        good_name,
+        promotion_type,
+        upgrade_state
+        )
+        VALUE
+        (
+        #{promotionLog.pkId, jdbcType = INTEGER},
+        #{promotionLog.userId,jdbcType = INTEGER},
+        #{promotionLog.gameType,jdbcType = INTEGER},
+        #{promotionLog.goodName,jdbcType = VARCHAR},
+        #{promotionLog.promotionType,jdbcType = INTEGER},
+        #{promotionLog.upgradeState,jdbcType = INTEGER}
+        )
+        ]]>
+    </insert>
+
+    <!--查询促销记录-->
+    <select id="promotionLogList" parameterType="Map" resultMap="PromotionLog" >
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_promotion_log t
+		]]>
+        <where>
+            <if test="promotionLog.pkId != null" >
+            <![CDATA[AND t.pk_id = #{promotionLog.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="promotionLog.userId != null" >
+                <![CDATA[AND t.user_id = #{promotionLog.userId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="promotionLog.gameType != null" >
+                <![CDATA[AND t.game_type = #{promotionLog.gameType, jdbcType=BIGINT}]]>
+            </if>
+            <if test="promotionLog.goodName != null and promotionLog.goodName != ''" >
+                <![CDATA[AND t.good_name = #{promotionLog.goodName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="promotionLog.promotionType != null" >
+                <![CDATA[AND t.promotion_type = #{promotionLog.promotionType, jdbcType=BIGINT}]]>
+            </if>
+            <if test="promotionLog.upgradeState != null" >
+                <![CDATA[AND t.upgrade_state = #{promotionLog.upgradeState, jdbcType=BIGINT}]]>
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+
+

@@ -1,0 +1,81 @@
+package com.fun.client.controller;
+
+import com.fun.client.domain.FinRechargeOption;
+import com.fun.client.service.FinRechargeOptionService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.web.controller.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.Date;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class FinRechargeOptionController extends BaseController {
+
+    private @Autowired
+    FinRechargeOptionService finRechargeOptionService;
+
+    /**
+     * 充值金额
+     * @param finRechargeOption
+     * @return
+     * @throws Exception
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"/fin-recharge-option-add"}, method = {RequestMethod.POST})
+    public AjaxReturn insert(FinRechargeOption finRechargeOption) throws Exception {
+        int userId = getAuthentication().intValue();
+        //int userId = 1;
+        finRechargeOption.setCreateTime(new Date());
+        finRechargeOption.setCreateUser(userId);
+        finRechargeOption.setUpdateTime(new Date());
+        finRechargeOption.setUpdateUser(userId);
+        finRechargeOption.setDataVersion(1);
+        this.finRechargeOptionService.insert(finRechargeOption);
+        return new AjaxReturn(200,null,null);
+    }
+
+    @ApiIgnore
+    @RequestMapping(path = {"/fin-recharge-option-update"}, method = {RequestMethod.POST})
+    public AjaxReturn update(FinRechargeOption finRechargeOption) throws Exception {
+         int userId = getAuthentication().intValue();
+        //int userId = 1;
+        finRechargeOption.setCreateTime(new Date());
+        finRechargeOption.setCreateUser(userId);
+        finRechargeOption.setUpdateTime(new Date());
+        finRechargeOption.setUpdateUser(userId);
+        finRechargeOption.setDataVersion(1);
+       this.finRechargeOptionService.update(finRechargeOption);
+       return new AjaxReturn(200,"修改成功",null);
+    }
+
+    /**
+     * 查询充值金额选项列表
+     * @param finRechargeOption
+     * @return
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"/fin-recharge-option-list"}, method = {RequestMethod.POST})
+    public List<FinRechargeOption> select(FinRechargeOption finRechargeOption){
+        return this.finRechargeOptionService.select(finRechargeOption);
+    }
+
+    /**
+     * 通过ID查询
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @ApiIgnore
+    @RequestMapping(path = {"/fin-recharge-option-listById"}, method = {RequestMethod.POST})
+    public FinRechargeOption selectById(Integer userId) throws Exception {
+         userId = getAuthentication().intValue();
+        //userId = 1;
+        return this.finRechargeOptionService.selectById(userId);
+    }
+}

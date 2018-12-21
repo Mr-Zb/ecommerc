@@ -1,0 +1,34 @@
+package com.fun.client.domain;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+
+import java.io.Serializable;
+import java.util.Date;
+
+@Data
+@Builder
+@ApiModel()
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class IntegralOrderInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @ApiModelProperty("主键")
+    private Integer pkId;
+    @ApiModelProperty("用户id")
+    private Integer userId;
+    @ApiModelProperty("商品编号")
+    private Integer goodId;
+    @ApiModelProperty("商品名称")
+    private String goodName;
+    @ApiModelProperty("订单状态(1,升级中,2,升级成功,3,升级失败,4,申请发货,5,已发货,6,已退货")
+    private Integer orderState;
+    @ApiModelProperty("积分数")
+    private Double amount;
+    @ApiModelProperty("订单创建时间")
+    private Date createTime;
+    @ApiModelProperty("订单编号")
+    private String orderNo;
+}

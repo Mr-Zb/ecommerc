@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.OperationLogMapper">
+	<resultMap id="OperationLog" type="com.fun.client.domain.OperationLog">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version"
+			jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user"
+			jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time"
+			jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user"
+			jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time"
+			jdbcType="TIMESTAMP" />
+		<result property="memberId" javaType="Integer" column="member_id"
+			jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name"
+			jdbcType="VARCHAR" />
+		<result property="memberRemark" javaType="String" column="member_remark"
+			jdbcType="VARCHAR" />
+		<result property="operationIp" javaType="String" column="operation_ip"
+			jdbcType="VARCHAR" />
+		<result property="content" javaType="String" column="content"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true"
+		keyProperty="OperationLog.pkId">
+		<![CDATA[
+		INSERT INTO t_operation_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			member_remark,
+			operation_ip,
+			content
+		)
+		VALUES
+			(
+				#{operationLog.pkId, jdbcType = INTEGER},
+				#{operationLog.createUser, jdbcType = INTEGER},
+				#{operationLog.createTime, jdbcType = TIMESTAMP},
+				#{operationLog.updateUser, jdbcType = INTEGER},
+				#{operationLog.updateTime, jdbcType = TIMESTAMP},
+				#{operationLog.dataVersion, jdbcType = TINYINT},
+				#{operationLog.memberId, jdbcType = INTEGER},
+				#{operationLog.memberName, jdbcType = VARCHAR},
+				#{operationLog.memberRemark, jdbcType = VARCHAR},
+				#{operationLog.operationIp,jdbcType=VARCHAR},
+				#{operationLog.content, jdbcType = VARCHAR}
+			)
+		]]>
+	</insert>
+
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_operation_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			member_remark,
+			operation_ip,
+			content
+		)
+		]]>
+		<foreach collection="operationLogs" item="operationLog" open="VALUES"
+			separator=",">
+		<![CDATA[
+			(
+				#{operationLog.pkId, jdbcType = INTEGER},
+				#{operationLog.createUser, jdbcType = INTEGER},
+				#{operationLog.createTime, jdbcType = TIMESTAMP},
+				#{operationLog.updateUser, jdbcType = INTEGER},
+				#{operationLog.updateTime, jdbcType = TIMESTAMP},
+				#{operationLog.dataVersion, jdbcType = TINYINT},
+				#{operationLog.memberId, jdbcType = INTEGER},
+				#{operationLog.memberName, jdbcType = VARCHAR},
+				#{operationLog.memberRemark, jdbcType = VARCHAR},
+				#{operationLog.operationIp,jdbcType=VARCHAR},
+				#{operationLog.content, jdbcType = VARCHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_operation_log]]>
+		<set>
+		<![CDATA[pk_id = #{operationLog.pkId},]]>
+		<![CDATA[create_user = #{operationLog.createUser},]]>
+		<![CDATA[create_time = #{operationLog.createTime},]]>
+		<![CDATA[update_user = #{operationLog.updateUser},]]>
+		<![CDATA[update_time = #{operationLog.updateTime},]]>
+		<![CDATA[data_version = #{operationLog.dataVersion},]]>
+		<![CDATA[member_id = #{operationLog.memberId},]]>
+		<![CDATA[member_name = #{operationLog.memberName},]]>
+		<![CDATA[member_remark = #{operationLog.memberRemark},]]>
+        <![CDATA[operation_ip = #{operationLog.operationIp},]]>
+		<![CDATA[content = #{operationLog.content},]]>
+		</set>
+		<where>
+			<if test="where.pkId != null ">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null ">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null and where.createTime != ''">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=DATE}]]>
+			</if>
+			<if test="where.updateUser != null ">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null ">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=DATE}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.memberRemark != null and where.memberRemark != ''">
+			<![CDATA[AND member_remark = #{where.memberRemark, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.operationIp != null and where.memberNickName != ''">
+			<![CDATA[AND operation_ip = #{where.operationIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.content != null and where.content != ''">
+			<![CDATA[AND content = #{where.content, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_operation_log]]>
+		<set>
+		<![CDATA[create_user = #{operationLog.createUser},]]>
+		<![CDATA[create_time = #{operationLog.createTime},]]>
+		<![CDATA[update_user = #{operationLog.updateUser},]]>
+		<![CDATA[update_time = #{operationLog.updateTime},]]>
+		<![CDATA[data_version = #{operationLog.dataVersion},]]>
+		<![CDATA[member_id = #{operationLog.memberId},]]>
+		<![CDATA[member_name = #{operationLog.memberName},]]>
+		<![CDATA[member_remark = #{operationLog.memberRemark},]]>
+        <![CDATA[operation_ip = #{operationLog.operationIp},]]>
+		<![CDATA[content = #{operationLog.content},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{operationLog, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_operation_log]]>
+		<set>
+			<if test="operationLog.createUser != null ">
+			<![CDATA[AND create_user = #{operationLog.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if
+				test="operationLog.createTime != null and operationLog.createTime != ''">
+			<![CDATA[AND create_time = #{operationLog.createTime, jdbcType=DATE}]]>
+			</if>
+			<if test="operationLog.updateUser != null ">
+			<![CDATA[AND update_user = #{operationLog.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="operationLog.updateTime != null ">
+			<![CDATA[AND update_time = #{operationLog.updateTime, jdbcType=DATE}]]>
+			</if>
+			<if test="operationLog.dataVersion != null">
+			<![CDATA[AND data_version = #{operationLog.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="operationLog.memberId != null">
+			<![CDATA[AND member_id = #{operationLog.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if
+				test="operationLog.memberName != null and operationLog.memberName != ''">
+			<![CDATA[AND member_name = #{operationLog.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if
+				test="operationLog.memberRemark != null and operationLog.memberRemark != ''">
+			<![CDATA[AND member_remark = #{operationLog.memberRemark, jdbcType=VARCHAR}]]>
+			</if>
+			<if
+				test="operationLog.operationIp != null  and operationLog.memberNickName != ''">
+			<![CDATA[AND operation_ip = #{operationLog.operationIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="operationLog.content != null and operationLog.content != ''">
+			<![CDATA[AND content = #{operationLog.content, jdbcType=VARCHAR}]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.createUser != null ">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null and where.createTime != ''">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=DATE}]]>
+			</if>
+			<if test="where.updateUser != null ">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null ">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=DATE}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.memberRemark != null and where.memberRemark != ''">
+			<![CDATA[AND member_remark = #{where.memberRemark, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.operationIp != null and where.memberNickName != ''">
+			<![CDATA[AND operation_ip = #{where.operationIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.content != null and where.content != ''">
+			<![CDATA[AND content = #{where.content, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_operation_log]]>
+		<set>
+			<if test="operationLog.createUser != null">
+			<![CDATA[create_user = #{operationLog.createUser},]]>
+			</if>
+			<if test="operationLog.createTime != null">
+			<![CDATA[cteate_time = #{operationLog.createTime},]]>
+			</if>
+			<if test="operationLog.updateUser != null">
+			<![CDATA[upeate_User = #{operationLog.updateUser},]]>
+			</if>
+			<if
+				test="operationLog.updateTime != null and operationLog.updateTime != ''">
+			<![CDATA[update_time = #{operationLog.updateTime},]]>
+			</if>
+			<if
+				test="operationLog.dataVersion != null and operationLog.dataVersion != ''">
+			<![CDATA[data_version = #{operationLog.dataVersion},]]>
+			</if>
+			<if test="operationLog.memberId != null">
+			<![CDATA[member_id = #{operationLog.memberId},]]>
+			</if>
+			<if
+				test="operationLog.memberName != null and operationLog.memberName != ''">
+			<![CDATA[member_name = #{operationLog.memberName},]]>
+			</if>
+			<if test="operationLog.memberRemark != null">
+			<![CDATA[member_remark = #{operationLog.memberRemark},]]>
+			</if>
+			<if test="operationLog.operationIp != null">
+			<![CDATA[operation_ip = #{operationLog.operationIp},]]>
+			</if>
+			<if test="operationLog.content != null and operationLog.content != ''">
+			<![CDATA[content = #{operationLog.content},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{operationLog, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+
+
+	<!-- 查询列表 -->
+	<select id="listOperationLog" parameterType="Map" resultMap="OperationLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.member_remark AS member_remark,
+			t.operation_ip AS operation_ip,
+			t.content AS content
+		FROM
+			t_operation_log t
+		]]>
+		<where>
+			<if test="where.beginDate != null"><![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]></if>
+			<if test="where.endDate != null"><![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]></if>
+			<if test="where.keyword != null and where.keyword != ''"><![CDATA[AND t.member_name = '${where.keyword}']]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="OperationLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.member_remark AS member_remark,
+			t.operation_ip AS operation_ip,
+			t.content AS content
+		FROM
+			t_opearation_log t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{operationLogId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<!-- <delete id="delete" parameterType="Map"> <![CDATA[ DELETE FROM t_operation_log 
+		]]> <where> <if test="operationLog.createUser != null "> <![CDATA[AND create_user 
+		= #{operationLog.createUser, jdbcType=INTEGER}]]> </if> <if test="operationLog.createTime 
+		!= null and operationLog.currLoginIp != ''"> <![CDATA[AND create_time = #{operationLog.createTime, 
+		jdbcType=DATE}]]> </if> <if test="operationLog.updateUser != null "> <![CDATA[AND 
+		update_user = #{operationLog.updateUser, jdbcType=INTEGER}]]> </if> <if test="operationLog.updateTime 
+		!= null "> <![CDATA[AND update_time = #{operationLog.updateTime, jdbcType=DATE}]]> 
+		</if> <if test="operationLog.dataVersion != null"> <![CDATA[AND data_version 
+		= #{operationLog.dataVersion, jdbcType=TINYINT}]]> </if> <if test="operationLog.memberId 
+		!= null"> <![CDATA[AND member_id = #{operationLog.memberId, jdbcType=INTEGER}]]> 
+		</if> <if test="operationLog.memberName != null and operationLog.memberName 
+		!= ''"> <![CDATA[AND member_name = #{operationLog.memberName, jdbcType=VARCHAR}]]> 
+		</if> <if test="operationLog.memberNickName != null and operationLog.memberNickName 
+		!= ''"> <![CDATA[AND member_nickname = #{operationLog.memberNickName, jdbcType=VARCHAR}]]> 
+		</if> <if test="operationLog.operationIp != null and operationLog.memberNickName 
+		!= ''" > <![CDATA[AND operation_ip = #{operationLog.operationIp, jdbcType=VARCHAR}]]> 
+		</if> <if test="operationLog.content != null and operationLog.content != 
+		''"> <![CDATA[AND content = #{operationLog.content, jdbcType=VARCHAR}]]> 
+		</if> </where> </delete> -->
+
+	<!-- 按主键删除 -->
+	<!-- <delete id="deleteById" parameterType="Map"> <![CDATA[ DELETE FROM 
+		t_operation_log ]]> <where> <![CDATA[AND pk_id = #{operationLogId, jdbcType=INTEGER}]]> 
+		</where> </delete> -->
+</mapper>

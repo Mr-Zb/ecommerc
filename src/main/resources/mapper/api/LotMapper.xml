@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.admin.repository.LotMapper">
+	<resultMap id="LotLotteryIssue" type="com.fun.le.entities.LotLotteryIssue">
+		<id property="pkId" javaType="Long" column="pk_id" jdbcType="BIGINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productId" javaType="Integer" column="product_id" jdbcType="INTEGER" />
+		<result property="lotteryIssue" javaType="String" column="lottery_issue" jdbcType="CHAR" />
+		<result property="bgnTime" javaType="Date" column="bgn_time" jdbcType="TIMESTAMP" />
+		<result property="endTime" javaType="Date" column="end_time" jdbcType="TIMESTAMP" />
+		<result property="openTime" javaType="Date" column="open_time" jdbcType="TIMESTAMP" />
+		<result property="openFlag" javaType="Integer" column="open_flag" jdbcType="TINYINT" />
+		<result property="openCode" javaType="String" column="open_code" jdbcType="VARCHAR" />
+		<result property="openCodeScource" javaType="Integer" column="open_code_scource" jdbcType="TINYINT" />
+		<result property="openFeature1" javaType="String" column="open_feature1" jdbcType="CHAR" />
+		<result property="openFeature2" javaType="String" column="open_feature2" jdbcType="CHAR" />
+		<result property="openFeature3" javaType="String" column="open_feature3" jdbcType="CHAR" />
+		<result property="openFeature4" javaType="String" column="open_feature4" jdbcType="CHAR" />
+		<result property="openFeature5" javaType="String" column="open_feature5" jdbcType="LONGVARCHAR" />
+		<result property="amount1" javaType="Double" column="amount1" jdbcType="DECIMAL" />
+		<result property="amount2" javaType="Double" column="amount2" jdbcType="DECIMAL" />
+		<result property="amount3" javaType="Double" column="amount3" jdbcType="DECIMAL" />
+		<result property="amount4" javaType="Double" column="amount4" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<!-- 查询待获取号码的期数 -->
+	<select id="listOpenIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.product_id AS product_id,
+			t.lottery_issue AS lottery_issue,
+			t.open_time AS open_time
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.open_flag = '0']]>
+		<![CDATA[AND t.open_time >= #{beginTime, jdbcType=TIMESTAMP}]]>
+		<![CDATA[AND t.open_time <= #{endTime, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.open_time ASC]]>
+	</select>
+
+	<!-- 获取当前开奖期号 -->
+	<select id="currentOpenTime" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.open_flag,
+			t.open_time,
+			t.lottery_issue
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+		<![CDATA[AND t.open_time >= #{now, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.open_time ASC]]>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<!-- 获取当前截止时间 -->
+	<select id="currentEndTime" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.end_time,
+			t.lottery_issue
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+		<![CDATA[AND t.end_time >= #{now, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.end_time ASC]]>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<!-- 获取期号信息 -->
+	<select id="listCurrentIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue,
+			t.open_time AS open_time,
+			t.end_time AS end_time,
+			t.open_code AS open_code,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+		<![CDATA[AND t.end_time >= #{beginDate, jdbcType=TIMESTAMP}]]>
+		<![CDATA[AND t.end_time <= #{endDate, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.end_time ASC]]>
+	</select>
+
+	<!-- 获取开奖信息 -->
+	<select id="listCurrentOpenIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue,
+			t.open_time AS end_time,
+			t.open_code AS open_code,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+		<![CDATA[AND t.open_flag = '1']]>
+		</where>
+		<![CDATA[ORDER BY t.end_time DESC]]>
+		<![CDATA[LIMIT 20]]>
+	</select>
+
+	<!-- 获取号码信息 -->
+	<select id="getLotIssue" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue,
+			t.end_time AS end_time,
+			t.open_code AS open_code,
+			t.open_time AS open_time,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+		<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+		<![CDATA[AND t.lottery_issue = #{issue, jdbcType=CHAR}]]>
+		</where>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<select id="listOmittedIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.open_code AS open_code
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.product_id = #{productId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_flag = '1']]>
+		</where>
+		<![CDATA[ORDER BY t.lottery_issue DESC]]>
+		<![CDATA[LIMIT 1000]]>
+	</select>
+
+	<!-- 更新剩余开奖时间 -->
+	<update id="updateLotterIssueTimes" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+			<![CDATA[bgn_time = CONCAT(SUBSTR(bgn_time, 1, 10), ' ', '${beginTime}'),]]>
+			<![CDATA[end_time = CONCAT(SUBSTR(end_time, 1, 10), ' ', '${endTime}'),]]>
+			<![CDATA[open_time = CONCAT(SUBSTR(open_time, 1, 10), ' ', '${openTime}'),]]>
+		</set>
+		<where>
+			<![CDATA[AND data_version = '1']]>
+			<![CDATA[AND open_flag = '0']]>
+			<![CDATA[AND pk_id LIKE '${productId}______${issue}']]>
+			<![CDATA[AND end_time > NOW()]]>
+		</where>
+	</update>
+
+
+	<!-- 查询待获取号码的期数 -->
+	<select id="listIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.lottery_issue AS lottery_issue,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<if test="beginDate != null">
+			<![CDATA[AND t.end_time >= #{beginDate, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="endDate != null">
+			<![CDATA[AND t.end_time <= #{endDate, jdbcType=TIMESTAMP}]]>
+			</if>
+		</where>
+		<![CDATA[ORDER BY t.pk_id ASC]]>
+	</select>
+
+
+	<select id="listCheckIssues" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue,
+			t.bgn_time,
+			t.end_time,
+			t.open_time
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.data_version = '1']]>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<foreach collection="issues" item="issue" open="AND t.lottery_issue IN (" close=")" separator=",">
+				#{issue.schemeIssue, jdbcType=CHAR}
+			</foreach>
+			<![CDATA[AND t.end_time > #{end, jdbcType=TIMESTAMP}]]>
+		</where>		
+		<![CDATA[ORDER BY t.end_time ASC]]>
+	</select>
+	<select id="listCheckIssue" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue,
+			t.bgn_time,
+			t.end_time,
+			t.open_time
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.data_version = '1']]>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.lottery_issue = #{issue.schemeIssue, jdbcType=CHAR}]]>
+			<![CDATA[AND t.end_time > #{end, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.end_time ASC]]>
+	</select>
+	<!-- 查询走势 -->
+	<select id="listIssuesByTend" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.lottery_issue AS lottery_issue,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_flag = '1']]>
+			<![CDATA[AND t.lottery_issue <= #{issue, jdbcType=CHAR}]]>
+		</where>
+		<![CDATA[ORDER BY t.pk_id DESC]]>
+		<![CDATA[LIMIT ${limit}]]>
+	</select>
+	
+	<!-- 查询最新开奖号码 -->
+	<select id="listIssuesByPage" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.lottery_issue AS lottery_issue,
+			t.end_time AS end_time,
+			t.open_time AS open_time,
+			t.open_code AS open_code,
+			t.open_feature1 AS open_feature1,
+			t.open_feature2 AS open_feature2,
+			t.open_feature3 AS open_feature3,
+			t.open_feature4 AS open_feature4,
+			t.open_feature5 AS open_feature5
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_flag = '1']]>
+		</where>
+		<![CDATA[ORDER BY t.open_time DESC]]>
+	</select>
+
+	<resultMap id="LotProductInfo" type="com.fun.le.entities.LotProductInfo">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productType" javaType="Integer" column="product_type" jdbcType="TINYINT" />
+		<result property="productName" javaType="String" column="product_name" jdbcType="CHAR" />
+		<result property="productAlias" javaType="String" column="product_alias" jdbcType="CHAR" />
+		<result property="productIcon" javaType="String" column="product_icon" jdbcType="CHAR" />
+		<result property="productDesc" javaType="String" column="product_desc" jdbcType="CHAR" />
+		<result property="productOpenDesc" javaType="String" column="product_open_desc" jdbcType="CHAR" />
+		<result property="sorting" javaType="Integer" column="sorting" jdbcType="TINYINT" />
+		<result property="hotFlag" javaType="Integer" column="hot_flag" jdbcType="TINYINT" />
+		<result property="enableFlag" javaType="Integer" column="enable_flag" jdbcType="TINYINT" />
+		<result property="rewardFlag" javaType="Integer" column="reward_flag" jdbcType="TINYINT" />
+		<result property="multipleFlag" javaType="Integer" column="multiple_flag" jdbcType="TINYINT" />
+		<result property="groupFlag" javaType="Integer" column="group_flag" jdbcType="TINYINT" />
+		<result property="currIssue" javaType="String" column="curr_issue" jdbcType="CHAR" />
+		<result property="currEndTime" javaType="Date" column="curr_end_time" jdbcType="TIMESTAMP" />
+		<result property="currOpenTime" javaType="Date" column="curr_open_time" jdbcType="TIMESTAMP" />
+		<result property="lastIssue" javaType="String" column="last_issue" jdbcType="CHAR" />
+		<result property="lastEndTime" javaType="Date" column="last_end_time" jdbcType="TIMESTAMP" />
+		<result property="lastOpenTime" javaType="Date" column="last_open_time" jdbcType="TIMESTAMP" />
+		<result property="lastOpenCode" javaType="String" column="last_open_code" jdbcType="CHAR" />
+		<result property="lastOpenFeature1" javaType="String" column="last_open_feature1" jdbcType="CHAR" />
+		<result property="lastOpenFeature2" javaType="String" column="last_open_feature2" jdbcType="CHAR" />
+		<result property="lastOpenFeature3" javaType="String" column="last_open_feature3" jdbcType="CHAR" />
+		<result property="lastOpenFeature4" javaType="String" column="last_open_feature4" jdbcType="CHAR" />
+		<result property="lastOpenFeature5" javaType="String" column="last_open_feature5" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<!-- 查询最近开奖号码 -->
+	<select id="listCurrentCodes" parameterType="Map" resultMap="LotProductInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id,
+			t.product_name,
+			t.product_icon,
+			t.product_alias
+		FROM
+			t_lot_product_info t
+		]]>
+		<where>
+			<!-- <![CDATA[AND t.enable_flag = '1']]> -->
+		</where>
+	</select>
+
+	<!-- 查询最后一个开奖号码 -->
+	<select id="getLastOpenCode" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.lottery_issue AS lottery_issue,
+			t.open_code AS open_code,
+			t.open_time AS open_time
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.data_version = '1']]>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_flag = '1']]>
+		</where>
+		<![CDATA[ORDER BY t.pk_id DESC]]>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<!-- 获取最近一次开奖号码 -->
+	<select id="getLastOpenIssue" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.open_flag,
+			t.lottery_issue,
+			t.open_time,
+			t.open_code
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.data_version = '1']]>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_time <= #{now, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.pk_id DESC]]>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<!-- 获取下期开奖号码 -->
+	<select id="getNextOpenIssue" parameterType="Map" resultMap="LotLotteryIssue">
+		<![CDATA[
+		SELECT
+			t.open_flag,
+			t.lottery_issue,
+			t.open_time
+		FROM
+			t_lot_lottery_issue t
+		]]>
+		<where>
+			<![CDATA[AND t.data_version = '1']]>
+			<![CDATA[AND t.product_id = #{prodId, jdbcType=INTEGER}]]>
+			<![CDATA[AND t.open_flag = '0']]>
+			<![CDATA[AND t.open_time >= #{now, jdbcType=TIMESTAMP}]]>
+		</where>
+		<![CDATA[ORDER BY t.pk_id ASC]]>
+		<![CDATA[LIMIT 1]]>
+	</select>
+
+	<!-- 初始化活跃数据 -->
+	<update id="filing" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+			<![CDATA[data_version = #{version, jdbcType=INTEGER},]]>
+		</set>
+		<where>
+			<if test="version == 0">
+				<![CDATA[AND data_version = '1']]>
+			</if>
+			<if test="version == 1">
+				<![CDATA[AND data_version = '0']]>
+			</if>
+			<if test="beginDate != null">
+				<![CDATA[AND open_time >= #{beginDate, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="endDate != null">
+				<![CDATA[AND open_time <= #{endDate, jdbcType=TIMESTAMP}]]>
+			</if>
+		</where>
+	</update>
+	
+	<!-- 保存开奖号码 -->
+	<update id="saveOpenCode" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+		<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+		<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+		<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+		<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+		<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+		<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+		<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+		<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotLotteryIssue.pkId}]]>
+		<![CDATA[AND product_id = #{lotLotteryIssue.productId}]]>
+		<![CDATA[AND lottery_issue =#{lotLotteryIssue.lotteryIssue}]]>
+		<![CDATA[AND open_flag = '0']]>
+		</where>
+		<![CDATA[LIMIT 1]]>
+	</update>
+		<!-- 保存开奖号码 -->
+	<update id="saveOpenCodeNew" parameterType="Map">
+		<![CDATA[UPDATE t_lot_lottery_issue]]>
+		<set>
+		<![CDATA[open_flag = #{lotLotteryIssue.openFlag},]]>
+		<![CDATA[open_code = #{lotLotteryIssue.openCode},]]>
+		<![CDATA[open_code_scource = #{lotLotteryIssue.openCodeScource},]]>
+		<![CDATA[open_feature1 = #{lotLotteryIssue.openFeature1},]]>
+		<![CDATA[open_feature2 = #{lotLotteryIssue.openFeature2},]]>
+		<![CDATA[open_feature3 = #{lotLotteryIssue.openFeature3},]]>
+		<![CDATA[open_feature4 = #{lotLotteryIssue.openFeature4},]]>
+		<![CDATA[open_feature5 = #{lotLotteryIssue.openFeature5},]]>
+		<![CDATA[update_time = #{lotLotteryIssue.updateTime},]]>
+		<![CDATA[update_user = #{lotLotteryIssue.updateUser},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotLotteryIssue.pkId}]]>
+		<![CDATA[AND product_id = #{lotLotteryIssue.productId}]]>
+		<![CDATA[AND lottery_issue =#{lotLotteryIssue.lotteryIssue}]]>
+		<![CDATA[AND open_flag = '0']]>
+		</where>
+		<![CDATA[LIMIT 1]]>
+	</update>
+</mapper>

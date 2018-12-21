@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.SysPropSettingMapper">
+    <resultMap id="SysPropSetting" type="com.fun.le.entities.SysPropSetting">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="propKey" javaType="String" column="prop_key" jdbcType="VARCHAR"/>
+        <result property="propValue" javaType="String" column="prop_value" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="sysPropSetting.pkId">
+		<![CDATA[
+
+		INSERT INTO t_sys_prop_setting (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			prop_key,
+			prop_value,
+			remark
+		)
+		VALUES
+			(
+				#{sysPropSetting.pkId, jdbcType = INTEGER},
+				#{sysPropSetting.createUser, jdbcType = INTEGER},
+				#{sysPropSetting.createTime, jdbcType = TIMESTAMP},
+				#{sysPropSetting.updateUser, jdbcType = INTEGER},
+				#{sysPropSetting.updateTime, jdbcType = TIMESTAMP},
+				#{sysPropSetting.dataVersion, jdbcType = INTEGER},
+				#{sysPropSetting.propKey, jdbcType = VARCHAR},
+				#{sysPropSetting.propValue, jdbcType = VARCHAR},
+				#{sysPropSetting.remark, jdbcType = VARCHAR}
+			)
+
+        ]]>
+	</insert>
+
+    <!-- 批量插入数据 -->
+    <insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+        <![CDATA[
+		INSERT INTO t_sys_prop_setting (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			prop_key,
+			prop_value,
+			remark
+		)
+		]]>
+        <foreach collection="sysPropSettings" item="sysPropSetting" open="VALUES" separator=",">
+            <![CDATA[
+			(
+				#{sysPropSetting.pkId, jdbcType = INTEGER},
+				#{sysPropSetting.createUser, jdbcType = INTEGER},
+				#{sysPropSetting.createTime, jdbcType = TIMESTAMP},
+				#{sysPropSetting.updateUser, jdbcType = INTEGER},
+				#{sysPropSetting.updateTime, jdbcType = TIMESTAMP},
+				#{sysPropSetting.dataVersion, jdbcType = INTEGER},
+				#{sysPropSetting.propKey, jdbcType = VARCHAR},
+				#{sysPropSetting.propValue, jdbcType = VARCHAR},
+				#{sysPropSetting.remark, jdbcType = VARCHAR}
+			)
+		]]>
+        </foreach>
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update" parameterType="Map">
+        <![CDATA[UPDATE t_sys_prop_setting]]>
+        <set>
+            <![CDATA[update_user = #{sysPropSetting.updateUser},]]>
+            <![CDATA[update_time = #{sysPropSetting.updateTime},]]>
+            <![CDATA[data_version = #{sysPropSetting.dataVersion},]]>
+            <![CDATA[prop_key = #{sysPropSetting.propKey},]]>
+            <![CDATA[prop_value = #{sysPropSetting.propValue},]]>
+            <![CDATA[remark = #{sysPropSetting.remark},]]>
+        </set>
+        <where>
+            <if test="where.propKey != null and where.propKey != ''">
+                <![CDATA[AND prop_key = #{where.propKey, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.propValue != null and where.propValue != ''">
+                <![CDATA[AND prop_value = #{where.propValue, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据主键更新 -->
+    <update id="updateById" parameterType="Map">
+        <![CDATA[UPDATE t_sys_prop_setting]]>
+        <set>
+            <![CDATA[update_user = #{sysPropSetting.updateUser},]]>
+            <![CDATA[update_time = #{sysPropSetting.updateTime},]]>
+            <![CDATA[data_version = #{sysPropSetting.dataVersion},]]>
+            <![CDATA[prop_key = #{sysPropSetting.propKey},]]>
+            <![CDATA[prop_value = #{sysPropSetting.propValue},]]>
+            <![CDATA[remark = #{sysPropSetting.remark},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <!-- 根据用户ID更新 -->
+    <update id="updateByUserId" parameterType="Map">
+        <![CDATA[UPDATE t_sys_prop_setting]]>
+        <set>
+            <![CDATA[update_user = #{sysPropSetting.updateUser},]]>
+            <![CDATA[update_time = #{sysPropSetting.updateTime},]]>
+            <![CDATA[data_version = #{sysPropSetting.dataVersion},]]>
+            <![CDATA[prop_value = #{sysPropSetting.propValue},]]>
+        </set>
+        <where>
+            <![CDATA[AND create_user = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+
+    <!-- 更新有值数据 -->
+    <update id="updateActive" parameterType="Map">
+        <![CDATA[UPDATE t_sys_prop_setting]]>
+        <set>
+            <if test="sysPropSetting.updateUser != null">
+                <![CDATA[update_user = #{sysPropSetting.updateUser},]]>
+            </if>
+            <if test="sysPropSetting.updateTime != null">
+                <![CDATA[update_time = #{sysPropSetting.updateTime},]]>
+            </if>
+            <if test="sysPropSetting.dataVersion != null">
+                <![CDATA[data_version = #{sysPropSetting.dataVersion},]]>
+            </if>
+            <if test="sysPropSetting.propKey != null and sysPropSetting.propKey != ''">
+                <![CDATA[prop_key = #{sysPropSetting.propKey},]]>
+            </if>
+            <if test="sysPropSetting.propValue != null and sysPropSetting.propValue != ''">
+                <![CDATA[prop_value = #{sysPropSetting.propValue},]]>
+            </if>
+            <if test="sysPropSetting.remark != null and sysPropSetting.remark != ''">
+                <![CDATA[remark = #{sysPropSetting.remark},]]>
+            </if>
+        </set>
+        <where>
+            <if test="where.propKey != null and where.propKey != ''">
+                <![CDATA[AND prop_key = #{where.propKey, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.propValue != null and where.propValue != ''">
+                <![CDATA[AND prop_value = #{where.propValue, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据主键更新有值数据 -->
+    <update id="updateActiveById" parameterType="Map">
+        <![CDATA[UPDATE t_sys_prop_setting]]>
+        <set>
+            <if test="sysPropSetting.updateUser != null">
+                <![CDATA[update_user = #{sysPropSetting.updateUser},]]>
+            </if>
+            <if test="sysPropSetting.updateTime != null">
+                <![CDATA[update_time = #{sysPropSetting.updateTime},]]>
+            </if>
+            <if test="sysPropSetting.dataVersion != null">
+                <![CDATA[data_version = #{sysPropSetting.dataVersion},]]>
+            </if>
+            <if test="sysPropSetting.propKey != null and sysPropSetting.propKey != ''">
+                <![CDATA[prop_key = #{sysPropSetting.propKey},]]>
+            </if>
+            <if test="sysPropSetting.propValue != null and sysPropSetting.propValue != ''">
+                <![CDATA[prop_value = #{sysPropSetting.propValue},]]>
+            </if>
+            <if test="sysPropSetting.remark != null and sysPropSetting.remark != ''">
+                <![CDATA[remark = #{sysPropSetting.remark},]]>
+            </if>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+
+    <!-- 查询列表 -->
+    <select id="select" parameterType="Map" resultMap="SysPropSetting">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.prop_key AS prop_key,
+			t.prop_value AS prop_value,
+			t.remark AS remark
+		FROM
+			t_sys_prop_setting t
+		]]>
+        <where>
+            <if test="sysPropSetting.pkId != null and sysPropSetting.pkId > 0">
+                <![CDATA[AND t.pk_id = #{sysPropSetting.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="sysPropSetting.createUser != null and sysPropSetting.createUser > 0">
+                <![CDATA[AND t.create_user = #{sysPropSetting.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="sysPropSetting.createTime != null">
+                <![CDATA[AND t.create_time = #{sysPropSetting.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="sysPropSetting.updateUser != null and sysPropSetting.updateUser > 0">
+                <![CDATA[AND t.update_user = #{sysPropSetting.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="sysPropSetting.updateTime != null">
+                <![CDATA[AND t.update_time = #{sysPropSetting.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="sysPropSetting.dataVersion != null and sysPropSetting.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{sysPropSetting.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="sysPropSetting.propKey != null and sysPropSetting.propKey != ''">
+                <![CDATA[AND t.prop_key = #{sysPropSetting.propKey, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="sysPropSetting.propValue != null and sysPropSetting.propValue != ''">
+                <![CDATA[AND t.prop_value = #{sysPropSetting.propValue, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="sysPropSetting.remark != null and sysPropSetting.remark != ''">
+                <![CDATA[AND t.remark = #{sysPropSetting.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectById" parameterType="Map" resultMap="SysPropSetting">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.prop_key AS prop_key,
+			t.prop_value AS prop_value,
+			t.remark AS remark
+		FROM
+			t_sys_prop_setting t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+
+    <select id="selectByUserId" parameterType="Map" resultMap="SysPropSetting">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.prop_key AS prop_key,
+			t.prop_value AS prop_value,
+			t.remark AS remark
+		FROM
+			t_sys_prop_setting t
+		]]>
+        <where>
+            <![CDATA[AND t.create_user = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 按条件删除 -->
+    <delete id="delete" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_sys_prop_setting
+		]]>
+        <where>
+            <if test="where.pkId != null">
+                <![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.createUser != null">
+                <![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.createTime != null">
+                <![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.updateUser != null">
+                <![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.updateTime != null">
+                <![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.dataVersion != null">
+                <![CDATA[AND data_version = #{where.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.propKey != null and where.propKey != ''">
+                <![CDATA[AND prop_key = #{where.propKey, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.propValue != null and where.propValue != ''">
+                <![CDATA[AND prop_value = #{where.propValue, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </delete>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_sys_prop_setting
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{sysPropSettingId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+
+    <!--查询代理设置的返水比例-->
+    <select id="sysUserRebate" parameterType="Map" resultType="String">
+        <![CDATA[
+		SELECT
+			t.prop_value AS prop_value
+		FROM
+			t_sys_prop_setting t
+		]]>
+        <where>
+            <![CDATA[AND t.create_user = #{userId,jdbcType=INTEGER}]]>
+            <![CDATA[AND t.prop_key = "sys.user.rebate"]]>
+        </where>
+    </select>
+
+    <!--查询代理设置的推广比例-->
+    <select id="sysUserExtension" parameterType="Map" resultType="String">
+        <![CDATA[
+		SELECT
+			t.prop_value AS prop_value
+		FROM
+			t_sys_prop_setting t
+		]]>
+        <where>
+            <![CDATA[AND t.create_user = #{userId,jdbcType=INTEGER}]]>
+            <![CDATA[AND t.prop_key = "sys.user.extension"]]>
+        </where>
+    </select>
+
+    <!--查询上级设置的推广比例-->
+    <select id="selectSuperiorExtension" parameterType="Map" resultType="String">
+		<![CDATA[
+		SELECT
+         t1.prop_value
+         FROM
+         t_sys_prop_setting t1
+         WHERE 1=1
+         AND t1.prop_key ="sys.user.extension"
+         AND t1.create_user = (
+          SELECT
+          t.agent_id
+          FROM t_mem_user_info t
+          WHERE
+           1=1
+        AND t.pk_id = #{userId,jdbcType=INTEGER}
+        )
+         ]]>
+	</select>
+
+</mapper>

@@ -1,0 +1,144 @@
+package com.fun.le.service;
+
+import com.fun.client.domain.MemTeam;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.repository.MemUserInfoMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.repository.FinCapitalLogMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+@Service
+public class FinCapitalLogService extends BaseService {
+
+    private @Autowired
+    FinCapitalLogMapper finCapitalLogMapper;
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Pagination<FinCapitalLog> select(FinCapitalLog paramInteger, QueryDto queryDto, Integer integer, Integer c) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<FinCapitalLog> page = this.finCapitalLogMapper.select(paramInteger, queryDto, integer, c);
+        return new Pagination<FinCapitalLog>(page.getTotal(), page.getResult());
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double countUserBonus(Integer userId) {
+        return this.finCapitalLogMapper.countUserBonus(userId);
+    }
+
+    //用户余额
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double countUserAmount(Integer userId) {
+        return this.finCapitalLogMapper.countUserAmount(userId);
+    }
+
+    //团队余额
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double teamMoney(Integer userId) {
+        return this.finCapitalLogMapper.teamMoney(userId);
+    }
+
+    //团队充值
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double teamRecharge(Integer userId) {
+        return this.finCapitalLogMapper.teamRecharge(userId);
+    }
+
+    //团队提现
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double teamWithdraw(Integer userId) {
+        return this.finCapitalLogMapper.teamWithdraw(userId);
+    }
+
+    //团队促销
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double teamPromotion(Integer userId) {
+        return this.finCapitalLogMapper.teamPromotion(userId);
+    }
+
+    //团队升级
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double teamUpgrade(Integer userId) {
+        return this.finCapitalLogMapper.teamUpgrade(userId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<MemTeam> selectSubordinateInfo(Integer userId) {
+        return this.finCapitalLogMapper.selectSubordinateInfo(userId);
+    }
+
+    //查询下级用户ID
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<FinCapitalLog> countSubordinateUser(Integer userId) {
+        return this.finCapitalLogMapper.countSubordinateUser(userId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Integer insert(FinCapitalLog finCapitalLog) {
+        return this.finCapitalLogMapper.insert(finCapitalLog);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Set<FinCapitalLog> registerAndPromotionNum(Integer userId, QueryDto queryDto) {
+        return this.finCapitalLogMapper.registerAndPromotionNum(userId, queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Set<FinCapitalLog> selectPayNum(QueryDto queryDto) {
+        return this.finCapitalLogMapper.selectPayNum(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Set<FinCapitalLog> PromotionNum(QueryDto queryDto) {
+        return this.finCapitalLogMapper.promotionNum(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<FinCapitalLog> selectPayCount(QueryDto queryDto) {
+        return this.finCapitalLogMapper.selectPayCount(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double rechargeCount(QueryDto queryDto) {
+        return this.finCapitalLogMapper.rechargeCount(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public List<FinCapitalLog> drawCount(QueryDto queryDto){
+        return this.finCapitalLogMapper.drawCount(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double selectDrawMoney(QueryDto queryDto){
+        return this.finCapitalLogMapper.selectDrawMoney(queryDto);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class}, readOnly = true)
+    public Double selectFirstRecharge(Integer userId){
+        return this.finCapitalLogMapper.selectFirstRecharge(userId);
+    }
+
+    public Double betMoney(QueryDto queryDto){
+        return this.finCapitalLogMapper.selectBetMoney(queryDto);
+    }
+
+    public Set<FinCapitalLog> selectSeven(Integer num){
+        return this.finCapitalLogMapper.selectSeven(num);
+    }
+
+}
+
+
+

@@ -1,0 +1,182 @@
+package com.fun.client.repository;
+
+import com.fun.client.domain.MemTeam;
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.domain.ReturnCount;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.le.entities.FinCapitalLog;
+import com.github.pagehelper.Page;
+import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.security.access.method.P;
+
+import java.util.List;
+import java.util.Map;
+@Mapper
+public interface MemUserInfoMapper {
+
+    MemUserInfo selectByCampaign(@Param("campaign")String campaign);
+
+    /**
+     * 查询列表
+     *
+     * @param userId
+     * @return
+     */
+    MemUserInfo select(Integer userId);
+
+    MemUserInfo selectLoginName(@Param("loginName") String loginName);
+
+    /**
+     * 查询用户收货地址
+     */
+    MemUserInfo selectUserAddress(@Param("memUserInfoId") Integer memUserInfoId);
+
+    /**
+     * 根据主键查询
+     *
+     * @param memUserInfoId
+     * @return
+     */
+    MemUserInfo selectById(@Param("memUserInfoId") Integer memUserInfoId);
+
+    /**
+     * 插入数据
+     *
+     * @param memUserInfo
+     * @return
+     */
+    Integer insert(@Param("memUserInfo") MemUserInfo memUserInfo);
+
+    /**
+     * 新增银行卡信息
+     *
+     * @param memUserInfo
+     * @param userId
+     * @return
+     */
+    Integer insertBankInfo(@Param("memUserInfo") MemUserInfo memUserInfo, @Param("memUserInfoId") Integer userId);
+
+    /**
+     * 查询团队金额
+     *
+     * @param memUserInfoId
+     * @return
+     */
+    MemTeam selectTeamMoney(@Param("memUserInfoId") Integer memUserInfoId);
+
+    /**
+     * 更新数据
+     *
+     * @param memUserInfo
+     * @return
+     */
+    Integer update(@Param("memUserInfo") MemUserInfo memUserInfo, Integer userId);
+
+    /**
+     * 更新银行卡信息
+     *
+     * @param memUserInfo
+     * @param paramInteger
+     * @return
+     */
+    Integer addBankInfo(@Param("memUserInfo") MemUserInfo memUserInfo, @Param("memUserInfoId") Integer paramInteger);
+
+    /**
+     * 查询银行卡信息
+     *
+     * @param memUserInfo
+     * @param paramInteger
+     * @return
+     */
+    MemUserInfo selectBankInfo(@Param("memUserInfo") MemUserInfo memUserInfo, @Param("memUserInfoId") Integer paramInteger);
+
+
+    /**
+     * 根据ID修改收貨地址
+     *
+     * @param memUserInfo
+     * @param
+     * @return
+     */
+    Integer updateAddress(@Param("memUserInfo") MemUserInfo memUserInfo, @Param("memUserInfoId") Integer userId);
+
+
+    /**
+     * 修改收貨地址
+     *
+     * @param memUserInfo
+     * @param
+     * @return
+     */
+    Integer updateAddress(@Param("memUserInfo") MemUserInfo memUserInfo);
+
+
+    /**
+     * 根据ID修改密码
+     *
+     * @param
+     * @return
+     */
+//    @Update({"UPDATE t_mem_user_info SET login_pwd = #{pwd2} WHERE pk_id = #{userId} AND login_pwd = #{pwd1}"})
+    Integer updatePwdById(@Param("userId") Integer userId,
+                          @Param("pwd1") String paramString1,
+                          @Param("pwd2") String paramString2);
+
+    Integer updateUserAmount1(@Param("userId") Integer userId, @Param("capitalAmount2") Double capitalAmount2);
+
+    Integer updateUserIntegral(@Param("userId") Integer userId, @Param("amount") Double amount);
+
+    List<MemUserInfo> selectRegisterNum(@Param("where") QueryDto where);
+
+    Integer updatePwdByLoginName(@Param("loginPwd")String loginPwd,@Param("loginName")String loginName);
+
+    List<MemUserInfo> countSubordinateUser(@Param("userId") Integer userId);
+    //分页查询用户列表
+    Page<MemUserInfo> selectAll(@Param("userInfo") MemUserInfo userInfo, @Param("where") QueryDto where, @Param("onlines") List<Long> onlines);
+    //解绑信息
+    void unbundling(@Param("memId") Integer memId);
+    //修改用户权限
+    Integer updateAuthCodes(@Param("memUserInfo") MemUserInfo memUserInfo);
+    //删除用户
+    Integer deleteById(@Param("memUserInfoId")Integer memUserInfoId);
+    //
+    Page<MemUserInfo> listManagers(@Param("where") QueryDto where, @Param("onlines") List<Long> onlines);
+    //代理列表
+    Page<MemUserInfo> listAgentMember(@Param("userInfo") MemUserInfo userInfo,@Param("where") QueryDto where, @Param("onlines") List<Long> onlines);
+
+    Integer updateEnableFlag(@Param("enableFlag") Integer enableFlag ,@Param("memId")Integer memId);
+
+    //修改返佣比例
+    Integer updateRebate(@Param("userInfo") MemUserInfo userInfo);
+
+    //修改备注信息
+    Integer updateRemark(@Param("userInfo") MemUserInfo userInfo);
+    //修改备注信息
+    Integer updateCampaign(@Param("userInfo") MemUserInfo userInfo);
+
+    Integer updateExtension(@Param("extension") double extension,@Param("userId") Integer userId);
+    ReturnCount selectRechargeCount(@Param("memberId")Integer memberId);
+    ReturnCount selectWithdrawCount(@Param("memberId")Integer memberId);
+    List<MemUserInfo> selectSubordinate(@Param("agentId")Integer agentId);
+
+    //更新用户资金
+    Integer updateUserAmount(@Param("memUserInfo") MemUserInfo memUserInfo,@Param("userId") Integer userId);
+
+    Double teamCapital1(@Param("userId") Integer userId);//团队余额
+    Double teamCapital4(@Param("userId") Integer userId);//团队充值
+    Double teamCapital5(@Param("userId") Integer userId);//团队促销
+    Double teamCapital6(@Param("userId") Integer userId);//团队促销
+    Double teamCapital7(@Param("userId") Integer userId);//团队提现
+
+    //test
+    List<MemUserInfo> testTeamMoney(@Param("agentId") Integer agentId);
+
+//    修改用户设置的赔率
+
+    Integer updateUserExtension(@Param("extension") double extension,@Param("memId") Integer memId);
+
+    Integer updateGoogle(@Param("userInfo") MemUserInfo userInfo);
+}

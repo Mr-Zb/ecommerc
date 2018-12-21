@@ -1,0 +1,80 @@
+package com.fun.api.web.controller;
+
+import com.fun.admin.service.LotService;
+import com.fun.admin.service.ProdService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.framework.web.support.annotation.Secure;
+import com.fun.le.entities.LotLotteryIssue;
+import com.fun.le.entities.SchSchemeIssue;
+import com.fun.le.service.LotLotteryIssueService;
+import com.fun.le.service.SchSchemeIssueService;
+import com.fun.utils.Log;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+
+
+@RestController
+@RequestMapping("/api")
+public class SchSchemeIssueController extends BaseController {
+    private @Autowired
+    SchSchemeIssueService schSchemeIssueService;
+
+    private @Autowired
+    ProdService prodService;
+    @Autowired
+    private LotLotteryIssueService issueService;
+    @Autowired
+    private LotService lotService;
+
+
+    /**
+     * 开奖设置-列表
+     *
+     * @param prodId
+     * @param beginDate
+     * @param endDate
+     * @return
+     * @throws BusinessException
+     */
+    @ApiIgnore
+    //@Secure(has = {"le:award:manager"})
+    @RequestMapping(path = {"lot-issues-list"}, method = {RequestMethod.POST})
+    public AjaxReturn listIssues(
+            @RequestParam(value = "prodId", required = false, defaultValue = "1100") Integer prodId,
+            @RequestParam(value = "beginDate", required = false, defaultValue = "") Date beginDate,
+            @RequestParam(value = "endDate", required = false, defaultValue = "") Date endDate,
+            QueryDto queryDto)
+            throws BusinessException {
+        return this.prodService.listIssues(prodId, beginDate, endDate, queryDto);
+    }
+
+    @ApiIgnore
+    @Log("保存开奖号")
+    // @Secure(has = {"le:award:manager"})
+    @RequestMapping(path = {"lot-issue-save"}, method = {RequestMethod.POST})
+    public AjaxReturn saveIssue(@RequestParam("issueId") Long issueId, @RequestParam("endTime") Date endTime,
+                                @RequestParam("openTime") Date openTime, @RequestParam("openCode") String openCode,HttpServletRequest request) throws Exception {
+        int userId = getAuthentication(request).intValue();
+        try {
+            this.lotService.saveOpenCodeNew(issueId, endTime, openTime, openCode, userId);
+        } catch (Exception e) {
+            return new AjaxReturn(501, "不符合开奖规则", null);
+        }
+        return new AjaxReturn(200, null, null);
+    }
+
+}

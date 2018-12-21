@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.BannerInfoMapper">
+    <resultMap id="BannerInfo" type="com.fun.client.domain.BannerInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="bannerName" javaType="String" column="banner_name" jdbcType="VARCHAR" />
+        <result property="bannerSrc" javaType="String" column="banner_src" jdbcType="VARCHAR" />
+        <result property="detail" javaType="String" column="detail" jdbcType="VARCHAR" />
+        <result property="state" javaType="Integer" column="state" jdbcType="INTEGER" />
+        <result property="bannerLocation" javaType="Integer" column="banner_location" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map">
+		<![CDATA[
+		INSERT INTO t_banner_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			banner_name,
+			banner_src,
+			detail,
+			state,
+			banner_location
+		)
+		VALUES
+			(
+				#{bannerInfo.pkId, jdbcType = INTEGER},
+				#{bannerInfo.createUser, jdbcType = INTEGER},
+				#{bannerInfo.createTime, jdbcType = TIMESTAMP},
+				#{bannerInfo.updateUser, jdbcType = INTEGER},
+				#{bannerInfo.updateTime, jdbcType = TIMESTAMP},
+				#{bannerInfo.dataVersion, jdbcType = TINYINT},
+				#{bannerInfo.bannerName, jdbcType = VARCHAR},
+				#{bannerInfo.bannerSrc, jdbcType = VARCHAR},
+				#{bannerInfo.detail, jdbcType = VARCHAR},
+				#{bannerInfo.state, jdbcType = INTEGER},
+				#{bannerInfo.bannerLocation, jdbcType = INTEGER}
+			)
+		]]>
+	</insert>
+
+    <!-- 查询所有轮播图信息 -->
+    <select id="select" parameterType="Map" resultMap="BannerInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_banner_info t
+		]]>
+        <where>
+            <if test="bannerInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{bannerInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="bannerInfo.createUser != null and bannerInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{bannerInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{bannerInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="bannerInfo.updateUser != null and bannerInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{bannerInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{bannerInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="bannerInfo.dataVersion != null and bannerInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{bannerInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.bannerName != null and bannerInfo.bannerName != ''">
+                <![CDATA[AND t.banner_name = #{bannerInfo.bannerName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.bannerSrc != null and bannerInfo.bannerSrc != ''">
+                <![CDATA[AND t.banner_src = #{bannerInfo.bannerSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.detail != null and bannerInfo.datail != ''">
+                <![CDATA[AND t.detail = #{bannerInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.state != null">
+                <![CDATA[AND t.state = #{bannerInfo.state, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.bannerLocation != null">
+                <![CDATA[AND t.banner_location = #{bannerInfo.bannerLocation, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有开启状态的首页轮播图信息 -->
+    <select id="selectByState" parameterType="Map" resultMap="BannerInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_banner_info t
+		]]>
+        <where>
+            <if test="bannerInfo.pkId != null">
+                <![CDATA[AND t.pk_id = #{bannerInfo.pkId, jdbcType=BIGINT}]]>
+            </if>
+            <if test="bannerInfo.createUser != null and bannerInfo.createUser > 0">
+                <![CDATA[AND t.create_user = #{bannerInfo.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.createTime != null">
+                <![CDATA[AND t.create_time = #{bannerInfo.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="bannerInfo.updateUser != null and bannerInfo.updateUser > 0">
+                <![CDATA[AND t.update_user = #{bannerInfo.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.updateTime != null">
+                <![CDATA[AND t.update_time = #{bannerInfo.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="bannerInfo.dataVersion != null and bannerInfo.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{bannerInfo.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.bannerName != null and bannerInfo.bannerName != ''">
+                <![CDATA[AND t.banner_name = #{bannerInfo.bannerName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.bannerSrc != null and bannerInfo.bannerSrc != ''">
+                <![CDATA[AND t.banner_src = #{bannerInfo.bannerSrc, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.detail != null and bannerInfo.datail != ''">
+                <![CDATA[AND t.detail = #{bannerInfo.detail, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="bannerInfo.state != null">
+                <![CDATA[AND t.state = #{bannerInfo.state, jdbcType=INTEGER}]]>
+            </if>
+            <if test="bannerInfo.bannerLocation != null">
+                <![CDATA[AND t.banner_location = #{bannerInfo.bannerLocation, jdbcType=INTEGER}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectById" parameterType="Map" resultMap="BannerInfo">
+        <![CDATA[
+		SELECT
+			*
+		FROM
+			t_banner_info t
+		]]>
+        <where>
+            <![CDATA[AND t.pk_id = #{bannerInfoId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[LIMIT 1]]>
+    </select>
+
+    <!--根据Id修改轮播图信息-->
+    <update id="update" parameterType="Map">
+        <![CDATA[UPDATE t_banner_info t]]>
+            <set>
+            <![CDATA[ t.update_user = #{bannerInfo.updateUser},]]>
+            <![CDATA[ t.update_time = #{bannerInfo.updateTime},]]>
+            <![CDATA[ t.data_version = #{bannerInfo.dataVersion},]]>
+            <![CDATA[ t.banner_name = #{bannerInfo.bannerName},]]>
+            <![CDATA[ t.banner_src = #{bannerInfo.bannerSrc},]]>
+            <![CDATA[ t.detail = #{bannerInfo.detail},]]>
+            <![CDATA[ t.state = #{bannerInfo.state},]]>
+            <![CDATA[ t.banner_location = #{bannerInfo.bannerLocation},]]>
+            </set>
+          <where>
+              <![CDATA[AND t.pk_id = #{bannerInfoId,jdbcType=INTEGER }]]>
+          </where>
+    </update>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_banner_info
+		]]>
+        <where>
+            <![CDATA[AND banner_location = #{bannerInfoId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+</mapper>

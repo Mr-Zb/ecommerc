@@ -1,0 +1,969 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.FinCapitalLogMapper">
+    <resultMap id="FinCapitalLog" type="com.fun.le.entities.FinCapitalLog">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="memberId" javaType="Long" column="member_id" jdbcType="INTEGER"/>
+        <result property="memberName" javaType="String" column="member_name" jdbcType="VARCHAR"/>
+        <result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER"/>
+        <result property="agentName" javaType="String" column="agent_name" jdbcType="VARCHAR"/>
+        <result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="VARCHAR"/>
+        <result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="VARCHAR"/>
+        <result property="capitalType" javaType="Integer" column="capital_type" jdbcType="INTEGER"/>
+        <result property="capitalAmount1" javaType="Double" column="capital_amount1" jdbcType="DECIMAL"/>
+        <result property="capitalAmount2" javaType="Double" column="capital_amount2" jdbcType="DECIMAL"/>
+        <result property="orderId" javaType="Integer" column="order_id" jdbcType="INTEGER"/>
+        <result property="orderNo" javaType="String" column="order_no" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="SysPropSetting" type="com.fun.le.entities.SysPropSetting">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="propKey" javaType="String" column="prop_key" jdbcType="VARCHAR"/>
+        <result property="propValue" javaType="String" column="prop_value" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="MemTeam" type="com.fun.client.domain.MemTeam">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <id property="userId" javaType="Integer" column="user_id" jdbcType="INTEGER"/>
+        <result property="amount1" javaType="Double" column="amount1" jdbcType="DECIMAL"/>
+        <result property="amount2" javaType="Double" column="amount2" jdbcType="DECIMAL"/>
+        <result property="rebate" javaType="Double" column="rebate" jdbcType="DECIMAL"/>
+        <result property="memberName" javaType="String" column="member_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="finCapitalLog.pkId">
+        <![CDATA[
+		INSERT INTO t_fin_capital_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			capital_type,
+			capital_amount1,
+			capital_amount2,
+			order_id,
+			order_no,
+			remark
+		)
+		VALUES
+			(
+				#{finCapitalLog.pkId, jdbcType = INTEGER},
+				#{finCapitalLog.createUser, jdbcType = INTEGER},
+				#{finCapitalLog.createTime, jdbcType = TIMESTAMP},
+				#{finCapitalLog.updateUser, jdbcType = INTEGER},
+				#{finCapitalLog.updateTime, jdbcType = TIMESTAMP},
+				#{finCapitalLog.dataVersion, jdbcType = INTEGER},
+				#{finCapitalLog.memberId, jdbcType = INTEGER},
+				#{finCapitalLog.memberName, jdbcType = VARCHAR},
+				#{finCapitalLog.agentId, jdbcType = INTEGER},
+				#{finCapitalLog.agentName, jdbcType = VARCHAR},
+				#{finCapitalLog.agentFullId, jdbcType = VARCHAR},
+				#{finCapitalLog.agentFullName, jdbcType = VARCHAR},
+				#{finCapitalLog.capitalType, jdbcType = INTEGER},
+				#{finCapitalLog.capitalAmount1, jdbcType = DECIMAL},
+				#{finCapitalLog.capitalAmount2, jdbcType = DECIMAL},
+				#{finCapitalLog.orderId, jdbcType = INTEGER},
+				#{finCapitalLog.orderNo, jdbcType = VARCHAR},
+				#{finCapitalLog.remark, jdbcType = VARCHAR}
+			)
+        ]]>
+    </insert>
+
+    <!-- 批量插入数据 -->
+    <insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+        <![CDATA[
+		INSERT INTO t_fin_capital_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			capital_type,
+			capital_amount1,
+			capital_amount2,
+			order_id,
+			order_no,
+			remark
+		)
+		]]>
+        <foreach collection="finCapitalLogs" item="finCapitalLog" open="VALUES" separator=",">
+            <![CDATA[
+			(
+				#{finCapitalLog.pkId, jdbcType = INTEGER},
+				#{finCapitalLog.createUser, jdbcType = INTEGER},
+				#{finCapitalLog.createTime, jdbcType = TIMESTAMP},
+				#{finCapitalLog.updateUser, jdbcType = INTEGER},
+				#{finCapitalLog.updateTime, jdbcType = TIMESTAMP},
+				#{finCapitalLog.dataVersion, jdbcType = INTEGER},
+				#{finCapitalLog.memberId, jdbcType = INTEGER},
+				#{finCapitalLog.memberName, jdbcType = VARCHAR},
+				#{finCapitalLog.agentId, jdbcType = INTEGER},
+				#{finCapitalLog.agentName, jdbcType = VARCHAR},
+				#{finCapitalLog.agentFullId, jdbcType = VARCHAR},
+				#{finCapitalLog.agentFullName, jdbcType = VARCHAR},
+				#{finCapitalLog.capitalType, jdbcType = INTEGER},
+				#{finCapitalLog.capitalAmount1, jdbcType = DECIMAL},
+				#{finCapitalLog.capitalAmount2, jdbcType = DECIMAL},
+				#{finCapitalLog.orderId, jdbcType = INTEGER},
+				#{finCapitalLog.orderNo, jdbcType = VARCHAR},
+				#{finCapitalLog.remark, jdbcType = VARCHAR}
+			)
+		]]>
+        </foreach>
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="update" parameterType="Map">
+        <![CDATA[UPDATE t_fin_capital_log]]>
+        <set>
+            <![CDATA[update_user = #{finCapitalLog.updateUser},]]>
+            <![CDATA[update_time = #{finCapitalLog.updateTime},]]>
+            <![CDATA[data_version = #{finCapitalLog.dataVersion},]]>
+            <![CDATA[member_id = #{finCapitalLog.memberId},]]>
+            <![CDATA[member_name = #{finCapitalLog.memberName},]]>
+            <![CDATA[agent_id = #{finCapitalLog.agentId},]]>
+            <![CDATA[agent_name = #{finCapitalLog.agentName},]]>
+            <![CDATA[agent_full_id = #{finCapitalLog.agentFullId},]]>
+            <![CDATA[agent_full_name = #{finCapitalLog.agentFullName},]]>
+            <![CDATA[capital_type = #{finCapitalLog.capitalType},]]>
+            <![CDATA[capital_amount1 = #{finCapitalLog.capitalAmount1},]]>
+            <![CDATA[capital_amount2 = #{finCapitalLog.capitalAmount2},]]>
+            <![CDATA[order_id = #{finCapitalLog.orderId},]]>
+            <![CDATA[order_no = #{finCapitalLog.orderNo},]]>
+            <![CDATA[remark = #{finCapitalLog.remark},]]>
+        </set>
+        <where>
+            <if test="where.memberId != null">
+                <![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.memberName != null and where.memberName != ''">
+                <![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentId != null">
+                <![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.agentName != null and where.agentName != ''">
+                <![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullId != null and where.agentFullId != ''">
+                <![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullName != null and where.agentFullName != ''">
+                <![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.capitalType != null">
+                <![CDATA[AND capital_type = #{where.capitalType, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.capitalAmount1 != null">
+                <![CDATA[AND capital_amount1 = #{where.capitalAmount1, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.capitalAmount2 != null">
+                <![CDATA[AND capital_amount2 = #{where.capitalAmount2, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.orderId != null">
+                <![CDATA[AND order_id = #{where.orderId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.orderNo != null and where.orderNo != ''">
+                <![CDATA[AND order_no = #{where.orderNo, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据主键更新 -->
+    <update id="updateById" parameterType="Map">
+        <![CDATA[UPDATE t_fin_capital_log]]>
+        <set>
+            <![CDATA[update_user = #{finCapitalLog.updateUser},]]>
+            <![CDATA[update_time = #{finCapitalLog.updateTime},]]>
+            <![CDATA[data_version = #{finCapitalLog.dataVersion},]]>
+            <![CDATA[member_id = #{finCapitalLog.memberId},]]>
+            <![CDATA[member_name = #{finCapitalLog.memberName},]]>
+            <![CDATA[agent_id = #{finCapitalLog.agentId},]]>
+            <![CDATA[agent_name = #{finCapitalLog.agentName},]]>
+            <![CDATA[agent_full_id = #{finCapitalLog.agentFullId},]]>
+            <![CDATA[agent_full_name = #{finCapitalLog.agentFullName},]]>
+            <![CDATA[capital_type = #{finCapitalLog.capitalType},]]>
+            <![CDATA[capital_amount1 = #{finCapitalLog.capitalAmount1},]]>
+            <![CDATA[capital_amount2 = #{finCapitalLog.capitalAmount2},]]>
+            <![CDATA[order_id = #{finCapitalLog.orderId},]]>
+            <![CDATA[order_no = #{finCapitalLog.orderNo},]]>
+            <![CDATA[remark = #{finCapitalLog.remark},]]>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{finCapitalLogId, jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+    <!-- 更新有值数据 -->
+    <update id="updateActive" parameterType="Map">
+        <![CDATA[UPDATE t_fin_capital_log]]>
+        <set>
+            <if test="finCapitalLog.updateUser != null">
+                <![CDATA[update_user = #{finCapitalLog.updateUser},]]>
+            </if>
+            <if test="finCapitalLog.updateTime != null">
+                <![CDATA[update_time = #{finCapitalLog.updateTime},]]>
+            </if>
+            <if test="finCapitalLog.dataVersion != null">
+                <![CDATA[data_version = #{finCapitalLog.dataVersion},]]>
+            </if>
+            <if test="finCapitalLog.memberId != null">
+                <![CDATA[member_id = #{finCapitalLog.memberId},]]>
+            </if>
+            <if test="finCapitalLog.memberName != null and finCapitalLog.memberName != ''">
+                <![CDATA[member_name = #{finCapitalLog.memberName},]]>
+            </if>
+            <if test="finCapitalLog.agentId != null">
+                <![CDATA[agent_id = #{finCapitalLog.agentId},]]>
+            </if>
+            <if test="finCapitalLog.agentName != null and finCapitalLog.agentName != ''">
+                <![CDATA[agent_name = #{finCapitalLog.agentName},]]>
+            </if>
+            <if test="finCapitalLog.agentFullId != null and finCapitalLog.agentFullId != ''">
+                <![CDATA[agent_full_id = #{finCapitalLog.agentFullId},]]>
+            </if>
+            <if test="finCapitalLog.agentFullName != null and finCapitalLog.agentFullName != ''">
+                <![CDATA[agent_full_name = #{finCapitalLog.agentFullName},]]>
+            </if>
+            <if test="finCapitalLog.capitalType != null">
+                <![CDATA[capital_type = #{finCapitalLog.capitalType},]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount1 != null">
+                <![CDATA[capital_amount1 = #{finCapitalLog.capitalAmount1},]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount2 != null">
+                <![CDATA[capital_amount2 = #{finCapitalLog.capitalAmount2},]]>
+            </if>
+            <if test="finCapitalLog.orderId != null">
+                <![CDATA[order_id = #{finCapitalLog.orderId},]]>
+            </if>
+            <if test="finCapitalLog.orderNo != null and finCapitalLog.orderNo != ''">
+                <![CDATA[order_no = #{finCapitalLog.orderNo},]]>
+            </if>
+            <if test="finCapitalLog.remark != null and finCapitalLog.remark != ''">
+                <![CDATA[remark = #{finCapitalLog.remark},]]>
+            </if>
+        </set>
+        <where>
+            <if test="where.memberId != null">
+                <![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.memberName != null and where.memberName != ''">
+                <![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentId != null">
+                <![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.agentName != null and where.agentName != ''">
+                <![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullId != null and where.agentFullId != ''">
+                <![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullName != null and where.agentFullName != ''">
+                <![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.capitalType != null">
+                <![CDATA[AND capital_type = #{where.capitalType, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.capitalAmount1 != null">
+                <![CDATA[AND capital_amount1 = #{where.capitalAmount1, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.capitalAmount2 != null">
+                <![CDATA[AND capital_amount2 = #{where.capitalAmount2, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.orderId != null">
+                <![CDATA[AND order_id = #{where.orderId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.orderNo != null and where.orderNo != ''">
+                <![CDATA[AND order_no = #{where.orderNo, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据主键更新有值数据 -->
+    <update id="updateActiveById" parameterType="Map">
+        <![CDATA[UPDATE t_fin_capital_log]]>
+        <set>
+            <if test="finCapitalLog.updateUser != null">
+                <![CDATA[update_user = #{finCapitalLog.updateUser},]]>
+            </if>
+            <if test="finCapitalLog.updateTime != null">
+                <![CDATA[update_time = #{finCapitalLog.updateTime},]]>
+            </if>
+            <if test="finCapitalLog.dataVersion != null">
+                <![CDATA[data_version = #{finCapitalLog.dataVersion},]]>
+            </if>
+            <if test="finCapitalLog.memberId != null">
+                <![CDATA[member_id = #{finCapitalLog.memberId},]]>
+            </if>
+            <if test="finCapitalLog.memberName != null and finCapitalLog.memberName != ''">
+                <![CDATA[member_name = #{finCapitalLog.memberName},]]>
+            </if>
+            <if test="finCapitalLog.agentId != null">
+                <![CDATA[agent_id = #{finCapitalLog.agentId},]]>
+            </if>
+            <if test="finCapitalLog.agentName != null and finCapitalLog.agentName != ''">
+                <![CDATA[agent_name = #{finCapitalLog.agentName},]]>
+            </if>
+            <if test="finCapitalLog.agentFullId != null and finCapitalLog.agentFullId != ''">
+                <![CDATA[agent_full_id = #{finCapitalLog.agentFullId},]]>
+            </if>
+            <if test="finCapitalLog.agentFullName != null and finCapitalLog.agentFullName != ''">
+                <![CDATA[agent_full_name = #{finCapitalLog.agentFullName},]]>
+            </if>
+            <if test="finCapitalLog.capitalType != null">
+                <![CDATA[capital_type = #{finCapitalLog.capitalType},]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount1 != null">
+                <![CDATA[capital_amount1 = #{finCapitalLog.capitalAmount1},]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount2 != null">
+                <![CDATA[capital_amount2 = #{finCapitalLog.capitalAmount2},]]>
+            </if>
+            <if test="finCapitalLog.orderId != null">
+                <![CDATA[order_id = #{finCapitalLog.orderId},]]>
+            </if>
+            <if test="finCapitalLog.orderNo != null and finCapitalLog.orderNo != ''">
+                <![CDATA[order_no = #{finCapitalLog.orderNo},]]>
+            </if>
+            <if test="finCapitalLog.remark != null and finCapitalLog.remark != ''">
+                <![CDATA[remark = #{finCapitalLog.remark},]]>
+            </if>
+        </set>
+        <where>
+            <![CDATA[AND pk_id = #{finCapitalLogId, jdbcType=INTEGER}]]>
+        </where>
+    </update>
+
+
+    <!-- 查询列表 -->
+    <select id="select1" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.capital_type AS capital_type,
+			t.capital_amount1 AS capital_amount1,
+			t.capital_amount2 AS capital_amount2,
+			t.order_id AS order_id,
+			t.order_no AS order_no,
+			t.remark AS remark
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <if test="finCapitalLog.pkId != null and finCapitalLog.pkId > 0">
+                <![CDATA[AND t.pk_id = #{finCapitalLog.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.createUser != null and finCapitalLog.createUser > 0">
+                <![CDATA[AND t.create_user = #{finCapitalLog.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.createTime != null">
+                <![CDATA[AND t.create_time = #{finCapitalLog.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finCapitalLog.updateUser != null and finCapitalLog.updateUser > 0">
+                <![CDATA[AND t.update_user = #{finCapitalLog.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.updateTime != null">
+                <![CDATA[AND t.update_time = #{finCapitalLog.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finCapitalLog.dataVersion != null and finCapitalLog.dataVersion > 0">
+                <![CDATA[AND t.data_version = #{finCapitalLog.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.memberId != null and finCapitalLog.memberId > 0">
+                <![CDATA[AND t.member_id = #{finCapitalLog.memberId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.memberName != null and finCapitalLog.memberName != ''">
+                <![CDATA[AND t.member_name = #{finCapitalLog.memberName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="finCapitalLog.agentId != null and finCapitalLog.agentId > 0">
+                <![CDATA[AND t.agent_id = #{finCapitalLog.agentId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.agentName != null and finCapitalLog.agentName != ''">
+                <![CDATA[AND t.agent_name = #{finCapitalLog.agentName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="finCapitalLog.agentFullId != null and finCapitalLog.agentFullId != ''">
+                <![CDATA[AND t.agent_full_id = #{finCapitalLog.agentFullId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="finCapitalLog.agentFullName != null and finCapitalLog.agentFullName != ''">
+                <![CDATA[AND t.agent_full_name = #{finCapitalLog.agentFullName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="finCapitalLog.capitalType != null and finCapitalLog.capitalType > 0">
+                <![CDATA[AND t.capital_type = #{finCapitalLog.capitalType, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount1 != null and finCapitalLog.capitalAmount1 > 0">
+                <![CDATA[AND t.capital_amount1 = #{finCapitalLog.capitalAmount1, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount2 != null and finCapitalLog.capitalAmount2 > 0">
+                <![CDATA[AND t.capital_amount2 = #{finCapitalLog.capitalAmount2, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="finCapitalLog.orderId != null and finCapitalLog.orderId > 0">
+                <![CDATA[AND t.order_id = #{finCapitalLog.orderId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.orderNo != null and finCapitalLog.orderNo != ''">
+                <![CDATA[AND t.order_no = #{finCapitalLog.orderNo, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="finCapitalLog.remark != null and finCapitalLog.remark != ''">
+                <![CDATA[AND t.remark = #{finCapitalLog.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询列表 -->
+    <select id="select" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.capital_type AS capital_type,
+			t.capital_amount1 AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <if test="finCapitalLog.pkId != null and finCapitalLog.pkId > 0">
+                <![CDATA[AND t.pk_id = #{finCapitalLog.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.createUser != null and finCapitalLog.createUser > 0">
+                <![CDATA[AND t.create_user = #{finCapitalLog.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.createTime != null">
+                <![CDATA[AND t.create_time = #{finCapitalLog.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="finCapitalLog.capitalType != null and finCapitalLog.capitalType > 0">
+                <![CDATA[AND t.capital_type = #{finCapitalLog.capitalType, jdbcType=INTEGER}]]>
+            </if>
+            <if test="finCapitalLog.capitalAmount1 != null and finCapitalLog.capitalAmount1 > 0">
+                <![CDATA[AND t.capital_amount1 = #{finCapitalLog.capitalAmount1, jdbcType=DECIMAL}]]>
+            </if>
+            <!--  <![CDATA[ORDER BY t.create_time DESC ]]>-->
+        </where>
+    </select>
+
+    <!-- 根据主键查询 -->
+    <select id="selectById" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.capital_type AS capital_type,
+			t.capital_amount1 AS capital_amount1,
+			t.capital_amount2 AS capital_amount2,
+			t.order_id AS order_id,
+			t.order_no AS order_no,
+			t.remark AS remark
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.member_id = #{finCapitalLogId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[ORDER BY t.create_time DESC limit 1]]>
+    </select>
+
+    <!-- 按条件删除 -->
+    <delete id="delete" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_fin_capital_log
+		]]>
+        <where>
+            <if test="where.pkId != null">
+                <![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.createUser != null">
+                <![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.createTime != null">
+                <![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.updateUser != null">
+                <![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.updateTime != null">
+                <![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.dataVersion != null">
+                <![CDATA[AND data_version = #{where.dataVersion, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.memberId != null">
+                <![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.memberName != null and where.memberName != ''">
+                <![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentId != null">
+                <![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.agentName != null and where.agentName != ''">
+                <![CDATA[AND agent_name = #{where.agentName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullId != null and where.agentFullId != ''">
+                <![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.agentFullName != null and where.agentFullName != ''">
+                <![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.capitalType != null">
+                <![CDATA[AND capital_type = #{where.capitalType, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.capitalAmount1 != null">
+                <![CDATA[AND capital_amount1 = #{where.capitalAmount1, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.capitalAmount2 != null">
+                <![CDATA[AND capital_amount2 = #{where.capitalAmount2, jdbcType=DECIMAL}]]>
+            </if>
+            <if test="where.orderId != null">
+                <![CDATA[AND order_id = #{where.orderId, jdbcType=INTEGER}]]>
+            </if>
+            <if test="where.orderNo != null and where.orderNo != ''">
+                <![CDATA[AND order_no = #{where.orderNo, jdbcType=VARCHAR}]]>
+            </if>
+            <if test="where.remark != null and where.remark != ''">
+                <![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+            </if>
+        </where>
+    </delete>
+
+    <!-- 按主键删除 -->
+    <delete id="deleteById" parameterType="Map">
+        <![CDATA[
+		DELETE
+		FROM
+			t_fin_capital_log
+		]]>
+        <where>
+            <![CDATA[AND pk_id = #{finCapitalLogId, jdbcType=INTEGER}]]>
+        </where>
+    </delete>
+
+    <!-- 获取用户余额 -->
+    <select id="countUserAmount" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.member_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取下级总余额 -->
+    <select id="teamMoney" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取团队充值 -->
+    <select id="teamRecharge" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.capital_type = 11]]>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取团队提现 -->
+    <select id="teamWithdraw" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(ABS(t.capital_amount1)),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.capital_type = 12]]>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取团队促销 -->
+    <select id="teamPromotion" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(ABS(t.capital_amount1)),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.capital_type = 21]]>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取团队升级金额 -->
+    <select id="teamUpgrade" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.capital_type = 31]]>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+
+    </select>
+
+    <!-- 统计资金明细 -->
+    <select id="countCapital" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+		SELECT
+			t.capital_type,
+			SUM(t.capital_amount1) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.data_version = '1']]>
+            <![CDATA[AND t.member_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+        <![CDATA[GROUP BY t.capital_type]]>
+    </select>
+
+    <!--获取用户的余额-->
+    <select id="selectSubordinateMoney" parameterType="Map" resultType="Double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.create_user = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取团队促销 -->
+    <select id="userPromotion" parameterType="Map" resultType="double">
+        <![CDATA[
+		SELECT
+			IFNULL(
+				SUM(ABS(t.capital_amount1)),
+				0.00
+			) AS t.capital_amount1
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.capital_type = 21]]>
+            <![CDATA[AND t.create_user = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!-- 获取用户奖金 -->
+    <select id="countUserBonus" parameterType="Map" resultType="double">
+        <![CDATA[
+
+		  SELECT
+		  IFNULL(
+		  sum(t.capital_amount1),
+		  0.00
+		  )
+		   FROM t_fin_capital_log t
+           where 1=1
+           and t.capital_type =31
+           and t.member_id = #{userId,jdbcType=INTEGER}
+
+        ]]>
+    </select>
+
+    <select id="selectSubordinateInfo" parameterType="Map" resultMap="MemTeam">
+        <![CDATA[
+		SELECT
+		t.member_name AS member_name,
+        t.member_id AS user_id, SUM(t.capital_amount1) AS amount1
+       FROM t_fin_capital_log t
+       where member_id = #{userId,jdbcType = INTEGER}
+       GROUP BY member_id
+        ]]>
+    </select>
+
+    <!-- 获取下级用户-->
+    <select id="countSubordinateUser" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+		SELECT
+		DISTINCT t.member_id
+		FROM
+			t_fin_capital_log t
+		]]>
+        <where>
+            <![CDATA[AND t.agent_id = #{userId, jdbcType=INTEGER}]]>
+        </where>
+    </select>
+
+    <!--促销-->
+    <select id="registerAndPromotionNum" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+        SELECT
+        DISTINCT t.member_id
+        FROM t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=22]]>
+            <![CDATA[AND t.member_id= #{userId,jdbcType =INTEGER}]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--充值人数-->
+    <select id="selectPayNum" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+        SELECT
+        DISTINCT t.member_id
+        FROM t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=11]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--充值笔数-->
+    <select id="selectPayCount" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+        SELECT
+        t.member_id
+        FROM t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=11]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--促销人数-->
+    <select id="promotionNum" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+        SELECT
+        DISTINCT t.member_id
+        FROM t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=22]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--当日充值总额-->
+    <select id="rechargeCount" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+         IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+        FROM
+        t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=11]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--提款笔数-->
+    <select id="drawCount" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+        SELECT
+        t.member_id
+        FROM t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=12]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--提款金额-->
+    <select id="selectDrawMoney" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+        IFNULL(
+				SUM(t.capital_amount1),
+				0.00
+			) AS capital_amount1
+        FROM
+        t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=12]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <!--首充金额-->
+    <select id="selectFirstRecharge" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+        t.capital_amount1
+        FROM
+        t_fin_capital_log t
+        WHERE 1=1
+        AND t.member_id= #{userId,jdbcType =INTEGER}
+        AND t.capital_type =11
+        ORDER BY t.create_time
+        LIMIT 1
+        ]]>
+    </select>
+
+    <!--投注金额-->
+    <select id="selectBetMoney" parameterType="Map" resultType="Double">
+        <![CDATA[
+        SELECT
+         IFNULL(
+				SUM(ABS(t.capital_amount1)),
+				0.00
+			) AS capital_amount1
+        FROM
+        t_fin_capital_log t
+        ]]>
+        <where>
+            <![CDATA[AND t.capital_type=22]]>
+            <if test="where.beginDate != null">
+                <![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="where.endDate != null">
+                <![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSeven" parameterType="Map" resultMap="FinCapitalLog">
+        <![CDATA[
+      SELECT DISTINCT a.member_id
+      from t_fin_capital_log a
+      WHERE TO_DAYS( NOW( ) ) - TO_DAYS( a.create_time) = #{num,jdbcType=INTEGER}
+      AND a.capital_type=22
+        ]]>
+
+    </select>
+</mapper>

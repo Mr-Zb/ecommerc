@@ -1,0 +1,53 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.MemUserInfo;
+import com.fun.client.repository.MemUserInfoMapper;
+import com.fun.framework.service.BaseService;
+import com.fun.le.entities.FinCapitalLog;
+import com.fun.le.repository.FinCapitalLogMapper;
+import com.fun.le.service.FinCapitalLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+
+@Service
+public class FinService extends BaseService {
+    private @Autowired
+    FinCapitalLogMapper finCapitalLogMapper;
+    @Autowired
+    private MemUserInfoMapper memUserInfoMapper;
+    private @Autowired
+    FinCapitalLogService finCapitalLogService;
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class }, readOnly = false)
+    public void addCapitalLog(Integer memId, Integer capitalType, Double amount,
+                              String orderNo, String remark){
+        synchronized (getlock(memId)) {
+            double amount2 = this.finCapitalLogService.countUserAmount(memId);
+            MemUserInfo userInfo = memUserInfoMapper.selectById(memId);
+            FinCapitalLog finCapitalLog = new FinCapitalLog();
+            finCapitalLog.setMemberName(userInfo.getLoginName());
+            finCapitalLog.setCreateTime(new Date());
+            finCapitalLog.setUpdateTime(new Date());
+            finCapitalLog.setCreateUser(memId);
+            finCapitalLog.setUpdateUser(memId);
+            finCapitalLog.setRemark(remark);
+            finCapitalLog.setOrderNo(orderNo);
+            finCapitalLog.setMemberId(userInfo.getPkId().longValue());
+            finCapitalLog.setCapitalAmount1(amount);
+            finCapitalLog.setCapitalAmount2(amount2 + amount);
+            finCapitalLog.setCapitalType(capitalType);
+            finCapitalLog.setAgentFullId(userInfo.getAgentFullId());
+            finCapitalLog.setAgentFullName(userInfo.getAgentFullName());
+            finCapitalLog.setAgentId(userInfo.getAgentId().intValue());
+            finCapitalLog.setAgentName(userInfo.getAgentName());
+            finCapitalLog.setOrderId(0);
+            finCapitalLog.setDataVersion(1);
+            this.finCapitalLogMapper.insert(finCapitalLog);
+            this.memUserInfoMapper.updateUserAmount1(memId, finCapitalLog.getCapitalAmount2());
+        }
+    }
+}

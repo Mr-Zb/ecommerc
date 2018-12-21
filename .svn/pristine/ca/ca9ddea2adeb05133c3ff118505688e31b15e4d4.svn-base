@@ -1,0 +1,60 @@
+package com.fun.client.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@ApiModel()
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class GoodsInfo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(name = "pkId", notes = "主键")
+    private Integer pkId;
+    @ApiModelProperty(name = "cteateUser", notes = "创建者")
+    private Integer createUser;
+    @ApiModelProperty(name = "createTime", notes = "创建时间")
+    private Date createTime;
+    @ApiModelProperty(name = "updateUser", notes = "更新者")
+    private Integer updateUser;
+    @ApiModelProperty(name = "updateTime", notes = "更新时间")
+    private Date updateTime;
+    @ApiModelProperty(name = "dataVersion", notes = "版本号")
+    private Integer dataVersion;
+    @ApiModelProperty(name = "goodName", notes = "商品名称")
+    private String goodName;
+    @ApiModelProperty(name = "goodSrc", notes = "商品图片URL")
+    private String goodSrc;
+    @ApiModelProperty(name = "catId", notes = "商品分类")
+    private Integer catId;
+    @ApiModelProperty(name = "detail", notes = "商品详情")
+    private String detail;
+    @ApiModelProperty(name = "price", notes = "商品价格")
+    private Double price;
+    @ApiModelProperty(name = "coin", notes = "商品积分")
+    private Double coin;
+    @ApiModelProperty(name = "isIntegral", notes = "是否是积分商品(0,不是，1,是)")
+    private Integer isIntegral;
+    @ApiModelProperty(name = "isPromotion", notes = "是否是促销商品ID(有值时is_promotion必须为1)")
+    private Integer isPromotion;
+    @ApiModelProperty(name = "goodSourceId", notes = "原有商品ID(is_promotion=1时)")
+    private Integer goodSourceId;
+    @ApiModelProperty(name = "repertoryNum", notes = "商品库存")
+    private Integer repertoryNum;
+    @ApiModelProperty(name = "purchasePrice", notes = "进价")
+    private Double purchasePrice;
+    @ApiModelProperty(name = "count", notes = "销售数量")
+    private Integer count;
+}

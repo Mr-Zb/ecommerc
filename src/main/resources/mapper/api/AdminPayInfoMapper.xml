@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.api.repository.AdminPayInfoMapper">
+	<resultMap id="PayInfo" type="com.fun.api.domain.PayInfo" />
+
+	<select id="listPayInfos" parameterType="Map" resultMap="PayInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id,
+			t.create_time,
+			t.order_no1,
+			t.order_no2,
+			t.order_no3,
+			t.merchant_id,
+			t.agent_id,
+			t.pay_type,
+			t.platform_id,
+			t.pay_status,
+			order_amt,
+			fee1,
+			fee2,
+			fee3,
+			notice_status
+		FROM
+			t_pay_info t
+		]]>
+		<where>
+			<include refid="where" />
+		</where>
+		<![CDATA[
+		ORDER BY
+			t.pk_id DESC
+		]]>
+	</select>
+
+
+	<sql id="where">
+		<if test="beginDate != null">
+			<![CDATA[AND t.create_time >= #{beginDate, jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[AND t.create_time <= #{endDate, jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="orderNo1 != null and orderNo1 != ''">
+			<![CDATA[AND t.order_no1 = #{orderNo1}]]>
+		</if>
+		<if test="orderNo2 != null and orderNo2 != ''">
+			<![CDATA[AND t.order_no2 = #{orderNo2}]]>
+		</if>
+		<if test="orderNo3 != null and orderNo3 != ''">
+			<![CDATA[AND t.order_no3 = #{orderNo3}]]>
+		</if>
+		<if test="merchantId != null">
+			<![CDATA[AND t.merchant_id = #{merchantId}]]>
+		</if>
+		<if test="agentId != null">
+			<![CDATA[AND t.agent_id = #{agentId}]]>
+		</if>
+		<if test="platformId != null">
+			<![CDATA[AND t.platform_id = #{platformId}]]>
+		</if>
+		<if test="payType != null">
+			<![CDATA[AND t.pay_type = #{payType}]]>
+		</if>
+		<if test="payStatus != null">
+			<![CDATA[AND t.pay_status = #{payStatus}]]>
+		</if>
+		<if test="noticeStatus != null">
+			<![CDATA[AND t.notice_status = #{noticeStatus}]]>
+		</if>
+	</sql>
+
+</mapper>

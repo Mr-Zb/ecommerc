@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.le.repository.LotProductInfoMapper">
+	<resultMap id="LotProductInfo" type="com.fun.le.entities.LotProductInfo">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="productType" javaType="Integer" column="product_type" jdbcType="TINYINT" />
+		<result property="productName" javaType="String" column="product_name" jdbcType="CHAR" />
+		<result property="productAlias" javaType="String" column="product_alias" jdbcType="CHAR" />
+		<result property="productIcon" javaType="String" column="product_icon" jdbcType="CHAR" />
+		<result property="productDesc" javaType="String" column="product_desc" jdbcType="CHAR" />
+		<result property="productOpenDesc" javaType="String" column="product_open_desc" jdbcType="CHAR" />
+		<result property="sorting" javaType="Integer" column="sorting" jdbcType="TINYINT" />
+		<result property="hotFlag" javaType="Integer" column="hot_flag" jdbcType="TINYINT" />
+		<result property="enableFlag" javaType="Integer" column="enable_flag" jdbcType="TINYINT" />
+		<result property="rewardFlag" javaType="Integer" column="reward_flag" jdbcType="TINYINT" />
+		<result property="multipleFlag" javaType="Integer" column="multiple_flag" jdbcType="TINYINT" />
+		<result property="groupFlag" javaType="Integer" column="group_flag" jdbcType="TINYINT" />
+		<result property="currIssue" javaType="String" column="curr_issue" jdbcType="CHAR" />
+		<result property="currEndTime" javaType="Date" column="curr_end_time" jdbcType="TIMESTAMP" />
+		<result property="currOpenTime" javaType="Date" column="curr_open_time" jdbcType="TIMESTAMP" />
+		<result property="lastIssue" javaType="String" column="last_issue" jdbcType="CHAR" />
+		<result property="lastEndTime" javaType="Date" column="last_end_time" jdbcType="TIMESTAMP" />
+		<result property="lastOpenTime" javaType="Date" column="last_open_time" jdbcType="TIMESTAMP" />
+		<result property="lastOpenCode" javaType="String" column="last_open_code" jdbcType="CHAR" />
+		<result property="lastOpenFeature1" javaType="String" column="last_open_feature1" jdbcType="CHAR" />
+		<result property="lastOpenFeature2" javaType="String" column="last_open_feature2" jdbcType="CHAR" />
+		<result property="lastOpenFeature3" javaType="String" column="last_open_feature3" jdbcType="CHAR" />
+		<result property="lastOpenFeature4" javaType="String" column="last_open_feature4" jdbcType="CHAR" />
+		<result property="lastOpenFeature5" javaType="String" column="last_open_feature5" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="lotProductInfo.pkId">
+		<![CDATA[
+		INSERT INTO t_lot_product_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_type,
+			product_name,
+			product_alias,
+			product_icon,
+			product_desc,
+			product_open_desc,
+			sorting,
+			hot_flag,
+			enable_flag,
+			reward_flag,
+			multiple_flag,
+			group_flag,
+			curr_issue,
+			curr_end_time,
+			curr_open_time,
+			last_issue,
+			last_end_time,
+			last_open_time,
+			last_open_code,
+			last_open_feature1,
+			last_open_feature2,
+			last_open_feature3,
+			last_open_feature4,
+			last_open_feature5
+		)
+		VALUES
+			(
+				#{lotProductInfo.pkId, jdbcType = INTEGER},
+				#{lotProductInfo.createUser, jdbcType = INTEGER},
+				#{lotProductInfo.createTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.updateUser, jdbcType = INTEGER},
+				#{lotProductInfo.updateTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.dataVersion, jdbcType = TINYINT},
+				#{lotProductInfo.productType, jdbcType = TINYINT},
+				#{lotProductInfo.productName, jdbcType = CHAR},
+				#{lotProductInfo.productAlias, jdbcType = CHAR},
+				#{lotProductInfo.productIcon, jdbcType = CHAR},
+				#{lotProductInfo.productDesc, jdbcType = CHAR},
+				#{lotProductInfo.productOpenDesc, jdbcType = CHAR},
+				#{lotProductInfo.sorting, jdbcType = TINYINT},
+				#{lotProductInfo.hotFlag, jdbcType = TINYINT},
+				#{lotProductInfo.enableFlag, jdbcType = TINYINT},
+				#{lotProductInfo.rewardFlag, jdbcType = TINYINT},
+				#{lotProductInfo.multipleFlag, jdbcType = TINYINT},
+				#{lotProductInfo.groupFlag, jdbcType = TINYINT},
+				#{lotProductInfo.currIssue, jdbcType = CHAR},
+				#{lotProductInfo.currEndTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.currOpenTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastIssue, jdbcType = CHAR},
+				#{lotProductInfo.lastEndTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastOpenTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastOpenCode, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature1, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature2, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature3, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature4, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature5, jdbcType = LONGVARCHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_lot_product_info (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			product_type,
+			product_name,
+			product_alias,
+			product_icon,
+			product_desc,
+			product_open_desc,
+			sorting,
+			hot_flag,
+			enable_flag,
+			reward_flag,
+			multiple_flag,
+			group_flag,
+			curr_issue,
+			curr_end_time,
+			curr_open_time,
+			last_issue,
+			last_end_time,
+			last_open_time,
+			last_open_code,
+			last_open_feature1,
+			last_open_feature2,
+			last_open_feature3,
+			last_open_feature4,
+			last_open_feature5
+		)
+		]]>
+		<foreach collection="lotProductInfos" item="lotProductInfo" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{lotProductInfo.pkId, jdbcType = INTEGER},
+				#{lotProductInfo.createUser, jdbcType = INTEGER},
+				#{lotProductInfo.createTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.updateUser, jdbcType = INTEGER},
+				#{lotProductInfo.updateTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.dataVersion, jdbcType = TINYINT},
+				#{lotProductInfo.productType, jdbcType = TINYINT},
+				#{lotProductInfo.productName, jdbcType = CHAR},
+				#{lotProductInfo.productAlias, jdbcType = CHAR},
+				#{lotProductInfo.productIcon, jdbcType = CHAR},
+				#{lotProductInfo.productDesc, jdbcType = CHAR},
+				#{lotProductInfo.productOpenDesc, jdbcType = CHAR},
+				#{lotProductInfo.sorting, jdbcType = TINYINT},
+				#{lotProductInfo.hotFlag, jdbcType = TINYINT},
+				#{lotProductInfo.enableFlag, jdbcType = TINYINT},
+				#{lotProductInfo.rewardFlag, jdbcType = TINYINT},
+				#{lotProductInfo.multipleFlag, jdbcType = TINYINT},
+				#{lotProductInfo.groupFlag, jdbcType = TINYINT},
+				#{lotProductInfo.currIssue, jdbcType = CHAR},
+				#{lotProductInfo.currEndTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.currOpenTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastIssue, jdbcType = CHAR},
+				#{lotProductInfo.lastEndTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastOpenTime, jdbcType = TIMESTAMP},
+				#{lotProductInfo.lastOpenCode, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature1, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature2, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature3, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature4, jdbcType = CHAR},
+				#{lotProductInfo.lastOpenFeature5, jdbcType = LONGVARCHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_lot_product_info]]>
+		<set>
+		<![CDATA[update_user = #{lotProductInfo.updateUser},]]>
+		<![CDATA[update_time = #{lotProductInfo.updateTime},]]>
+		<![CDATA[data_version = #{lotProductInfo.dataVersion},]]>
+		<![CDATA[product_type = #{lotProductInfo.productType},]]>
+		<![CDATA[product_name = #{lotProductInfo.productName},]]>
+		<![CDATA[product_alias = #{lotProductInfo.productAlias},]]>
+		<![CDATA[product_icon = #{lotProductInfo.productIcon},]]>
+		<![CDATA[product_desc = #{lotProductInfo.productDesc},]]>
+		<![CDATA[product_open_desc = #{lotProductInfo.productOpenDesc},]]>
+		<![CDATA[sorting = #{lotProductInfo.sorting},]]>
+		<![CDATA[hot_flag = #{lotProductInfo.hotFlag},]]>
+		<![CDATA[enable_flag = #{lotProductInfo.enableFlag},]]>
+		<![CDATA[reward_flag = #{lotProductInfo.rewardFlag},]]>
+		<![CDATA[multiple_flag = #{lotProductInfo.multipleFlag},]]>
+		<![CDATA[group_flag = #{lotProductInfo.groupFlag},]]>
+		<![CDATA[curr_issue = #{lotProductInfo.currIssue},]]>
+		<![CDATA[curr_end_time = #{lotProductInfo.currEndTime},]]>
+		<![CDATA[curr_open_time = #{lotProductInfo.currOpenTime},]]>
+		<![CDATA[last_issue = #{lotProductInfo.lastIssue},]]>
+		<![CDATA[last_end_time = #{lotProductInfo.lastEndTime},]]>
+		<![CDATA[last_open_time = #{lotProductInfo.lastOpenTime},]]>
+		<![CDATA[last_open_code = #{lotProductInfo.lastOpenCode},]]>
+		<![CDATA[last_open_feature1 = #{lotProductInfo.lastOpenFeature1},]]>
+		<![CDATA[last_open_feature2 = #{lotProductInfo.lastOpenFeature2},]]>
+		<![CDATA[last_open_feature3 = #{lotProductInfo.lastOpenFeature3},]]>
+		<![CDATA[last_open_feature4 = #{lotProductInfo.lastOpenFeature4},]]>
+		<![CDATA[last_open_feature5 = #{lotProductInfo.lastOpenFeature5},]]>
+		</set>
+		<where>
+			<if test="where.productType != null">
+			<![CDATA[AND product_type = #{where.productType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productName != null and where.productName != ''">
+			<![CDATA[AND product_name = #{where.productName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productAlias != null and where.productAlias != ''">
+			<![CDATA[AND product_alias = #{where.productAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productIcon != null and where.productIcon != ''">
+			<![CDATA[AND product_icon = #{where.productIcon, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productDesc != null and where.productDesc != ''">
+			<![CDATA[AND product_desc = #{where.productDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productOpenDesc != null and where.productOpenDesc != ''">
+			<![CDATA[AND product_open_desc = #{where.productOpenDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.hotFlag != null">
+			<![CDATA[AND hot_flag = #{where.hotFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rewardFlag != null">
+			<![CDATA[AND reward_flag = #{where.rewardFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.multipleFlag != null">
+			<![CDATA[AND multiple_flag = #{where.multipleFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.groupFlag != null">
+			<![CDATA[AND group_flag = #{where.groupFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.currIssue != null and where.currIssue != ''">
+			<![CDATA[AND curr_issue = #{where.currIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.currEndTime != null">
+			<![CDATA[AND curr_end_time = #{where.currEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.currOpenTime != null">
+			<![CDATA[AND curr_open_time = #{where.currOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastIssue != null and where.lastIssue != ''">
+			<![CDATA[AND last_issue = #{where.lastIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastEndTime != null">
+			<![CDATA[AND last_end_time = #{where.lastEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenTime != null">
+			<![CDATA[AND last_open_time = #{where.lastOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenCode != null and where.lastOpenCode != ''">
+			<![CDATA[AND last_open_code = #{where.lastOpenCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature1 != null and where.lastOpenFeature1 != ''">
+			<![CDATA[AND last_open_feature1 = #{where.lastOpenFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature2 != null and where.lastOpenFeature2 != ''">
+			<![CDATA[AND last_open_feature2 = #{where.lastOpenFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature3 != null and where.lastOpenFeature3 != ''">
+			<![CDATA[AND last_open_feature3 = #{where.lastOpenFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature4 != null and where.lastOpenFeature4 != ''">
+			<![CDATA[AND last_open_feature4 = #{where.lastOpenFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature5 != null and where.lastOpenFeature5 != ''">
+			<![CDATA[AND last_open_feature5 = #{where.lastOpenFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_product_info]]>
+		<set>
+		<![CDATA[update_user = #{lotProductInfo.updateUser},]]>
+		<![CDATA[update_time = #{lotProductInfo.updateTime},]]>
+		<![CDATA[data_version = #{lotProductInfo.dataVersion},]]>
+		<![CDATA[product_type = #{lotProductInfo.productType},]]>
+		<![CDATA[product_name = #{lotProductInfo.productName},]]>
+		<![CDATA[product_alias = #{lotProductInfo.productAlias},]]>
+		<![CDATA[product_icon = #{lotProductInfo.productIcon},]]>
+		<![CDATA[product_desc = #{lotProductInfo.productDesc},]]>
+		<![CDATA[product_open_desc = #{lotProductInfo.productOpenDesc},]]>
+		<![CDATA[sorting = #{lotProductInfo.sorting},]]>
+		<![CDATA[hot_flag = #{lotProductInfo.hotFlag},]]>
+		<![CDATA[enable_flag = #{lotProductInfo.enableFlag},]]>
+		<![CDATA[reward_flag = #{lotProductInfo.rewardFlag},]]>
+		<![CDATA[multiple_flag = #{lotProductInfo.multipleFlag},]]>
+		<![CDATA[group_flag = #{lotProductInfo.groupFlag},]]>
+		<![CDATA[curr_issue = #{lotProductInfo.currIssue},]]>
+		<![CDATA[curr_end_time = #{lotProductInfo.currEndTime},]]>
+		<![CDATA[curr_open_time = #{lotProductInfo.currOpenTime},]]>
+		<![CDATA[last_issue = #{lotProductInfo.lastIssue},]]>
+		<![CDATA[last_end_time = #{lotProductInfo.lastEndTime},]]>
+		<![CDATA[last_open_time = #{lotProductInfo.lastOpenTime},]]>
+		<![CDATA[last_open_code = #{lotProductInfo.lastOpenCode},]]>
+		<![CDATA[last_open_feature1 = #{lotProductInfo.lastOpenFeature1},]]>
+		<![CDATA[last_open_feature2 = #{lotProductInfo.lastOpenFeature2},]]>
+		<![CDATA[last_open_feature3 = #{lotProductInfo.lastOpenFeature3},]]>
+		<![CDATA[last_open_feature4 = #{lotProductInfo.lastOpenFeature4},]]>
+		<![CDATA[last_open_feature5 = #{lotProductInfo.lastOpenFeature5},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotProductInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_lot_product_info]]>
+		<set>
+			<if test="lotProductInfo.updateUser != null">
+			<![CDATA[update_user = #{lotProductInfo.updateUser},]]>
+			</if>
+			<if test="lotProductInfo.updateTime != null">
+			<![CDATA[update_time = #{lotProductInfo.updateTime},]]>
+			</if>
+			<if test="lotProductInfo.dataVersion != null">
+			<![CDATA[data_version = #{lotProductInfo.dataVersion},]]>
+			</if>
+			<if test="lotProductInfo.productType != null">
+			<![CDATA[product_type = #{lotProductInfo.productType},]]>
+			</if>
+			<if test="lotProductInfo.productName != null and lotProductInfo.productName != ''">
+			<![CDATA[product_name = #{lotProductInfo.productName},]]>
+			</if>
+			<if test="lotProductInfo.productAlias != null and lotProductInfo.productAlias != ''">
+			<![CDATA[product_alias = #{lotProductInfo.productAlias},]]>
+			</if>
+			<if test="lotProductInfo.productIcon != null and lotProductInfo.productIcon != ''">
+			<![CDATA[product_icon = #{lotProductInfo.productIcon},]]>
+			</if>
+			<if test="lotProductInfo.productDesc != null and lotProductInfo.productDesc != ''">
+			<![CDATA[product_desc = #{lotProductInfo.productDesc},]]>
+			</if>
+			<if test="lotProductInfo.productOpenDesc != null and lotProductInfo.productOpenDesc != ''">
+			<![CDATA[product_open_desc = #{lotProductInfo.productOpenDesc},]]>
+			</if>
+			<if test="lotProductInfo.sorting != null">
+			<![CDATA[sorting = #{lotProductInfo.sorting},]]>
+			</if>
+			<if test="lotProductInfo.hotFlag != null">
+			<![CDATA[hot_flag = #{lotProductInfo.hotFlag},]]>
+			</if>
+			<if test="lotProductInfo.enableFlag != null">
+			<![CDATA[enable_flag = #{lotProductInfo.enableFlag},]]>
+			</if>
+			<if test="lotProductInfo.rewardFlag != null">
+			<![CDATA[reward_flag = #{lotProductInfo.rewardFlag},]]>
+			</if>
+			<if test="lotProductInfo.multipleFlag != null">
+			<![CDATA[multiple_flag = #{lotProductInfo.multipleFlag},]]>
+			</if>
+			<if test="lotProductInfo.groupFlag != null">
+			<![CDATA[group_flag = #{lotProductInfo.groupFlag},]]>
+			</if>
+			<if test="lotProductInfo.currIssue != null and lotProductInfo.currIssue != ''">
+			<![CDATA[curr_issue = #{lotProductInfo.currIssue},]]>
+			</if>
+			<if test="lotProductInfo.currEndTime != null">
+			<![CDATA[curr_end_time = #{lotProductInfo.currEndTime},]]>
+			</if>
+			<if test="lotProductInfo.currOpenTime != null">
+			<![CDATA[curr_open_time = #{lotProductInfo.currOpenTime},]]>
+			</if>
+			<if test="lotProductInfo.lastIssue != null and lotProductInfo.lastIssue != ''">
+			<![CDATA[last_issue = #{lotProductInfo.lastIssue},]]>
+			</if>
+			<if test="lotProductInfo.lastEndTime != null">
+			<![CDATA[last_end_time = #{lotProductInfo.lastEndTime},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenTime != null">
+			<![CDATA[last_open_time = #{lotProductInfo.lastOpenTime},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenCode != null and lotProductInfo.lastOpenCode != ''">
+			<![CDATA[last_open_code = #{lotProductInfo.lastOpenCode},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature1 != null and lotProductInfo.lastOpenFeature1 != ''">
+			<![CDATA[last_open_feature1 = #{lotProductInfo.lastOpenFeature1},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature2 != null and lotProductInfo.lastOpenFeature2 != ''">
+			<![CDATA[last_open_feature2 = #{lotProductInfo.lastOpenFeature2},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature3 != null and lotProductInfo.lastOpenFeature3 != ''">
+			<![CDATA[last_open_feature3 = #{lotProductInfo.lastOpenFeature3},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature4 != null and lotProductInfo.lastOpenFeature4 != ''">
+			<![CDATA[last_open_feature4 = #{lotProductInfo.lastOpenFeature4},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature5 != null and lotProductInfo.lastOpenFeature5 != ''">
+			<![CDATA[last_open_feature5 = #{lotProductInfo.lastOpenFeature5},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.productType != null">
+			<![CDATA[AND product_type = #{where.productType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productName != null and where.productName != ''">
+			<![CDATA[AND product_name = #{where.productName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productAlias != null and where.productAlias != ''">
+			<![CDATA[AND product_alias = #{where.productAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productIcon != null and where.productIcon != ''">
+			<![CDATA[AND product_icon = #{where.productIcon, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productDesc != null and where.productDesc != ''">
+			<![CDATA[AND product_desc = #{where.productDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productOpenDesc != null and where.productOpenDesc != ''">
+			<![CDATA[AND product_open_desc = #{where.productOpenDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.hotFlag != null">
+			<![CDATA[AND hot_flag = #{where.hotFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rewardFlag != null">
+			<![CDATA[AND reward_flag = #{where.rewardFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.multipleFlag != null">
+			<![CDATA[AND multiple_flag = #{where.multipleFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.groupFlag != null">
+			<![CDATA[AND group_flag = #{where.groupFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.currIssue != null and where.currIssue != ''">
+			<![CDATA[AND curr_issue = #{where.currIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.currEndTime != null">
+			<![CDATA[AND curr_end_time = #{where.currEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.currOpenTime != null">
+			<![CDATA[AND curr_open_time = #{where.currOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastIssue != null and where.lastIssue != ''">
+			<![CDATA[AND last_issue = #{where.lastIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastEndTime != null">
+			<![CDATA[AND last_end_time = #{where.lastEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenTime != null">
+			<![CDATA[AND last_open_time = #{where.lastOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenCode != null and where.lastOpenCode != ''">
+			<![CDATA[AND last_open_code = #{where.lastOpenCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature1 != null and where.lastOpenFeature1 != ''">
+			<![CDATA[AND last_open_feature1 = #{where.lastOpenFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature2 != null and where.lastOpenFeature2 != ''">
+			<![CDATA[AND last_open_feature2 = #{where.lastOpenFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature3 != null and where.lastOpenFeature3 != ''">
+			<![CDATA[AND last_open_feature3 = #{where.lastOpenFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature4 != null and where.lastOpenFeature4 != ''">
+			<![CDATA[AND last_open_feature4 = #{where.lastOpenFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature5 != null and where.lastOpenFeature5 != ''">
+			<![CDATA[AND last_open_feature5 = #{where.lastOpenFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_lot_product_info]]>
+		<set>
+			<if test="lotProductInfo.updateUser != null">
+			<![CDATA[update_user = #{lotProductInfo.updateUser},]]>
+			</if>
+			<if test="lotProductInfo.updateTime != null">
+			<![CDATA[update_time = #{lotProductInfo.updateTime},]]>
+			</if>
+			<if test="lotProductInfo.dataVersion != null">
+			<![CDATA[data_version = #{lotProductInfo.dataVersion},]]>
+			</if>
+			<if test="lotProductInfo.productType != null">
+			<![CDATA[product_type = #{lotProductInfo.productType},]]>
+			</if>
+			<if test="lotProductInfo.productName != null and lotProductInfo.productName != ''">
+			<![CDATA[product_name = #{lotProductInfo.productName},]]>
+			</if>
+			<if test="lotProductInfo.productAlias != null and lotProductInfo.productAlias != ''">
+			<![CDATA[product_alias = #{lotProductInfo.productAlias},]]>
+			</if>
+			<if test="lotProductInfo.productIcon != null and lotProductInfo.productIcon != ''">
+			<![CDATA[product_icon = #{lotProductInfo.productIcon},]]>
+			</if>
+			<if test="lotProductInfo.productDesc != null and lotProductInfo.productDesc != ''">
+			<![CDATA[product_desc = #{lotProductInfo.productDesc},]]>
+			</if>
+			<if test="lotProductInfo.productOpenDesc != null and lotProductInfo.productOpenDesc != ''">
+			<![CDATA[product_open_desc = #{lotProductInfo.productOpenDesc},]]>
+			</if>
+			<if test="lotProductInfo.sorting != null">
+			<![CDATA[sorting = #{lotProductInfo.sorting},]]>
+			</if>
+			<if test="lotProductInfo.hotFlag != null">
+			<![CDATA[hot_flag = #{lotProductInfo.hotFlag},]]>
+			</if>
+			<if test="lotProductInfo.enableFlag != null">
+			<![CDATA[enable_flag = #{lotProductInfo.enableFlag},]]>
+			</if>
+			<if test="lotProductInfo.rewardFlag != null">
+			<![CDATA[reward_flag = #{lotProductInfo.rewardFlag},]]>
+			</if>
+			<if test="lotProductInfo.multipleFlag != null">
+			<![CDATA[multiple_flag = #{lotProductInfo.multipleFlag},]]>
+			</if>
+			<if test="lotProductInfo.groupFlag != null">
+			<![CDATA[group_flag = #{lotProductInfo.groupFlag},]]>
+			</if>
+			<if test="lotProductInfo.currIssue != null and lotProductInfo.currIssue != ''">
+			<![CDATA[curr_issue = #{lotProductInfo.currIssue},]]>
+			</if>
+			<if test="lotProductInfo.currEndTime != null">
+			<![CDATA[curr_end_time = #{lotProductInfo.currEndTime},]]>
+			</if>
+			<if test="lotProductInfo.currOpenTime != null">
+			<![CDATA[curr_open_time = #{lotProductInfo.currOpenTime},]]>
+			</if>
+			<if test="lotProductInfo.lastIssue != null and lotProductInfo.lastIssue != ''">
+			<![CDATA[last_issue = #{lotProductInfo.lastIssue},]]>
+			</if>
+			<if test="lotProductInfo.lastEndTime != null">
+			<![CDATA[last_end_time = #{lotProductInfo.lastEndTime},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenTime != null">
+			<![CDATA[last_open_time = #{lotProductInfo.lastOpenTime},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenCode != null and lotProductInfo.lastOpenCode != ''">
+			<![CDATA[last_open_code = #{lotProductInfo.lastOpenCode},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature1 != null and lotProductInfo.lastOpenFeature1 != ''">
+			<![CDATA[last_open_feature1 = #{lotProductInfo.lastOpenFeature1},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature2 != null and lotProductInfo.lastOpenFeature2 != ''">
+			<![CDATA[last_open_feature2 = #{lotProductInfo.lastOpenFeature2},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature3 != null and lotProductInfo.lastOpenFeature3 != ''">
+			<![CDATA[last_open_feature3 = #{lotProductInfo.lastOpenFeature3},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature4 != null and lotProductInfo.lastOpenFeature4 != ''">
+			<![CDATA[last_open_feature4 = #{lotProductInfo.lastOpenFeature4},]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature5 != null and lotProductInfo.lastOpenFeature5 != ''">
+			<![CDATA[last_open_feature5 = #{lotProductInfo.lastOpenFeature5},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{lotProductInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="LotProductInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_type AS product_type,
+			t.product_name AS product_name,
+			t.product_alias AS product_alias,
+			t.product_icon AS product_icon,
+			t.product_desc AS product_desc,
+			t.product_open_desc AS product_open_desc,
+			t.sorting AS sorting,
+			t.hot_flag AS hot_flag,
+			t.enable_flag AS enable_flag,
+			t.reward_flag AS reward_flag,
+			t.multiple_flag AS multiple_flag,
+			t.group_flag AS group_flag,
+			t.curr_issue AS curr_issue,
+			t.curr_end_time AS curr_end_time,
+			t.curr_open_time AS curr_open_time,
+			t.last_issue AS last_issue,
+			t.last_end_time AS last_end_time,
+			t.last_open_time AS last_open_time,
+			t.last_open_code AS last_open_code,
+			t.last_open_feature1 AS last_open_feature1,
+			t.last_open_feature2 AS last_open_feature2,
+			t.last_open_feature3 AS last_open_feature3,
+			t.last_open_feature4 AS last_open_feature4,
+			t.last_open_feature5 AS last_open_feature5
+		FROM
+			t_lot_product_info t
+		]]>
+		<where>
+			<if test="lotProductInfo.pkId != null and lotProductInfo.pkId > 0">
+			<![CDATA[AND t.pk_id = #{lotProductInfo.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotProductInfo.createUser != null and lotProductInfo.createUser > 0">
+			<![CDATA[AND t.create_user = #{lotProductInfo.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotProductInfo.createTime != null">
+			<![CDATA[AND t.create_time = #{lotProductInfo.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.updateUser != null and lotProductInfo.updateUser > 0">
+			<![CDATA[AND t.update_user = #{lotProductInfo.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="lotProductInfo.updateTime != null">
+			<![CDATA[AND t.update_time = #{lotProductInfo.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.dataVersion != null and lotProductInfo.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{lotProductInfo.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.productType != null and lotProductInfo.productType > 0">
+			<![CDATA[AND t.product_type = #{lotProductInfo.productType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.productName != null and lotProductInfo.productName != ''">
+			<![CDATA[AND t.product_name = #{lotProductInfo.productName, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.productAlias != null and lotProductInfo.productAlias != ''">
+			<![CDATA[AND t.product_alias = #{lotProductInfo.productAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.productIcon != null and lotProductInfo.productIcon != ''">
+			<![CDATA[AND t.product_icon = #{lotProductInfo.productIcon, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.productDesc != null and lotProductInfo.productDesc != ''">
+			<![CDATA[AND t.product_desc = #{lotProductInfo.productDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.productOpenDesc != null and lotProductInfo.productOpenDesc != ''">
+			<![CDATA[AND t.product_open_desc = #{lotProductInfo.productOpenDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.sorting != null and lotProductInfo.sorting > 0">
+			<![CDATA[AND t.sorting = #{lotProductInfo.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.hotFlag != null and lotProductInfo.hotFlag > 0">
+			<![CDATA[AND t.hot_flag = #{lotProductInfo.hotFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.enableFlag != null and lotProductInfo.enableFlag > 0">
+			<![CDATA[AND t.enable_flag = #{lotProductInfo.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.rewardFlag != null and lotProductInfo.rewardFlag > 0">
+			<![CDATA[AND t.reward_flag = #{lotProductInfo.rewardFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.multipleFlag != null and lotProductInfo.multipleFlag > 0">
+			<![CDATA[AND t.multiple_flag = #{lotProductInfo.multipleFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.groupFlag != null and lotProductInfo.groupFlag > 0">
+			<![CDATA[AND t.group_flag = #{lotProductInfo.groupFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="lotProductInfo.currIssue != null and lotProductInfo.currIssue != ''">
+			<![CDATA[AND t.curr_issue = #{lotProductInfo.currIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.currEndTime != null">
+			<![CDATA[AND t.curr_end_time = #{lotProductInfo.currEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.currOpenTime != null">
+			<![CDATA[AND t.curr_open_time = #{lotProductInfo.currOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.lastIssue != null and lotProductInfo.lastIssue != ''">
+			<![CDATA[AND t.last_issue = #{lotProductInfo.lastIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastEndTime != null">
+			<![CDATA[AND t.last_end_time = #{lotProductInfo.lastEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenTime != null">
+			<![CDATA[AND t.last_open_time = #{lotProductInfo.lastOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenCode != null and lotProductInfo.lastOpenCode != ''">
+			<![CDATA[AND t.last_open_code = #{lotProductInfo.lastOpenCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature1 != null and lotProductInfo.lastOpenFeature1 != ''">
+			<![CDATA[AND t.last_open_feature1 = #{lotProductInfo.lastOpenFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature2 != null and lotProductInfo.lastOpenFeature2 != ''">
+			<![CDATA[AND t.last_open_feature2 = #{lotProductInfo.lastOpenFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature3 != null and lotProductInfo.lastOpenFeature3 != ''">
+			<![CDATA[AND t.last_open_feature3 = #{lotProductInfo.lastOpenFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature4 != null and lotProductInfo.lastOpenFeature4 != ''">
+			<![CDATA[AND t.last_open_feature4 = #{lotProductInfo.lastOpenFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="lotProductInfo.lastOpenFeature5 != null and lotProductInfo.lastOpenFeature5 != ''">
+			<![CDATA[AND t.last_open_feature5 = #{lotProductInfo.lastOpenFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="LotProductInfo">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.product_type AS product_type,
+			t.product_name AS product_name,
+			t.product_alias AS product_alias,
+			t.product_icon AS product_icon,
+			t.product_desc AS product_desc,
+			t.product_open_desc AS product_open_desc,
+			t.sorting AS sorting,
+			t.hot_flag AS hot_flag,
+			t.enable_flag AS enable_flag,
+			t.reward_flag AS reward_flag,
+			t.multiple_flag AS multiple_flag,
+			t.group_flag AS group_flag,
+			t.curr_issue AS curr_issue,
+			t.curr_end_time AS curr_end_time,
+			t.curr_open_time AS curr_open_time,
+			t.last_issue AS last_issue,
+			t.last_end_time AS last_end_time,
+			t.last_open_time AS last_open_time,
+			t.last_open_code AS last_open_code,
+			t.last_open_feature1 AS last_open_feature1,
+			t.last_open_feature2 AS last_open_feature2,
+			t.last_open_feature3 AS last_open_feature3,
+			t.last_open_feature4 AS last_open_feature4,
+			t.last_open_feature5 AS last_open_feature5
+		FROM
+			t_lot_product_info t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{lotProductInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_product_info
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productType != null">
+			<![CDATA[AND product_type = #{where.productType, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.productName != null and where.productName != ''">
+			<![CDATA[AND product_name = #{where.productName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productAlias != null and where.productAlias != ''">
+			<![CDATA[AND product_alias = #{where.productAlias, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productIcon != null and where.productIcon != ''">
+			<![CDATA[AND product_icon = #{where.productIcon, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productDesc != null and where.productDesc != ''">
+			<![CDATA[AND product_desc = #{where.productDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.productOpenDesc != null and where.productOpenDesc != ''">
+			<![CDATA[AND product_open_desc = #{where.productOpenDesc, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.sorting != null">
+			<![CDATA[AND sorting = #{where.sorting, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.hotFlag != null">
+			<![CDATA[AND hot_flag = #{where.hotFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.enableFlag != null">
+			<![CDATA[AND enable_flag = #{where.enableFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.rewardFlag != null">
+			<![CDATA[AND reward_flag = #{where.rewardFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.multipleFlag != null">
+			<![CDATA[AND multiple_flag = #{where.multipleFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.groupFlag != null">
+			<![CDATA[AND group_flag = #{where.groupFlag, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.currIssue != null and where.currIssue != ''">
+			<![CDATA[AND curr_issue = #{where.currIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.currEndTime != null">
+			<![CDATA[AND curr_end_time = #{where.currEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.currOpenTime != null">
+			<![CDATA[AND curr_open_time = #{where.currOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastIssue != null and where.lastIssue != ''">
+			<![CDATA[AND last_issue = #{where.lastIssue, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastEndTime != null">
+			<![CDATA[AND last_end_time = #{where.lastEndTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenTime != null">
+			<![CDATA[AND last_open_time = #{where.lastOpenTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.lastOpenCode != null and where.lastOpenCode != ''">
+			<![CDATA[AND last_open_code = #{where.lastOpenCode, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature1 != null and where.lastOpenFeature1 != ''">
+			<![CDATA[AND last_open_feature1 = #{where.lastOpenFeature1, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature2 != null and where.lastOpenFeature2 != ''">
+			<![CDATA[AND last_open_feature2 = #{where.lastOpenFeature2, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature3 != null and where.lastOpenFeature3 != ''">
+			<![CDATA[AND last_open_feature3 = #{where.lastOpenFeature3, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature4 != null and where.lastOpenFeature4 != ''">
+			<![CDATA[AND last_open_feature4 = #{where.lastOpenFeature4, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.lastOpenFeature5 != null and where.lastOpenFeature5 != ''">
+			<![CDATA[AND last_open_feature5 = #{where.lastOpenFeature5, jdbcType=LONGVARCHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_lot_product_info
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{lotProductInfoId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

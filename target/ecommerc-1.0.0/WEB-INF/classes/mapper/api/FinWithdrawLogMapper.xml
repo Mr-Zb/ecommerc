@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.FinWithdrawLogMapper">
+	<resultMap id="FinWithdrawLog" type="com.fun.client.domain.FinWithdrawLog">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="TINYINT" />
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="memberId" javaType="Integer" column="member_id" jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name" jdbcType="CHAR" />
+		<result property="agentId" javaType="Integer" column="agent_id" jdbcType="INTEGER" />
+		<result property="agentName" javaType="String" column="agent_name" jdbcType="CHAR" />
+		<result property="agentFullId" javaType="String" column="agent_full_id" jdbcType="CHAR" />
+		<result property="agentFullName" javaType="String" column="agent_full_name" jdbcType="CHAR" />
+		<result property="bankAccount" javaType="String" column="bank_account" jdbcType="CHAR" />
+		<result property="bankAccountName" javaType="String" column="bank_account_name" jdbcType="CHAR" />
+		<result property="bankName" javaType="String" column="bank_name" jdbcType="CHAR" />
+		<result property="bankSubName" javaType="String" column="bank_sub_name" jdbcType="CHAR" />
+		<result property="orderNo" javaType="String" column="order_no" jdbcType="CHAR" />
+		<result property="withdrawTo" javaType="String" column="withdraw_to" jdbcType="CHAR" />
+		<result property="withdrawAccount" javaType="String" column="withdraw_account" jdbcType="CHAR" />
+		<result property="withdrawNo" javaType="String" column="withdraw_no" jdbcType="CHAR" />
+		<result property="withdrawState" javaType="Integer" column="withdraw_state" jdbcType="TINYINT" />
+		<result property="withdrawAmount1" javaType="Double" column="withdraw_amount1" jdbcType="DECIMAL" />
+		<result property="withdrawAmount2" javaType="Double" column="withdraw_amount2" jdbcType="DECIMAL" />
+		<result property="remark" javaType="String" column="remark" jdbcType="CHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="finWithdrawLog.pkId">
+		<![CDATA[
+		INSERT INTO t_fin_withdraw_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			bank_account,
+			bank_account_name,
+			bank_name,
+			bank_sub_name,
+			order_no,
+			withdraw_to,
+			withdraw_account,
+			withdraw_no,
+			withdraw_state,
+			withdraw_amount1,
+			withdraw_amount2,
+			remark
+		)
+		VALUES
+			(
+				#{finWithdrawLog.pkId, jdbcType = INTEGER},
+				#{finWithdrawLog.createUser, jdbcType = INTEGER},
+				#{finWithdrawLog.createTime, jdbcType = TIMESTAMP},
+				#{finWithdrawLog.updateUser, jdbcType = INTEGER},
+				#{finWithdrawLog.updateTime, jdbcType = TIMESTAMP},
+				#{finWithdrawLog.dataVersion, jdbcType = TINYINT},
+				#{finWithdrawLog.memberId, jdbcType = INTEGER},
+				#{finWithdrawLog.memberName, jdbcType = CHAR},
+				#{finWithdrawLog.agentId, jdbcType = INTEGER},
+				#{finWithdrawLog.agentName, jdbcType = CHAR},
+				#{finWithdrawLog.agentFullId, jdbcType = CHAR},
+				#{finWithdrawLog.agentFullName, jdbcType = CHAR},
+				#{finWithdrawLog.bankAccount, jdbcType = CHAR},
+				#{finWithdrawLog.bankAccountName, jdbcType = CHAR},
+				#{finWithdrawLog.bankName, jdbcType = CHAR},
+				#{finWithdrawLog.bankSubName, jdbcType = CHAR},
+				#{finWithdrawLog.orderNo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawTo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawAccount, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawNo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawState, jdbcType = TINYINT},
+				#{finWithdrawLog.withdrawAmount1, jdbcType = DECIMAL},
+				#{finWithdrawLog.withdrawAmount2, jdbcType = DECIMAL},
+				#{finWithdrawLog.remark, jdbcType = CHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_fin_withdraw_log (
+			pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			member_id,
+			member_name,
+			agent_id,
+			agent_name,
+			agent_full_id,
+			agent_full_name,
+			bank_account,
+			bank_account_name,
+			bank_name,
+			bank_sub_name,
+			order_no,
+			withdraw_to,
+			withdraw_account,
+			withdraw_no,
+			withdraw_state,
+			withdraw_amount1,
+			withdraw_amount2,
+			remark
+		)
+		]]>
+		<foreach collection="finWithdrawLogs" item="finWithdrawLog" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{finWithdrawLog.pkId, jdbcType = INTEGER},
+				#{finWithdrawLog.createUser, jdbcType = INTEGER},
+				#{finWithdrawLog.createTime, jdbcType = TIMESTAMP},
+				#{finWithdrawLog.updateUser, jdbcType = INTEGER},
+				#{finWithdrawLog.updateTime, jdbcType = TIMESTAMP},
+				#{finWithdrawLog.dataVersion, jdbcType = TINYINT},
+				#{finWithdrawLog.memberId, jdbcType = INTEGER},
+				#{finWithdrawLog.memberName, jdbcType = CHAR},
+				#{finWithdrawLog.agentId, jdbcType = INTEGER},
+				#{finWithdrawLog.agentName, jdbcType = CHAR},
+				#{finWithdrawLog.agentFullId, jdbcType = CHAR},
+				#{finWithdrawLog.agentFullName, jdbcType = CHAR},
+				#{finWithdrawLog.bankAccount, jdbcType = CHAR},
+				#{finWithdrawLog.bankAccountName, jdbcType = CHAR},
+				#{finWithdrawLog.bankName, jdbcType = CHAR},
+				#{finWithdrawLog.bankSubName, jdbcType = CHAR},
+				#{finWithdrawLog.orderNo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawTo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawAccount, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawNo, jdbcType = CHAR},
+				#{finWithdrawLog.withdrawState, jdbcType = TINYINT},
+				#{finWithdrawLog.withdrawAmount1, jdbcType = DECIMAL},
+				#{finWithdrawLog.withdrawAmount2, jdbcType = DECIMAL},
+				#{finWithdrawLog.remark, jdbcType = CHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_fin_withdraw_log]]>
+		<set>
+		<![CDATA[update_user = #{finWithdrawLog.updateUser},]]>
+		<![CDATA[update_time = #{finWithdrawLog.updateTime},]]>
+		<![CDATA[data_version = #{finWithdrawLog.dataVersion},]]>
+		<![CDATA[member_id = #{finWithdrawLog.memberId},]]>
+		<![CDATA[member_name = #{finWithdrawLog.memberName},]]>
+		<![CDATA[agent_id = #{finWithdrawLog.agentId},]]>
+		<![CDATA[agent_name = #{finWithdrawLog.agentName},]]>
+		<![CDATA[agent_full_id = #{finWithdrawLog.agentFullId},]]>
+		<![CDATA[agent_full_name = #{finWithdrawLog.agentFullName},]]>
+		<![CDATA[bank_account = #{finWithdrawLog.bankAccount},]]>
+		<![CDATA[bank_account_name = #{finWithdrawLog.bankAccountName},]]>
+		<![CDATA[bank_name = #{finWithdrawLog.bankName},]]>
+		<![CDATA[bank_sub_name = #{finWithdrawLog.bankSubName},]]>
+		<![CDATA[order_no = #{finWithdrawLog.orderNo},]]>
+		<![CDATA[withdraw_to = #{finWithdrawLog.withdrawTo},]]>
+		<![CDATA[withdraw_account = #{finWithdrawLog.withdrawAccount},]]>
+		<![CDATA[withdraw_no = #{finWithdrawLog.withdrawNo},]]>
+		<![CDATA[withdraw_state = #{finWithdrawLog.withdrawState},]]>
+		<![CDATA[withdraw_amount1 = #{finWithdrawLog.withdrawAmount1},]]>
+		<![CDATA[withdraw_amount2 = #{finWithdrawLog.withdrawAmount2},]]>
+		<![CDATA[remark = #{finWithdrawLog.remark},]]>
+		</set>
+		<where>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccount != null and where.bankAccount != ''">
+			<![CDATA[AND bank_account = #{where.bankAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccountName != null and where.bankAccountName != ''">
+			<![CDATA[AND bank_account_name = #{where.bankAccountName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankName != null and where.bankName != ''">
+			<![CDATA[AND bank_name = #{where.bankName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankSubName != null and where.bankSubName != ''">
+			<![CDATA[AND bank_sub_name = #{where.bankSubName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawTo != null and where.withdrawTo != ''">
+			<![CDATA[AND withdraw_to = #{where.withdrawTo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawAccount != null and where.withdrawAccount != ''">
+			<![CDATA[AND withdraw_account = #{where.withdrawAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawNo != null and where.withdrawNo != ''">
+			<![CDATA[AND withdraw_no = #{where.withdrawNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawState != null">
+			<![CDATA[AND withdraw_state = #{where.withdrawState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.withdrawAmount1 != null">
+			<![CDATA[AND withdraw_amount1 = #{where.withdrawAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.withdrawAmount2 != null">
+			<![CDATA[AND withdraw_amount2 = #{where.withdrawAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_fin_withdraw_log]]>
+		<set>
+		<![CDATA[update_user = #{finWithdrawLog.updateUser},]]>
+		<![CDATA[update_time = #{finWithdrawLog.updateTime},]]>
+		<![CDATA[data_version = #{finWithdrawLog.dataVersion},]]>
+		<![CDATA[member_id = #{finWithdrawLog.memberId},]]>
+		<![CDATA[member_name = #{finWithdrawLog.memberName},]]>
+		<![CDATA[agent_id = #{finWithdrawLog.agentId},]]>
+		<![CDATA[agent_name = #{finWithdrawLog.agentName},]]>
+		<![CDATA[agent_full_id = #{finWithdrawLog.agentFullId},]]>
+		<![CDATA[agent_full_name = #{finWithdrawLog.agentFullName},]]>
+		<![CDATA[bank_account = #{finWithdrawLog.bankAccount},]]>
+		<![CDATA[bank_account_name = #{finWithdrawLog.bankAccountName},]]>
+		<![CDATA[bank_name = #{finWithdrawLog.bankName},]]>
+		<![CDATA[bank_sub_name = #{finWithdrawLog.bankSubName},]]>
+		<![CDATA[order_no = #{finWithdrawLog.orderNo},]]>
+		<![CDATA[withdraw_to = #{finWithdrawLog.withdrawTo},]]>
+		<![CDATA[withdraw_account = #{finWithdrawLog.withdrawAccount},]]>
+		<![CDATA[withdraw_no = #{finWithdrawLog.withdrawNo},]]>
+		<![CDATA[withdraw_state = #{finWithdrawLog.withdrawState},]]>
+		<![CDATA[withdraw_amount1 = #{finWithdrawLog.withdrawAmount1},]]>
+		<![CDATA[withdraw_amount2 = #{finWithdrawLog.withdrawAmount2},]]>
+		<![CDATA[remark = #{finWithdrawLog.remark},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{finWithdrawLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_fin_withdraw_log]]>
+		<set>
+			<if test="finWithdrawLog.updateUser != null">
+			<![CDATA[update_user = #{finWithdrawLog.updateUser},]]>
+			</if>
+			<if test="finWithdrawLog.updateTime != null">
+			<![CDATA[update_time = #{finWithdrawLog.updateTime},]]>
+			</if>
+			<if test="finWithdrawLog.dataVersion != null">
+			<![CDATA[data_version = #{finWithdrawLog.dataVersion},]]>
+			</if>
+			<if test="finWithdrawLog.memberId != null">
+			<![CDATA[member_id = #{finWithdrawLog.memberId},]]>
+			</if>
+			<if test="finWithdrawLog.memberName != null and finWithdrawLog.memberName != ''">
+			<![CDATA[member_name = #{finWithdrawLog.memberName},]]>
+			</if>
+			<if test="finWithdrawLog.agentId != null">
+			<![CDATA[agent_id = #{finWithdrawLog.agentId},]]>
+			</if>
+			<if test="finWithdrawLog.agentName != null and finWithdrawLog.agentName != ''">
+			<![CDATA[agent_name = #{finWithdrawLog.agentName},]]>
+			</if>
+			<if test="finWithdrawLog.agentFullId != null and finWithdrawLog.agentFullId != ''">
+			<![CDATA[agent_full_id = #{finWithdrawLog.agentFullId},]]>
+			</if>
+			<if test="finWithdrawLog.agentFullName != null and finWithdrawLog.agentFullName != ''">
+			<![CDATA[agent_full_name = #{finWithdrawLog.agentFullName},]]>
+			</if>
+			<if test="finWithdrawLog.bankAccount != null and finWithdrawLog.bankAccount != ''">
+			<![CDATA[bank_account = #{finWithdrawLog.bankAccount},]]>
+			</if>
+			<if test="finWithdrawLog.bankAccountName != null and finWithdrawLog.bankAccountName != ''">
+			<![CDATA[bank_account_name = #{finWithdrawLog.bankAccountName},]]>
+			</if>
+			<if test="finWithdrawLog.bankName != null and finWithdrawLog.bankName != ''">
+			<![CDATA[bank_name = #{finWithdrawLog.bankName},]]>
+			</if>
+			<if test="finWithdrawLog.bankSubName != null and finWithdrawLog.bankSubName != ''">
+			<![CDATA[bank_sub_name = #{finWithdrawLog.bankSubName},]]>
+			</if>
+			<if test="finWithdrawLog.orderNo != null and finWithdrawLog.orderNo != ''">
+			<![CDATA[order_no = #{finWithdrawLog.orderNo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawTo != null and finWithdrawLog.withdrawTo != ''">
+			<![CDATA[withdraw_to = #{finWithdrawLog.withdrawTo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAccount != null and finWithdrawLog.withdrawAccount != ''">
+			<![CDATA[withdraw_account = #{finWithdrawLog.withdrawAccount},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawNo != null and finWithdrawLog.withdrawNo != ''">
+			<![CDATA[withdraw_no = #{finWithdrawLog.withdrawNo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawState != null">
+			<![CDATA[withdraw_state = #{finWithdrawLog.withdrawState},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount1 != null">
+			<![CDATA[withdraw_amount1 = #{finWithdrawLog.withdrawAmount1},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount2 != null">
+			<![CDATA[withdraw_amount2 = #{finWithdrawLog.withdrawAmount2},]]>
+			</if>
+			<if test="finWithdrawLog.remark != null and finWithdrawLog.remark != ''">
+			<![CDATA[remark = #{finWithdrawLog.remark},]]>
+			</if>
+		</set>
+		<where>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccount != null and where.bankAccount != ''">
+			<![CDATA[AND bank_account = #{where.bankAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccountName != null and where.bankAccountName != ''">
+			<![CDATA[AND bank_account_name = #{where.bankAccountName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankName != null and where.bankName != ''">
+			<![CDATA[AND bank_name = #{where.bankName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankSubName != null and where.bankSubName != ''">
+			<![CDATA[AND bank_sub_name = #{where.bankSubName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawTo != null and where.withdrawTo != ''">
+			<![CDATA[AND withdraw_to = #{where.withdrawTo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawAccount != null and where.withdrawAccount != ''">
+			<![CDATA[AND withdraw_account = #{where.withdrawAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawNo != null and where.withdrawNo != ''">
+			<![CDATA[AND withdraw_no = #{where.withdrawNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawState != null">
+			<![CDATA[AND withdraw_state = #{where.withdrawState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.withdrawAmount1 != null">
+			<![CDATA[AND withdraw_amount1 = #{where.withdrawAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.withdrawAmount2 != null">
+			<![CDATA[AND withdraw_amount2 = #{where.withdrawAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_fin_withdraw_log]]>
+		<set>
+			<if test="finWithdrawLog.updateUser != null">
+			<![CDATA[update_user = #{finWithdrawLog.updateUser},]]>
+			</if>
+			<if test="finWithdrawLog.updateTime != null">
+			<![CDATA[update_time = #{finWithdrawLog.updateTime},]]>
+			</if>
+			<if test="finWithdrawLog.dataVersion != null">
+			<![CDATA[data_version = #{finWithdrawLog.dataVersion},]]>
+			</if>
+			<if test="finWithdrawLog.memberId != null">
+			<![CDATA[member_id = #{finWithdrawLog.memberId},]]>
+			</if>
+			<if test="finWithdrawLog.memberName != null and finWithdrawLog.memberName != ''">
+			<![CDATA[member_name = #{finWithdrawLog.memberName},]]>
+			</if>
+			<if test="finWithdrawLog.agentId != null">
+			<![CDATA[agent_id = #{finWithdrawLog.agentId},]]>
+			</if>
+			<if test="finWithdrawLog.agentName != null and finWithdrawLog.agentName != ''">
+			<![CDATA[agent_name = #{finWithdrawLog.agentName},]]>
+			</if>
+			<if test="finWithdrawLog.agentFullId != null and finWithdrawLog.agentFullId != ''">
+			<![CDATA[agent_full_id = #{finWithdrawLog.agentFullId},]]>
+			</if>
+			<if test="finWithdrawLog.agentFullName != null and finWithdrawLog.agentFullName != ''">
+			<![CDATA[agent_full_name = #{finWithdrawLog.agentFullName},]]>
+			</if>
+			<if test="finWithdrawLog.bankAccount != null and finWithdrawLog.bankAccount != ''">
+			<![CDATA[bank_account = #{finWithdrawLog.bankAccount},]]>
+			</if>
+			<if test="finWithdrawLog.bankAccountName != null and finWithdrawLog.bankAccountName != ''">
+			<![CDATA[bank_account_name = #{finWithdrawLog.bankAccountName},]]>
+			</if>
+			<if test="finWithdrawLog.bankName != null and finWithdrawLog.bankName != ''">
+			<![CDATA[bank_name = #{finWithdrawLog.bankName},]]>
+			</if>
+			<if test="finWithdrawLog.bankSubName != null and finWithdrawLog.bankSubName != ''">
+			<![CDATA[bank_sub_name = #{finWithdrawLog.bankSubName},]]>
+			</if>
+			<if test="finWithdrawLog.orderNo != null and finWithdrawLog.orderNo != ''">
+			<![CDATA[order_no = #{finWithdrawLog.orderNo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawTo != null and finWithdrawLog.withdrawTo != ''">
+			<![CDATA[withdraw_to = #{finWithdrawLog.withdrawTo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAccount != null and finWithdrawLog.withdrawAccount != ''">
+			<![CDATA[withdraw_account = #{finWithdrawLog.withdrawAccount},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawNo != null and finWithdrawLog.withdrawNo != ''">
+			<![CDATA[withdraw_no = #{finWithdrawLog.withdrawNo},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawState != null">
+			<![CDATA[withdraw_state = #{finWithdrawLog.withdrawState},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount1 != null">
+			<![CDATA[withdraw_amount1 = #{finWithdrawLog.withdrawAmount1},]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount2 != null">
+			<![CDATA[withdraw_amount2 = #{finWithdrawLog.withdrawAmount2},]]>
+			</if>
+			<if test="finWithdrawLog.remark != null and finWithdrawLog.remark != ''">
+			<![CDATA[remark = #{finWithdrawLog.remark},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{finWithdrawLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="FinWithdrawLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.bank_account AS bank_account,
+			t.bank_account_name AS bank_account_name,
+			t.bank_name AS bank_name,
+			t.bank_sub_name AS bank_sub_name,
+			t.order_no AS order_no,
+			t.withdraw_to AS withdraw_to,
+			t.withdraw_account AS withdraw_account,
+			t.withdraw_no AS withdraw_no,
+			t.withdraw_state AS withdraw_state,
+			t.withdraw_amount1 AS withdraw_amount1,
+			t.withdraw_amount2 AS withdraw_amount2,
+			t.remark AS remark
+		FROM
+			t_fin_withdraw_log t
+		]]>
+		<where>
+			<if test="finWithdrawLog.pkId != null and finWithdrawLog.pkId > 0">
+			<![CDATA[AND t.pk_id = #{finWithdrawLog.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finWithdrawLog.createUser != null and finWithdrawLog.createUser > 0">
+			<![CDATA[AND t.create_user = #{finWithdrawLog.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finWithdrawLog.createTime != null">
+			<![CDATA[AND t.create_time = #{finWithdrawLog.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="finWithdrawLog.updateUser != null and finWithdrawLog.updateUser > 0">
+			<![CDATA[AND t.update_user = #{finWithdrawLog.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finWithdrawLog.updateTime != null">
+			<![CDATA[AND t.update_time = #{finWithdrawLog.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="finWithdrawLog.dataVersion != null and finWithdrawLog.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{finWithdrawLog.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="finWithdrawLog.memberId != null and finWithdrawLog.memberId > 0">
+			<![CDATA[AND t.member_id = #{finWithdrawLog.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finWithdrawLog.memberName != null and finWithdrawLog.memberName != ''">
+			<![CDATA[AND t.member_name = #{finWithdrawLog.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.agentId != null and finWithdrawLog.agentId > 0">
+			<![CDATA[AND t.agent_id = #{finWithdrawLog.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="finWithdrawLog.agentName != null and finWithdrawLog.agentName != ''">
+			<![CDATA[AND t.agent_name = #{finWithdrawLog.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.agentFullId != null and finWithdrawLog.agentFullId != ''">
+			<![CDATA[AND t.agent_full_id = #{finWithdrawLog.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.agentFullName != null and finWithdrawLog.agentFullName != ''">
+			<![CDATA[AND t.agent_full_name = #{finWithdrawLog.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.bankAccount != null and finWithdrawLog.bankAccount != ''">
+			<![CDATA[AND t.bank_account = #{finWithdrawLog.bankAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.bankAccountName != null and finWithdrawLog.bankAccountName != ''">
+			<![CDATA[AND t.bank_account_name = #{finWithdrawLog.bankAccountName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.bankName != null and finWithdrawLog.bankName != ''">
+			<![CDATA[AND t.bank_name = #{finWithdrawLog.bankName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.bankSubName != null and finWithdrawLog.bankSubName != ''">
+			<![CDATA[AND t.bank_sub_name = #{finWithdrawLog.bankSubName, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.orderNo != null and finWithdrawLog.orderNo != ''">
+			<![CDATA[AND t.order_no = #{finWithdrawLog.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawTo != null and finWithdrawLog.withdrawTo != ''">
+			<![CDATA[AND t.withdraw_to = #{finWithdrawLog.withdrawTo, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAccount != null and finWithdrawLog.withdrawAccount != ''">
+			<![CDATA[AND t.withdraw_account = #{finWithdrawLog.withdrawAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawNo != null and finWithdrawLog.withdrawNo != ''">
+			<![CDATA[AND t.withdraw_no = #{finWithdrawLog.withdrawNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawState != null and finWithdrawLog.withdrawState > 0">
+			<![CDATA[AND t.withdraw_state = #{finWithdrawLog.withdrawState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount1 != null and finWithdrawLog.withdrawAmount1 > 0">
+			<![CDATA[AND t.withdraw_amount1 = #{finWithdrawLog.withdrawAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="finWithdrawLog.withdrawAmount2 != null and finWithdrawLog.withdrawAmount2 > 0">
+			<![CDATA[AND t.withdraw_amount2 = #{finWithdrawLog.withdrawAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="finWithdrawLog.remark != null and finWithdrawLog.remark != ''">
+			<![CDATA[AND t.remark = #{finWithdrawLog.remark, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.beginDate != null">
+				<![CDATA[AND t.create_time >= #{where.beginDate, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.endDate != null">
+				<![CDATA[AND t.create_time <= #{where.endDate, jdbcType=TIMESTAMP}]]>
+			</if>
+		</where>
+	 	<![CDATA[ORDER BY t.create_time DESC ]]>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="FinWithdrawLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.agent_id AS agent_id,
+			t.agent_name AS agent_name,
+			t.agent_full_id AS agent_full_id,
+			t.agent_full_name AS agent_full_name,
+			t.bank_account AS bank_account,
+			t.bank_account_name AS bank_account_name,
+			t.bank_name AS bank_name,
+			t.bank_sub_name AS bank_sub_name,
+			t.order_no AS order_no,
+			t.withdraw_to AS withdraw_to,
+			t.withdraw_account AS withdraw_account,
+			t.withdraw_no AS withdraw_no,
+			t.withdraw_state AS withdraw_state,
+			t.withdraw_amount1 AS withdraw_amount1,
+			t.withdraw_amount2 AS withdraw_amount2,
+			t.remark AS remark
+		FROM
+			t_fin_withdraw_log t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{finWithdrawLogId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_fin_withdraw_log
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createUser != null">
+			<![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentId != null">
+			<![CDATA[AND agent_id = #{where.agentId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.agentName != null and where.agentName != ''">
+			<![CDATA[AND agent_name = #{where.agentName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullId != null and where.agentFullId != ''">
+			<![CDATA[AND agent_full_id = #{where.agentFullId, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.agentFullName != null and where.agentFullName != ''">
+			<![CDATA[AND agent_full_name = #{where.agentFullName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccount != null and where.bankAccount != ''">
+			<![CDATA[AND bank_account = #{where.bankAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankAccountName != null and where.bankAccountName != ''">
+			<![CDATA[AND bank_account_name = #{where.bankAccountName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankName != null and where.bankName != ''">
+			<![CDATA[AND bank_name = #{where.bankName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.bankSubName != null and where.bankSubName != ''">
+			<![CDATA[AND bank_sub_name = #{where.bankSubName, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.orderNo != null and where.orderNo != ''">
+			<![CDATA[AND order_no = #{where.orderNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawTo != null and where.withdrawTo != ''">
+			<![CDATA[AND withdraw_to = #{where.withdrawTo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawAccount != null and where.withdrawAccount != ''">
+			<![CDATA[AND withdraw_account = #{where.withdrawAccount, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawNo != null and where.withdrawNo != ''">
+			<![CDATA[AND withdraw_no = #{where.withdrawNo, jdbcType=CHAR}]]>
+			</if>
+			<if test="where.withdrawState != null">
+			<![CDATA[AND withdraw_state = #{where.withdrawState, jdbcType=TINYINT}]]>
+			</if>
+			<if test="where.withdrawAmount1 != null">
+			<![CDATA[AND withdraw_amount1 = #{where.withdrawAmount1, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.withdrawAmount2 != null">
+			<![CDATA[AND withdraw_amount2 = #{where.withdrawAmount2, jdbcType=DECIMAL}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=CHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_fin_withdraw_log
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{finWithdrawLogId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+
+</mapper>

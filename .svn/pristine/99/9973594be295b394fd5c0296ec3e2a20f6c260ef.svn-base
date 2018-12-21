@@ -1,0 +1,204 @@
+package com.fun.client.service;
+
+import com.fun.client.domain.GoodImg;
+import com.fun.client.domain.GoodsInfo;
+import com.fun.client.domain.ReturnGoodsDemo;
+import com.fun.client.repository.GoodsInfoMapper;
+import com.fun.client.repository.GoodsOrderInfoMapper;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.service.BaseService;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.management.Query;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+@Service
+public class GoodsInfoService extends BaseService {
+
+    private @Autowired
+    GoodsInfoMapper goodsMapper;
+    private @Autowired
+    GoodsOrderInfoMapper goodsOrderInfoMapper;
+
+    private @Autowired
+    GoodsInfoMapper getGoodsMapper;
+
+    public List<GoodsInfo> selectAll(GoodsInfo goodsInfo) {
+        return goodsMapper.select(goodsInfo);
+    }
+
+    public GoodsInfo selectById(Integer goodsInfoId) {
+        return goodsMapper.selectById(goodsInfoId);
+    }
+
+    public Integer deteleById(Integer goodsInfoId) {
+        return goodsMapper.deleteById(goodsInfoId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer deteleTwoById(Integer goodsInfoId, Integer goodsInfoId2) {
+        goodsMapper.deleteById(goodsInfoId2);
+        return goodsMapper.deleteById(goodsInfoId);
+    }
+
+    public Integer insert(GoodsInfo goodsInfo) {
+        goodsInfo.setCreateTime(new Date());
+        goodsInfo.setUpdateTime(new Date());
+        goodsInfo.setDataVersion(Integer.valueOf(1));
+        return goodsMapper.insert(goodsInfo);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void insert(Integer userId, GoodsInfo goodsInfo, String goodSrc, String[] goodsSrc) {
+        goodsInfo.setGoodSrc(goodSrc);
+        goodsInfo.setUpdateUser(userId);
+        goodsInfo.setUpdateTime(new Date());
+        goodsInfo.setCreateUser(userId);
+        goodsInfo.setCreateTime(new Date());
+        goodsInfo.setDataVersion(Integer.valueOf(1));
+        goodsInfo.setGoodSourceId(null);
+        goodsMapper.insert(goodsInfo);
+        for (String str : goodsSrc) {
+            GoodImg goodImg = new GoodImg();
+            goodImg.setDataVersion(Integer.valueOf(1));
+            goodImg.setCreateTime(new Date());
+            goodImg.setUpdateTime(new Date());
+            goodImg.setUpdateUser(userId);
+            goodImg.setCreateUser(userId);
+            goodImg.setGoodId(goodsInfo.getPkId());
+            goodImg.setGoodSrc(str);
+            goodsMapper.insertGoodImgs(goodImg);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public void insert(Integer userId, GoodsInfo goodsInfo, String goodSrc, String goodSrc1, String goodName1, Double price1) throws IOException {
+        //插入商品
+        goodsInfo.setGoodSrc(goodSrc);
+        goodsInfo.setUpdateUser(userId);
+        goodsInfo.setUpdateTime(new Date());
+        goodsInfo.setCreateUser(userId);
+        goodsInfo.setCreateTime(new Date());
+        goodsInfo.setDataVersion(Integer.valueOf(1));
+        goodsMapper.insert(goodsInfo);
+        //插入升级后的商品
+        GoodsInfo goodsInfo1 = new GoodsInfo();
+        goodsInfo1.setCoin(0.0);
+        goodsInfo1.setPrice(0.0);
+        goodsInfo1.setGoodSourceId(goodsInfo.getPkId());
+        goodsInfo1.setIsPromotion(1);
+        goodsInfo1.setIsIntegral(0);
+        goodsInfo1.setDataVersion(Integer.valueOf(1));
+        goodsInfo1.setCreateUser(userId);
+        goodsInfo1.setCreateTime(new Date());
+        goodsInfo1.setUpdateTime(new Date());
+        goodsInfo1.setUpdateUser(userId);
+        goodsInfo1.setCatId(goodsInfo.getCatId());
+        goodsInfo1.setDetail("");
+        goodsInfo1.setGoodSrc(goodSrc1);
+        goodsInfo1.setPurchasePrice(price1);
+        goodsInfo1.setGoodName(goodName1);
+        goodsInfo1.setRepertoryNum(0);
+        goodsMapper.insert(goodsInfo1);
+    }
+
+    public Integer updateById(GoodsInfo goodsInfo, Integer userId) {
+        return goodsMapper.updateById(goodsInfo, userId);
+    }
+
+    public List<GoodsInfo> selectByPromotion(GoodsInfo goodsInfo) {
+        return goodsMapper.selectByPromotion(goodsInfo);
+    }
+
+    public Pagination<ReturnGoodsDemo> selectBackByPromotion(GoodsInfo goodsInfo, QueryDto queryDto) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<GoodsInfo> page = goodsMapper.selectBackByPromotion(goodsInfo);
+        List<ReturnGoodsDemo> objects = new ArrayList<>();
+        for (GoodsInfo goods : page.getResult()) {
+            GoodsInfo goodsInfo3 = goodsMapper.selectById(goods.getGoodSourceId());
+            goods.setCount(goodsOrderInfoMapper.selectOrderByGoodId(goods.getPkId()) + goodsOrderInfoMapper.selectOrderByGoodId(goodsInfo3.getPkId()));
+            ReturnGoodsDemo returnGoodsDemo = new ReturnGoodsDemo();
+            returnGoodsDemo.setLeft(goodsInfo3);
+            returnGoodsDemo.setRight(goods);
+            objects.add(returnGoodsDemo);
+        }
+        return new Pagination<>(page.getTotal(), objects);
+    }
+
+    public List<GoodsInfo> selectByIntegral(GoodsInfo goodsInfo) {
+        return goodsMapper.selectByIntegral(goodsInfo);
+    }
+
+    public List<GoodImg> selectImgs(Integer goodId) {
+        return goodsMapper.selectImgs(goodId);
+    }
+
+    public GoodsInfo selectByGoodSourceId(Integer goodSourceId) {
+        return goodsMapper.selectByGoodSourceId(goodSourceId);
+    }
+
+    public Integer selectCount(Integer catId) {
+        return goodsMapper.selectCount(catId);
+    }
+
+    public Integer deleteDetailImgById(Integer Id) {
+        return goodsMapper.deleteDetailImgById(Id);
+    }
+
+    public Integer insertGoodImgs(GoodImg goodImg) {
+        goodImg.setCreateTime(new Date());
+        goodImg.setUpdateTime(new Date());
+        goodImg.setDataVersion(Integer.valueOf(1));
+        return goodsMapper.insertGoodImgs(goodImg);
+    }
+
+    public Pagination<GoodsInfo> selectGoods(GoodsInfo goodsInfo, QueryDto queryDto) {
+        PageHelper.startPage(queryDto.getPage(), queryDto.getRows(), true);
+        Page<GoodsInfo> page = goodsMapper.selectGoods(goodsInfo);
+        for (GoodsInfo good : page.getResult()) {
+            good.setCount(goodsOrderInfoMapper.selectOrderByGoodId(good.getPkId()));
+        }
+        return new Pagination<>(page.getTotal(), page.getResult());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateGoodInfoById(Integer userId, GoodsInfo goodsInfo, String[] goodsSrc) {
+        goodsMapper.deleteDetailImgByGoodId(goodsInfo.getPkId());
+        for (int i = 0; i < goodsSrc.length; i++) {
+            GoodImg goodImg = new GoodImg();
+            goodImg.setCreateUser(userId);
+            goodImg.setCreateTime(new Date());
+            goodImg.setDataVersion(Integer.valueOf(1));
+            goodImg.setUpdateTime(new Date());
+            goodImg.setUpdateUser(userId);
+            goodImg.setGoodId(goodsInfo.getPkId());
+            goodImg.setGoodSrc(goodsSrc[i]);
+            goodsMapper.insertGoodImgs(goodImg);
+        }
+        return goodsMapper.updateGoodInfoById(goodsInfo);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateGoodInfo(GoodsInfo goodsInfo, GoodsInfo goodsInfo1) {
+        goodsMapper.updateGoodInfoById(goodsInfo);
+        return goodsMapper.updateGoodInfoById(goodsInfo1);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class}, readOnly = false)
+    public Integer updateGoodsState(Integer goodsState, Integer goodsId) {
+        return this.getGoodsMapper.updateGoodsState(goodsState, goodsId);
+    }
+}

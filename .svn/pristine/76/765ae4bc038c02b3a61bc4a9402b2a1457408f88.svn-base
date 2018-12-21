@@ -1,0 +1,21 @@
+package com.fun.api.repository;
+
+import com.fun.api.domain.OrderManage;
+import com.fun.framework.web.dto.QueryDto;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+@Mapper
+public interface OrderManageMapper {
+
+     Page<OrderManage> selectGoodsOrderList(@Param("orderManage") OrderManage orderManage, @Param("where") QueryDto where);
+
+     Page<OrderManage> selectIsIntegralOrderList(@Param("orderManage") OrderManage orderManage, @Param("where") QueryDto where);
+
+     Page<OrderManage> promotionManageDjdlList(@Param("orderManage") OrderManage orderManage, @Param("where") QueryDto where);
+
+     Page<OrderManage> promotionManageQhbList(@Param("orderManage") OrderManage orderManage, @Param("where") QueryDto where);
+}

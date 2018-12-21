@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.LogisticsInfoMapper">
+    <resultMap id="LogisticsInfo" type="com.fun.client.domain.LogisticsInfo">
+        <id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER"/>
+        <result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER"/>
+        <result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="orderId" javaType="Integer" column="order_Id" jdbcType="INTEGER"/>
+        <result property="logisticsCompany" javaType="String" column="logistics_company" jdbcType="VARCHAR"/>
+        <result property="logisticsNo" javaType="String" column="logistics_no" jdbcType="VARCHAR"/>
+        <result property="remark" javaType="String" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--新增物流信息-->
+    <insert id="addLogisticsInfo" parameterType="Map">
+        <![CDATA[
+        INSERT INTO t_logistics_info(
+            pk_id,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			order_id,
+			logistics_company,
+			logistics_no,
+			remark
+        )
+        VALUE (
+             	#{logisticsInfo.pkId, jdbcType = INTEGER},
+				#{logisticsInfo.createUser, jdbcType = INTEGER},
+				#{logisticsInfo.createTime, jdbcType = TIMESTAMP},
+				#{logisticsInfo.updateUser, jdbcType = INTEGER},
+				#{logisticsInfo.updateTime, jdbcType = TIMESTAMP},
+				#{logisticsInfo.dataVersion, jdbcType = INTEGER},
+				#{logisticsInfo.orderId,jdbcType = INTEGER},
+				#{logisticsInfo.logisticsCompany,jdbcType= VARCHAR},
+				#{logisticsInfo.logisticsNo,jdbcType = VARCHAR},
+				#{logisticsInfo.remark,jdbcType = VARCHAR}
+        )
+        ]]>
+    </insert>
+</mapper>

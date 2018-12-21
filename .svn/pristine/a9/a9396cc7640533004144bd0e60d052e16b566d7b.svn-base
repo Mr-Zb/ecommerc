@@ -1,0 +1,125 @@
+package com.fun.le.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import com.fun.client.domain.MemTeam;
+import com.fun.le.entities.SysPropSetting;
+import com.fun.le.repository.SysPropSettingMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fun.framework.support.BusinessException;
+
+@Service
+public class SysPropSettingService {
+
+	@Autowired
+	private SysPropSettingMapper sysPropSettingMapper;
+
+	public Integer insert(Integer userId, SysPropSetting sysPropSetting) throws BusinessException {
+		sysPropSetting.setCreateTime(new Date());
+		sysPropSetting.setCreateUser(userId);
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		sysPropSetting.setDataVersion(Integer.valueOf(1));
+		return this.sysPropSettingMapper.insert(sysPropSetting);
+	}
+
+	public Integer insert(Integer userId, List<SysPropSetting> sysPropSettings) throws BusinessException {
+		for (SysPropSetting sysPropSetting : sysPropSettings) {
+			sysPropSetting.setCreateTime(new Date());
+			sysPropSetting.setCreateUser(userId);
+			sysPropSetting.setUpdateTime(new Date());
+			sysPropSetting.setUpdateUser(userId);
+			sysPropSetting.setDataVersion(Integer.valueOf(1));
+		}
+		return this.sysPropSettingMapper.insertBatch(sysPropSettings);
+	}
+
+	public Integer update(Integer userId, SysPropSetting sysPropSetting, SysPropSetting where)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.update(sysPropSetting, where);
+	}
+
+	public Integer updateById(Integer userId, SysPropSetting sysPropSetting, Integer sysPropSettingId)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateById(sysPropSetting, sysPropSettingId);
+	}
+
+	public Integer updateByIdnew(Integer userId, SysPropSetting sysPropSetting)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateById(sysPropSetting,userId);
+	}
+
+
+
+	public Integer updateActive(Integer userId, SysPropSetting sysPropSetting, SysPropSetting where)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateActive(sysPropSetting, where);
+	}
+
+	public Integer updateActiveById(Integer userId, SysPropSetting sysPropSetting, Integer sysPropSettingId)
+			throws BusinessException {
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		return this.sysPropSettingMapper.updateActiveById(sysPropSetting, sysPropSettingId);
+	}
+
+	public Integer updateByUserId(SysPropSetting sysPropSetting,Integer userId){
+		sysPropSetting.setUpdateTime(new Date());
+		sysPropSetting.setUpdateUser(userId);
+		sysPropSetting.setDataVersion(1);
+		return this.sysPropSettingMapper.updateByUserId(sysPropSetting,userId);
+	}
+
+	public List<SysPropSetting> select(Integer userId, SysPropSetting sysPropSetting) throws BusinessException {
+		return this.sysPropSettingMapper.select(sysPropSetting);
+	}
+
+	public List<SysPropSetting> select(SysPropSetting sysPropSetting){
+		return this.sysPropSettingMapper.select(sysPropSetting);
+	}
+
+	public SysPropSetting selectById(Integer userId, Integer sysPropSettingId) throws BusinessException {
+		return this.sysPropSettingMapper.selectById(sysPropSettingId);
+	}
+
+	public List<SysPropSetting> selectByUserId(Integer userId) throws BusinessException {
+		return this.sysPropSettingMapper.selectByUserId(userId);
+	}
+
+	public Integer delete(Integer userId, SysPropSetting where) throws BusinessException {
+		return this.sysPropSettingMapper.delete(where);
+	}
+
+	public Integer deleteById(Integer userId, Integer sysPropSettingId) throws BusinessException {
+		return this.sysPropSettingMapper.deleteById(sysPropSettingId);
+	}
+
+	//查询代理返水比例
+	public String  sysUserRebate(Integer userId) {
+		return this.sysPropSettingMapper.sysUserRebate(userId);
+	}
+	//查询推广比率
+	public String sysUserExtension (Integer userId) {
+		return this.sysPropSettingMapper.sysUserExtension(userId);
+	}
+
+	public String  selectSuperiorExtension(Integer userId){
+		return this.sysPropSettingMapper.selectSuperiorExtension(userId);
+	}
+
+	public List<SysPropSetting> selectALiMessageSetting(){
+		return this.sysPropSettingMapper.selectALiMessageSetting();
+	}
+}

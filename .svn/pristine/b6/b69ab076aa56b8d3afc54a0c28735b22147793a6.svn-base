@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fun.client.repository.MemLoginLogMapper">
+	<resultMap id="MemLoginLog" type="com.fun.client.domain.MemLoginLog">
+		<id property="pkId" javaType="Integer" column="pk_id" jdbcType="INTEGER" />
+		<id property="dataVersion" javaType="Integer" column="data_version" jdbcType="INTEGER" />
+	    <result property="userType" javaType="Integer" column="user_type" jdbcType="TINYINT" /> 
+		<result property="createUser" javaType="Integer" column="create_user" jdbcType="INTEGER" />
+		<result property="createTime" javaType="Date" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateUser" javaType="Integer" column="update_user" jdbcType="INTEGER" />
+		<result property="updateTime" javaType="Date" column="update_time" jdbcType="TIMESTAMP" />
+		<result property="loginName" javaType="String" column="login_name" jdbcType="VARCHAR" />
+		<result property="currLoginIp" javaType="String" column="curr_login_ip" jdbcType="VARCHAR" />
+		<result property="currLoginAddress" javaType="String" column="curr_login_address" jdbcType="VARCHAR" />
+		<result property="currLoginDevice" javaType="String" column="curr_login_device" jdbcType="VARCHAR" />
+		<result property="currLoginTime" javaType="Date" column="curr_login_time" jdbcType="TIMESTAMP" />
+		<result property="memberId" javaType="Integer" column="member_id" jdbcType="INTEGER" />
+		<result property="memberName" javaType="String" column="member_name" jdbcType="VARCHAR" />
+		<result property="resultFlag" javaType="Integer" column="result_flag" jdbcType="INTEGER" />
+		<result property="remark" javaType="String" column="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="Map" useGeneratedKeys="true" keyProperty="memLoginLog.pkId">
+		<![CDATA[
+		INSERT INTO t_mem_login_log (
+			pk_id,
+			user_type,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			login_name,
+			curr_login_ip,
+			curr_login_address,
+			curr_login_device,
+			curr_login_time,
+			member_id,
+			member_name,
+			result_flag,
+			remark
+		)
+		VALUES
+			(
+				#{memLoginLog.pkId, jdbcType = INTEGER},
+				#{memLoginLog.userType,jdbcType= TINYINT},
+				#{memLoginLog.createUser, jdbcType = INTEGER},
+				#{memLoginLog.createTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.updateUser, jdbcType = INTEGER},
+				#{memLoginLog.updateTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.dataVersion, jdbcType = INTEGER},
+				#{memLoginLog.loginName, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginIp, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginAddress, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginDevice, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.memberId, jdbcType = INTEGER},
+				#{memLoginLog.memberName, jdbcType = VARCHAR},
+				#{memLoginLog.resultFlag, jdbcType = INTEGER},
+				#{memLoginLog.remark, jdbcType = VARCHAR}
+			)
+		]]>
+	</insert>
+	
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch" parameterType="Map" useGeneratedKeys="false">
+		<![CDATA[
+		INSERT INTO t_mem_login_log (
+			pk_id,
+	     	user_type,
+			create_user,
+			create_time,
+			update_user,
+			update_time,
+			data_version,
+			login_name,
+			curr_login_ip,
+			curr_login_address,
+			curr_login_device,
+			curr_login_time,
+			member_id,
+			member_name,
+			result_flag,
+			remark
+		)
+		]]>
+		<foreach collection="memLoginLogs" item="memLoginLog" open="VALUES" separator=",">
+		<![CDATA[
+			(
+				#{memLoginLog.pkId, jdbcType = INTEGER},
+		        #{memLoginLog.userType,jdbcType= TINYINT},
+				#{memLoginLog.createUser, jdbcType = INTEGER},
+				#{memLoginLog.createTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.updateUser, jdbcType = INTEGER},
+				#{memLoginLog.updateTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.dataVersion, jdbcType = INTEGER},
+				#{memLoginLog.loginName, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginIp, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginAddress, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginDevice, jdbcType = VARCHAR},
+				#{memLoginLog.currLoginTime, jdbcType = TIMESTAMP},
+				#{memLoginLog.memberId, jdbcType = INTEGER},
+				#{memLoginLog.memberName, jdbcType = VARCHAR},
+				#{memLoginLog.resultFlag, jdbcType = INTEGER},
+				#{memLoginLog.remark, jdbcType = VARCHAR}
+			)
+		]]>
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update" parameterType="Map">
+		<![CDATA[UPDATE t_mem_login_log]]>
+		<set>
+		 <![CDATA[user_type = #{memLoginLog.userType},]]> 
+		<![CDATA[update_user = #{memLoginLog.updateUser},]]>
+		<![CDATA[update_time = #{memLoginLog.updateTime},]]>
+		<![CDATA[data_version = #{memLoginLog.dataVersion},]]>
+		<![CDATA[login_name = #{memLoginLog.loginName},]]>
+		<![CDATA[curr_login_ip = #{memLoginLog.currLoginIp},]]>
+		<![CDATA[curr_login_address = #{memLoginLog.currLoginAddress},]]>
+		<![CDATA[curr_login_device = #{memLoginLog.currLoginDevice},]]>
+		<![CDATA[curr_login_time = #{memLoginLog.currLoginTime},]]>
+		<![CDATA[member_id = #{memLoginLog.memberId},]]>
+		<![CDATA[member_name = #{memLoginLog.memberName},]]>
+		<![CDATA[result_flag = #{memLoginLog.resultFlag},]]>
+		<![CDATA[remark = #{memLoginLog.remark},]]>
+		</set>
+		<where>
+		     <if test="where.userType != null ">
+			<![CDATA[AND user_type = #{where.userType, jdbcType=TINYINT}]]>
+			</if> 
+			<if test="where.loginName != null and where.loginName != ''">
+			<![CDATA[AND login_name = #{where.loginName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginIp != null and where.currLoginIp != ''">
+			<![CDATA[AND curr_login_ip = #{where.currLoginIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginAddress != null and where.currLoginAddress != ''">
+			<![CDATA[AND curr_login_address = #{where.currLoginAddress, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginDevice != null and where.currLoginDevice != ''">
+			<![CDATA[AND curr_login_device = #{where.currLoginDevice, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginTime != null">
+			<![CDATA[AND curr_login_time = #{where.currLoginTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.resultFlag != null">
+			<![CDATA[AND result_flag = #{where.resultFlag, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新 -->
+	<update id="updateById" parameterType="Map">
+		<![CDATA[UPDATE t_mem_login_log]]>
+		<set>
+		<![CDATA[user_type = #{memLoginLog.userType},]]> 
+		<![CDATA[update_user = #{memLoginLog.updateUser},]]>
+		<![CDATA[update_time = #{memLoginLog.updateTime},]]>
+		<![CDATA[data_version = #{memLoginLog.dataVersion},]]>
+		<![CDATA[login_name = #{memLoginLog.loginName},]]>
+		<![CDATA[curr_login_ip = #{memLoginLog.currLoginIp},]]>
+		<![CDATA[curr_login_address = #{memLoginLog.currLoginAddress},]]>
+		<![CDATA[curr_login_device = #{memLoginLog.currLoginDevice},]]>
+		<![CDATA[curr_login_time = #{memLoginLog.currLoginTime},]]>
+		<![CDATA[member_id = #{memLoginLog.memberId},]]>
+		<![CDATA[member_name = #{memLoginLog.memberName},]]>
+		<![CDATA[result_flag = #{memLoginLog.resultFlag},]]>
+		<![CDATA[remark = #{memLoginLog.remark},]]>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{memLoginLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+	<!-- 更新有值数据 -->
+	<update id="updateActive" parameterType="Map">
+		<![CDATA[UPDATE t_mem_login_log]]>
+		<set>
+		  <if test="memLoginLog.userType !=null">
+		    <![CDATA[user_type = #{memLoginLog.usserType},]]>
+		    </if> 
+			<if test="memLoginLog.updateUser != null">
+			<![CDATA[update_user = #{memLoginLog.updateUser},]]>
+			</if>
+			<if test="memLoginLog.updateTime != null">
+			<![CDATA[update_time = #{memLoginLog.updateTime},]]>
+			</if>
+			<if test="memLoginLog.dataVersion != null">
+			<![CDATA[data_version = #{memLoginLog.dataVersion},]]>
+			</if>
+			<if test="memLoginLog.loginName != null and memLoginLog.loginName != ''">
+			<![CDATA[login_name = #{memLoginLog.loginName},]]>
+			</if>
+			<if test="memLoginLog.currLoginIp != null and memLoginLog.currLoginIp != ''">
+			<![CDATA[curr_login_ip = #{memLoginLog.currLoginIp},]]>
+			</if>
+			<if test="memLoginLog.currLoginAddress != null and memLoginLog.currLoginAddress != ''">
+			<![CDATA[curr_login_address = #{memLoginLog.currLoginAddress},]]>
+			</if>
+			<if test="memLoginLog.currLoginDevice != null and memLoginLog.currLoginDevice != ''">
+			<![CDATA[curr_login_device = #{memLoginLog.currLoginDevice},]]>
+			</if>
+			<if test="memLoginLog.currLoginTime != null">
+			<![CDATA[curr_login_time = #{memLoginLog.currLoginTime},]]>
+			</if>
+			<if test="memLoginLog.memberId != null">
+			<![CDATA[member_id = #{memLoginLog.memberId},]]>
+			</if>
+			<if test="memLoginLog.memberName != null and memLoginLog.memberName != ''">
+			<![CDATA[member_name = #{memLoginLog.memberName},]]>
+			</if>
+			<if test="memLoginLog.resultFlag != null">
+			<![CDATA[result_flag = #{memLoginLog.resultFlag},]]>
+			</if>
+			<if test="memLoginLog.remark != null and memLoginLog.remark != ''">
+			<![CDATA[remark = #{memLoginLog.remark},]]>
+			</if>
+		</set>
+		<where>
+		    <if test="where.userType != null">
+		    <![CDATA[AND user_type = #{where.loginName,jdbcType = TINYINT}]]>
+		    </if> 
+			<if test="where.loginName != null and where.loginName != ''">
+			<![CDATA[AND login_name = #{where.loginName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginIp != null and where.currLoginIp != ''">
+			<![CDATA[AND curr_login_ip = #{where.currLoginIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginAddress != null and where.currLoginAddress != ''">
+			<![CDATA[AND curr_login_address = #{where.currLoginAddress, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginDevice != null and where.currLoginDevice != ''">
+			<![CDATA[AND curr_login_device = #{where.currLoginDevice, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginTime != null">
+			<![CDATA[AND curr_login_time = #{where.currLoginTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.resultFlag != null">
+			<![CDATA[AND result_flag = #{where.resultFlag, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据主键更新有值数据 -->
+	<update id="updateActiveById" parameterType="Map">
+		<![CDATA[UPDATE t_mem_login_log]]>
+		<set>
+		   <if test="memLoginLog.userType != null">
+		    <![CDATA[user_type = #{memLoginLog.loginName},]]>
+		    </if> 
+			<if test="memLoginLog.updateUser != null">
+			<![CDATA[update_user = #{memLoginLog.updateUser},]]>
+			</if>
+			<if test="memLoginLog.updateTime != null">
+			<![CDATA[update_time = #{memLoginLog.updateTime},]]>
+			</if>
+			<if test="memLoginLog.dataVersion != null">
+			<![CDATA[data_version = #{memLoginLog.dataVersion},]]>
+			</if>
+			<if test="memLoginLog.loginName != null and memLoginLog.loginName != ''">
+			<![CDATA[login_name = #{memLoginLog.loginName},]]>
+			</if>
+			<if test="memLoginLog.currLoginIp != null and memLoginLog.currLoginIp != ''">
+			<![CDATA[curr_login_ip = #{memLoginLog.currLoginIp},]]>
+			</if>
+			<if test="memLoginLog.currLoginAddress != null and memLoginLog.currLoginAddress != ''">
+			<![CDATA[curr_login_address = #{memLoginLog.currLoginAddress},]]>
+			</if>
+			<if test="memLoginLog.currLoginDevice != null and memLoginLog.currLoginDevice != ''">
+			<![CDATA[curr_login_device = #{memLoginLog.currLoginDevice},]]>
+			</if>
+			<if test="memLoginLog.currLoginTime != null">
+			<![CDATA[curr_login_time = #{memLoginLog.currLoginTime},]]>
+			</if>
+			<if test="memLoginLog.memberId != null">
+			<![CDATA[member_id = #{memLoginLog.memberId},]]>
+			</if>
+			<if test="memLoginLog.memberName != null and memLoginLog.memberName != ''">
+			<![CDATA[member_name = #{memLoginLog.memberName},]]>
+			</if>
+			<if test="memLoginLog.resultFlag != null">
+			<![CDATA[result_flag = #{memLoginLog.resultFlag},]]>
+			</if>
+			<if test="memLoginLog.remark != null and memLoginLog.remark != ''">
+			<![CDATA[remark = #{memLoginLog.remark},]]>
+			</if>
+		</set>
+		<where>
+		<![CDATA[AND pk_id = #{memLoginLogId, jdbcType=INTEGER}]]>
+		</where>
+	</update>
+	
+
+	<!-- 查询列表 -->
+	<select id="select" parameterType="Map" resultMap="MemLoginLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+         	t.user_type AS user_type,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.login_name AS login_name,
+			t.curr_login_ip AS curr_login_ip,
+			t.curr_login_address AS curr_login_address,
+			t.curr_login_device AS curr_login_device,
+			t.curr_login_time AS curr_login_time,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.result_flag AS result_flag,
+			t.remark AS remark
+		FROM
+			t_mem_login_log t
+		]]>
+		<where>
+			<if test="memLoginLog.pkId != null and memLoginLog.pkId > 0">
+			<![CDATA[AND t.pk_id = #{memLoginLog.pkId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.userType != null ">
+			<![CDATA[AND t.user_type = #{memLoginLog.userType, jdbcType=TINYINT}]]>
+			</if> 
+			<if test="memLoginLog.createUser != null and memLoginLog.createUser > 0">
+			<![CDATA[AND t.create_user = #{memLoginLog.createUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.createTime != null">
+			<![CDATA[AND t.create_time = #{memLoginLog.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="memLoginLog.updateUser != null and memLoginLog.updateUser > 0">
+			<![CDATA[AND t.update_user = #{memLoginLog.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.updateTime != null">
+			<![CDATA[AND t.update_time = #{memLoginLog.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="memLoginLog.dataVersion != null and memLoginLog.dataVersion > 0">
+			<![CDATA[AND t.data_version = #{memLoginLog.dataVersion, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.loginName != null and memLoginLog.loginName != ''">
+			<![CDATA[AND t.login_name = #{memLoginLog.loginName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="memLoginLog.currLoginIp != null and memLoginLog.currLoginIp != ''">
+			<![CDATA[AND t.curr_login_ip = #{memLoginLog.currLoginIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="memLoginLog.currLoginAddress != null and memLoginLog.currLoginAddress != ''">
+			<![CDATA[AND t.curr_login_address = #{memLoginLog.currLoginAddress, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="memLoginLog.currLoginDevice != null and memLoginLog.currLoginDevice != ''">
+			<![CDATA[AND t.curr_login_device = #{memLoginLog.currLoginDevice, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="memLoginLog.currLoginTime != null">
+			<![CDATA[AND t.curr_login_time = #{memLoginLog.currLoginTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="memLoginLog.memberId != null and memLoginLog.memberId > 0">
+			<![CDATA[AND t.member_id = #{memLoginLog.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.memberName != null and memLoginLog.memberName != ''">
+			<![CDATA[AND t.member_name = #{memLoginLog.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="memLoginLog.resultFlag != null and memLoginLog.resultFlag > 0">
+			<![CDATA[AND t.result_flag = #{memLoginLog.resultFlag, jdbcType=INTEGER}]]>
+			</if>
+			<if test="memLoginLog.remark != null and memLoginLog.remark != ''">
+			<![CDATA[AND t.remark = #{memLoginLog.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据主键查询 -->
+	<select id="selectById" parameterType="Map" resultMap="MemLoginLog">
+		<![CDATA[
+		SELECT
+			t.pk_id AS pk_id,
+		    t.user_type AS user_type,
+			t.create_user AS create_user,
+			t.create_time AS create_time,
+			t.update_user AS update_user,
+			t.update_time AS update_time,
+			t.data_version AS data_version,
+			t.login_name AS login_name,
+			t.curr_login_ip AS curr_login_ip,
+			t.curr_login_address AS curr_login_address,
+			t.curr_login_device AS curr_login_device,
+			t.curr_login_time AS curr_login_time,
+			t.member_id AS member_id,
+			t.member_name AS member_name,
+			t.result_flag AS result_flag,
+			t.remark AS remark
+		FROM
+			t_mem_login_log t
+		]]>
+		<where>
+		<![CDATA[AND t.pk_id = #{memLoginLogId, jdbcType=INTEGER}]]>
+		</where>
+	</select>
+
+	<!-- 按条件删除 -->
+	<delete id="delete" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_mem_login_log
+		]]>
+		<where>
+			<if test="where.pkId != null">
+			<![CDATA[AND pk_id = #{where.pkId, jdbcType=INTEGER}]]>
+			</if>
+			
+			 <if test="where.userType != null">
+			 <![CDATA[AND user_type = #{where.userType, jdbcType=TINYINT}]]>
+			</if> 
+			
+			 <if test="where.createUser != null">
+			 <![CDATA[AND create_user = #{where.createUser, jdbcType=INTEGER}]]>
+			</if>  
+			<if test="where.createTime != null">
+			<![CDATA[AND create_time = #{where.createTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.updateUser != null">
+			<![CDATA[AND update_user = #{where.updateUser, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.updateTime != null">
+			<![CDATA[AND update_time = #{where.updateTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.dataVersion != null">
+			<![CDATA[AND data_version = #{where.dataVersion, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.loginName != null and where.loginName != ''">
+			<![CDATA[AND login_name = #{where.loginName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginIp != null and where.currLoginIp != ''">
+			<![CDATA[AND curr_login_ip = #{where.currLoginIp, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginAddress != null and where.currLoginAddress != ''">
+			<![CDATA[AND curr_login_address = #{where.currLoginAddress, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginDevice != null and where.currLoginDevice != ''">
+			<![CDATA[AND curr_login_device = #{where.currLoginDevice, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.currLoginTime != null">
+			<![CDATA[AND curr_login_time = #{where.currLoginTime, jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="where.memberId != null">
+			<![CDATA[AND member_id = #{where.memberId, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.memberName != null and where.memberName != ''">
+			<![CDATA[AND member_name = #{where.memberName, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="where.resultFlag != null">
+			<![CDATA[AND result_flag = #{where.resultFlag, jdbcType=INTEGER}]]>
+			</if>
+			<if test="where.remark != null and where.remark != ''">
+			<![CDATA[AND remark = #{where.remark, jdbcType=VARCHAR}]]>
+			</if>
+		</where>
+	</delete>
+
+	<!-- 按主键删除 -->
+	<delete id="deleteById" parameterType="Map">
+		<![CDATA[
+		DELETE
+		FROM
+			t_mem_login_log
+		]]>
+		<where>
+		<![CDATA[AND pk_id = #{memLoginLogId, jdbcType=INTEGER}]]>
+		</where>
+	</delete>
+</mapper>

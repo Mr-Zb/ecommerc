@@ -1,0 +1,80 @@
+package com.fun.client.controller;
+
+import com.fun.client.domain.FinRechargeLog;
+import com.fun.client.domain.FinWithdrawLog;
+import com.fun.client.service.FinRechargeLogService;
+import com.fun.client.service.FinWithdrawLogService;
+import com.fun.client.service.MemFinService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.support.BusinessException;
+import com.fun.framework.web.dto.QueryDto;
+import com.fun.framework.web.support.annotation.Secure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import com.fun.framework.web.controller.BaseController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+public class FinanceController extends BaseController {
+
+	@Autowired(required = false)
+	private MemFinService memFinService;
+	private @Autowired
+	FinRechargeLogService finRechargeLogService;
+	private @Autowired
+	FinWithdrawLogService finWithdrawLogService;
+
+	@ApiOperation(value = "提款申请", notes = "提款申请", code = 200, produces = "application/json")
+	@RequestMapping(path = { "/api-mem-fin-draw-applier" }, method = {RequestMethod.POST })
+	public synchronized AjaxReturn drawApplier(
+			@ApiParam(name = "amount", value = "申请金额", required = true) @RequestParam(value = "amount", required = true, defaultValue = "") Double amount,
+			@ApiParam(name = "bankPwd", value = "提现密码", required = true) @RequestParam(value = "bankPwd", required = true, defaultValue = "") String bankPwd)
+			throws Exception {
+		int userId = getAuthentication().intValue();
+		this.memFinService.drawApplier(Integer.valueOf(userId), bankPwd, amount);
+		return new AjaxReturn(200, null, null);
+	}
+
+	/**
+	 * 充值明细
+	 * @param finRechargeLog
+	 * @param queryDto
+	 * @return
+	 */
+	@ApiIgnore
+	@Secure(has = {"le:fina:recharge:list"})
+	@RequestMapping(path = {"fin-recharge-list"})
+	public AjaxReturn selectFinRechargeList(FinRechargeLog finRechargeLog, QueryDto queryDto){
+		if (finRechargeLog == null) {
+			finRechargeLog = new FinRechargeLog();
+		}
+		if (queryDto == null) {
+			queryDto = new QueryDto();
+		}
+		return this.finRechargeLogService.selectFinRechargeList(finRechargeLog,queryDto);
+	}
+
+	/**
+	 * 提款明细
+	 */
+	@ApiIgnore
+	@Secure(has = {"le:fina:draw:list"})
+	@RequestMapping(path = {"fin-draw-list"})
+	public AjaxReturn select(FinWithdrawLog finWithdrawLog,QueryDto queryDto) throws BusinessException {
+		if (finWithdrawLog == null) {
+			finWithdrawLog = new FinWithdrawLog();
+		}
+		if (queryDto == null) {
+			queryDto = new QueryDto();
+		}
+		return this.finWithdrawLogService.select(finWithdrawLog,queryDto);
+	}
+}

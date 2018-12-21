@@ -1,0 +1,396 @@
+package com.fun.admin.controller;
+
+import com.fun.admin.dto.ReturnCat;
+import com.fun.client.domain.*;
+import com.fun.client.service.GoodsInfoService;
+import com.fun.client.service.GoodsOrderInfoService;
+import com.fun.client.service.MenuInfoService;
+import com.fun.framework.domain.AjaxReturn;
+import com.fun.framework.domain.MenuReturn;
+import com.fun.framework.domain.Pagination;
+import com.fun.framework.utils.StringUtils;
+import com.fun.framework.web.controller.BaseController;
+import com.fun.framework.web.dto.QueryDto;
+
+import lombok.extern.log4j.Log4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
+
+@Log4j
+@RestController
+@RequestMapping("/api")
+public class MenuInfoController extends BaseController {
+
+    @Autowired
+    private MenuInfoService menuInfoService;
+    @Autowired
+    private GoodsInfoService goodsInfoService;
+    private @Autowired
+    GoodsOrderInfoService goodsOrderInfoService;
+    @Autowired
+    private Environment env;
+    /**
+     * 商品类别列表
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-list"}, method = {RequestMethod.POST})
+    public MenuReturn showOperationList(){
+        MenuInfo menuInfo = new MenuInfo();
+        //普通商品
+        menuInfo.setBigMenu(0);
+        List<MenuInfo> select = menuInfoService.select(menuInfo);
+        select.forEach(menuInfo1 -> {
+            menuInfo1.setCount(goodsInfoService.selectCount(menuInfo1.getPkId()));
+        });
+        //促销商品
+        menuInfo.setBigMenu(1);
+        List<MenuInfo> select1 = menuInfoService.select(menuInfo);
+        select1.forEach(menuInfo1 -> {
+            menuInfo1.setCount(goodsInfoService.selectCount(menuInfo1.getPkId()));
+        });
+        //积分商品
+        menuInfo.setBigMenu(2);
+        List<MenuInfo> select2 = menuInfoService.select(menuInfo);
+        select2.forEach(menuInfo1 -> {
+            menuInfo1.setCount(goodsInfoService.selectCount(menuInfo1.getPkId()));
+        });
+        return new MenuReturn(200,null,select,select1,select2);
+    }
+
+    /**
+     * 插入积分商品类别
+     * @param menuInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(path = {"sys-menu-insert"}, method = {RequestMethod.POST})
+    public AjaxReturn insertCat(MenuInfo menuInfo) throws Exception {
+        if (StringUtils.isBlank(menuInfo.getCatName())){
+            return new AjaxReturn(500,"类别名称不能为空！",null);
+        }
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        menuInfo.setCreateUser(userId);
+        menuInfo.setUpdateUser(userId);
+        menuInfoService.insert(menuInfo);
+        return new AjaxReturn(200,null,null);
+    }
+
+    /**
+     * 删除积分商品类别
+     * @param Id
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-delete"}, method = {RequestMethod.POST})
+    public AjaxReturn delete(Integer Id) {
+        Integer integer = goodsInfoService.selectCount(Id);
+        if (integer>0){
+            return new AjaxReturn(500,"该分类下还有商品，不能删除！",null);
+        }
+        menuInfoService.deleteById(Id);
+        return new AjaxReturn(200,null,null);
+    }
+
+    /**
+     * 修改类别名字
+     * @param menuInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(path = {"sys-menu-update-name"}, method = {RequestMethod.POST})
+    public AjaxReturn updateName(MenuInfo menuInfo) throws Exception {
+        MenuInfo menuInfo1 = menuInfoService.selectById(menuInfo.getPkId());
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        menuInfo1.setUpdateTime(new Date());
+        menuInfo1.setUpdateUser(userId);
+        menuInfo1.setCatName(menuInfo.getCatName());
+        if (StringUtils.isBlank(menuInfo.getCatName())){
+            return new AjaxReturn(500,"类别名称不能为空！",null);
+        }
+        menuInfoService.update(menuInfo1);
+        return new AjaxReturn(200,null,null);
+    }
+
+    /**
+     * 修改类别状态
+     * @param menuInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(path = {"sys-menu-update-state"}, method = {RequestMethod.POST})
+    public AjaxReturn updateState(MenuInfo menuInfo) throws Exception {
+        MenuInfo menuInfo1 = menuInfoService.selectById(menuInfo.getPkId());
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        menuInfo1.setUpdateTime(new Date());
+        menuInfo1.setUpdateUser(userId);
+        if (menuInfo.getState()==null){
+            return new AjaxReturn(500,"状态不能为空！",null);
+        }
+        menuInfo1.setState(menuInfo.getState());
+        menuInfoService.update(menuInfo1);
+        return new AjaxReturn(200,null,null);
+    }
+
+    /**
+     * 上传商品下拉框内容
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-list-select"}, method = {RequestMethod.POST})
+    public AjaxReturn selectMenu(){
+        MenuInfo menuInfo = new MenuInfo();
+        menuInfo.setBigMenu(1);
+        List<MenuInfo> select = menuInfoService.select(menuInfo);
+        List<ReturnCat> list = new ArrayList<>();
+        Map<String,Object> map = new HashMap<>();
+        select.forEach(menuInfo1 -> {
+            ReturnCat returnCat = new ReturnCat();
+            returnCat.setId(menuInfo1.getPkId()+"");
+            returnCat.setCatName(menuInfo1.getCatName());
+            list.add(returnCat);
+        });
+        return new AjaxReturn(200,null,list);
+    }
+    /**
+     * 上传商品图片
+     * @return
+     */
+    @RequestMapping(path = {"good-img-upload"})
+    public AjaxReturn imgUpload(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws IOException {
+            String path=env.getProperty("server.tomcat.basedir")+"/"+new Date().getTime()+file.getOriginalFilename();
+            log.info("----上传路径----:  "+path);
+            File newFile=new File(path);
+            file.transferTo(newFile);
+            String  path1=request.getScheme()+"://"+request.getServerName()+"/images"+path.substring(path.lastIndexOf("/"));
+            log.info("----插入数据库URl----:  "+path1);
+        return new AjaxReturn(200,null,path1);
+    }
+
+    /**
+     * 文件下载
+     * @param response
+     */
+    @RequestMapping(path = {"good-version-upload"})
+    public void download(HttpServletResponse response,String name){
+        String path=env.getProperty("server.version")+"/"+name;
+        try(InputStream inputStream = new FileInputStream(path);
+            OutputStream outputStream = response.getOutputStream()) {
+            //设置内容类型为下载类型
+            response.setContentType("application/x-download");
+            //设置请求头 和 文件下载名称
+            response.addHeader("Content-Disposition","attachment;filename="+name);
+            //用 common-io 工具 将输入流拷贝到输出流
+            IOUtils.copy(inputStream,outputStream);
+            outputStream.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 添加普通商品
+     * @param goodsInfo
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-list-insert"}, method = {RequestMethod.POST})
+    public AjaxReturn insertGood(GoodsInfo goodsInfo,String goodSrc,
+                                 String[] goodsSrc)
+            throws Exception {
+            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+            int userId = getAuthentication(request).intValue();
+            goodsInfo.setIsIntegral(0);
+            goodsInfo.setIsPromotion(0);
+            goodsInfo.setCoin(0.0);
+            if (goodsInfo.getPrice()<0){
+                return new AjaxReturn(500,"销售价格不能为负！",null);
+            }
+            if (goodsInfo.getPurchasePrice()<0){
+                return new AjaxReturn(500,"进货价格不能为负！",null);
+            }
+            if (goodsInfo.getRepertoryNum()<1){
+                return new AjaxReturn(500,"库存必须大于一！",null);
+            }
+            goodsInfoService.insert(userId,goodsInfo,goodSrc,goodsSrc);
+            return new AjaxReturn(200,null,null);
+        }
+
+    /**
+     * 添加积分商品
+     * @param goodsInfo
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-integral-insert"}, method = {RequestMethod.POST})
+    public AjaxReturn insertIntegralGood(GoodsInfo goodsInfo,String goodSrc,
+                                         String[] goodsSrc,String name)
+            throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        MenuInfo menuInfo = new MenuInfo();
+        menuInfo.setCatName(name);
+        List<MenuInfo> select = menuInfoService.select(menuInfo);
+        goodsInfo.setCatId(select.get(0).getPkId());
+        goodsInfo.setIsIntegral(0);
+        goodsInfo.setIsPromotion(0);
+        goodsInfo.setPrice(0.0);
+        if (goodsInfo.getCoin()<0){
+            return new AjaxReturn(500,"销售积分不能为负！",null);
+        }
+        if (goodsInfo.getPurchasePrice()<0){
+            return new AjaxReturn(500,"进货价格不能为负！",null);
+        }
+        if (goodsInfo.getRepertoryNum()<1){
+            return new AjaxReturn(500,"库存必须大于一！",null);
+        }
+        goodsInfoService.insert(userId,goodsInfo,goodSrc,goodsSrc);
+        return new AjaxReturn(200,null,null);
+    }
+    /**
+     * 添加促销商品
+     * @param goodsInfo
+     * @return
+     */
+    @RequestMapping(path = {"sys-menu-promotion-insert"}, method = {RequestMethod.POST})
+    public AjaxReturn insertPromotionGood(GoodsInfo goodsInfo,String goodSrc,String goodSrc1 ,String goodName1,Double price1)
+            throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        goodsInfo.setIsIntegral(0);
+        goodsInfo.setIsPromotion(1);
+        if (goodsInfo.getPurchasePrice()<0){
+            return new AjaxReturn(500,"进货价格不能为负！",null);
+        }
+        goodsInfoService.insert(userId,goodsInfo,goodSrc,goodSrc1,goodName1,price1);
+        return new AjaxReturn(200,null,null);
+    }
+    /**
+     * 积分商品展示
+     * @return
+     */
+    @RequestMapping(path = {"sys-integral-goods-list"}, method = {RequestMethod.POST})
+    public AjaxReturn showIntegral(String goodName,QueryDto queryDto) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setIsIntegral(1);
+        goodsInfo.setGoodName(goodName);
+        Pagination<GoodsInfo> goodsInfoPagination = goodsInfoService.selectGoods(goodsInfo, queryDto);
+        return goodsInfoPagination;
+    }
+    /**
+     * 普通商品展示
+     * @return
+     */
+    @RequestMapping(path = {"sys-cash-goods-list"}, method = {RequestMethod.POST})
+    public AjaxReturn cashGoodList(String goodName,QueryDto queryDto) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setIsIntegral(0);
+        goodsInfo.setIsPromotion(0);
+        goodsInfo.setGoodName(goodName);
+        Pagination<GoodsInfo> goodsInfoPagination = goodsInfoService.selectGoods(goodsInfo, queryDto);
+        return goodsInfoPagination;
+    }
+    /**
+     * 促销商品
+     * @return
+     */
+    @RequestMapping(path = {"/sys-good-promotion-list"},method = {RequestMethod.POST})
+    public AjaxReturn promotionGood(String goodName,QueryDto queryDto) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        goodsInfo.setGoodName(goodName);
+        Pagination<ReturnGoodsDemo> returnGoodsDemoPagination = goodsInfoService.selectBackByPromotion(goodsInfo, queryDto);
+        return returnGoodsDemoPagination;
+    }
+
+    /**
+     * 删除商品
+     * @return
+     */
+    @RequestMapping(path = {"delete-good-by-Id"}, method = {RequestMethod.POST})
+    public AjaxReturn deleteGood(Integer Id) {
+        goodsInfoService.deteleById(Id);
+        return new AjaxReturn(200, null, null);
+    }
+
+    /**
+     * 删除商品
+     * @return
+     */
+    @RequestMapping(path = {"delete-two-good-by-Id"}, method = {RequestMethod.POST})
+    public AjaxReturn deleteGoods(Integer Id) {
+        GoodsInfo goodsInfo1 = goodsInfoService.selectById(Id);
+        goodsInfoService.deteleTwoById(goodsInfo1.getGoodSourceId(),Id);
+        return new AjaxReturn(200, null, null);
+    }
+
+    /**
+     * 修改商品
+     * @return
+     */
+    @RequestMapping(path = {"update-good-by-Id"}, method = {RequestMethod.POST})
+    public AjaxReturn updateGood(GoodsInfo goodsInfo, String[] goodsSrc) throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        GoodsInfo goodsInfo1 = goodsInfoService.selectById(goodsInfo.getPkId());
+        goodsInfo1.setGoodName(goodsInfo.getGoodName());
+        goodsInfo1.setRepertoryNum(goodsInfo.getRepertoryNum());
+        goodsInfo1.setPurchasePrice(goodsInfo.getPurchasePrice());
+        goodsInfo1.setGoodSrc(goodsInfo.getGoodSrc());
+        goodsInfo1.setDetail(goodsInfo.getDetail());
+        goodsInfo1.setUpdateUser(userId);
+        goodsInfo1.setUpdateTime(new Date());
+        if (goodsInfo.getPrice()!=null&&goodsInfo.getPrice()>0){
+            goodsInfo1.setPrice(goodsInfo.getPrice());
+        }
+        if (goodsInfo.getCoin()!=null&&goodsInfo.getCoin()>0){
+            goodsInfo1.setPrice(goodsInfo.getCoin());
+        }
+        goodsInfo1.setCoin(goodsInfo.getCoin());
+        goodsInfoService.updateGoodInfoById(userId,goodsInfo1,goodsSrc);
+        return new AjaxReturn(200, null, null);
+    }
+    /**
+     * 修改促销商品
+     * @return
+     */
+    @RequestMapping(path = {"update-promotion-good-by-Id"}, method = {RequestMethod.POST})
+    public AjaxReturn updateGood(GoodsInfo goodsInfo, Integer Id, String goodsSrc,Double price1,String name) throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        int userId = getAuthentication(request).intValue();
+        GoodsInfo goodsInfo1 = goodsInfoService.selectById(goodsInfo.getPkId());
+        goodsInfo1.setGoodName(goodsInfo.getGoodName());
+        goodsInfo1.setPurchasePrice(goodsInfo.getPurchasePrice());
+        goodsInfo1.setGoodSrc(goodsInfo.getGoodSrc());
+        goodsInfo1.setDetail(goodsInfo.getDetail());
+        goodsInfo1.setUpdateUser(userId);
+        goodsInfo1.setUpdateTime(new Date());
+        if (goodsInfo.getPrice()!=null&&goodsInfo.getPrice()>0){
+            goodsInfo1.setPrice(goodsInfo.getPrice());
+        }
+        GoodsInfo goodsInfo2 = goodsInfoService.selectById(Id);
+        goodsInfo2.setGoodSrc(goodsSrc);
+        goodsInfo2.setGoodName(name);
+        goodsInfo2.setPurchasePrice(price1);
+        goodsInfo2.setUpdateTime(new Date());
+        goodsInfo2.setUpdateUser(userId);
+        goodsInfoService.updateGoodInfo(goodsInfo1,goodsInfo2);
+        return new AjaxReturn(200, null, null);
+    }
+}
